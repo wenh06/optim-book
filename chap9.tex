@@ -1,0 +1,40 @@
+%
+% Sample SBC book chapter
+%
+% This is a public-domain file.
+%
+\documentclass{SBCbookchapter}
+% \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+
+\usepackage[slantfont,boldfont]{xeCJK}
+\usepackage{fontspec}
+
+\makeatletter
+\newcommand{\mylabel}[2]{#2\def\@currentlabel{#2}\label{#1}}
+\makeatother
+
+% set chn font
+\setCJKmainfont{Noto Serif CJK SC}
+\setCJKsansfont{Noto Sans CJK SC}
+\setCJKmonofont{Noto Sans Mono CJK SC}
+
+
+\author{}
+\title{特殊优化模型方法}
+
+\begin{document}
+\maketitle
+
+\section{二次规划}
+\label{sec:7.2}
+
+
+\bibliographystyle{sbc}
+\bibliography{references}
+
+\end{document}
