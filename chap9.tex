@@ -8,20 +8,31 @@
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{graphicx}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amsfonts,amssymb,mathrsfs}
+\usepackage{txfonts}
+\usepackage{mathalfa}
 \usepackage{enumitem}
 
 \usepackage[slantfont,boldfont]{xeCJK}
 \usepackage{fontspec}
 
-\makeatletter
-\newcommand{\mylabel}[2]{#2\def\@currentlabel{#2}\label{#1}}
-\makeatother
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % set chn font
 \setCJKmainfont{Noto Serif CJK SC}
 \setCJKsansfont{Noto Sans CJK SC}
 \setCJKmonofont{Noto Sans Mono CJK SC}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% custom commands
+\makeatletter
+\newcommand{\mylabel}[2]{#2\def\@currentlabel{#2}\label{#1}}
+\makeatother
+
+\newcommand{\R}{\mathcal{R}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \author{}
@@ -32,6 +43,25 @@
 
 \section{二次规划}
 \label{sec:7.2}
+
+具有二次目标函数和线性约束的约束优化问题被称为二次规划 (quadratic programming, QP) 问题. 这是一类非常常见的约束优化问题, 且它们也常常作为一般的约束优化问题的子问题出现. 二次规划问题的一般形式为
+\begin{equation}
+\label{eq:quadratic-programming}
+\begin{array}{cl}
+\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & a_i^T = b_i, ~~ i \in \mathcal{E}, \\
+& a_i^T x \leqslant b_i, ~~ i \in \mathcal{I},
+\end{array}
+\end{equation}
+其中$G$是$n$阶对称方阵, $\mathcal{E}, \mathcal{I}$是两个下标的有限集, $d, a_i,$ 是$n$阶常向量, $b_i$是常数, $i \in \mathcal{E} \cup \mathcal{I},$ 约束条件有等式约束以及不等式约束. 以上形式的二次规划问题可以将约束条件以矩阵的形式表达，形成更加紧凑的形式：
+\begin{equation}
+\label{eq:quadratic-programming}
+\begin{array}{cl}
+\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & A x \preccurlyeq b,
+\end{array}
+\end{equation}
+其中$A$是行向量$a_i^T$排成的矩阵, $b$是常数$b_i$按相应次序排成的列向量, $i \in \mathcal{E} \cup \mathcal{I}.$
 
 
 \bibliographystyle{sbc}
