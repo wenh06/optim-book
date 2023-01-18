@@ -1,0 +1,171 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% compiler: XeLaTeX
+% TeX Live version: 2022
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% preamble
+\documentclass{SBCbookchapter}
+% \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts,amssymb,mathrsfs}
+\usepackage{txfonts}
+\usepackage{mathalfa}
+\usepackage{enumitem}
+
+\usepackage[slantfont,boldfont]{xeCJK}
+\usepackage{fontspec}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% set chn font
+\setCJKmainfont{Noto Serif CJK SC}
+\setCJKsansfont{Noto Sans CJK SC}
+\setCJKmonofont{Noto Sans Mono CJK SC}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% custom commands
+\makeatletter
+\newcommand{\mylabel}[2]{#2\def\@currentlabel{#2}\label{#1}}
+\makeatother
+
+
+\newtheorem{thm}{定理}[section]
+\newtheorem{prop}[thm]{命题}
+\newtheorem{Def}[thm]{定义}
+\newtheorem{lem}[thm]{引理}
+\newtheorem{conj}[thm]{猜想}
+\newtheorem{cor}[thm]{推论}
+\newtheorem{remark}[thm]{注记}
+\newtheorem{eg}[thm]{例}
+\newtheorem{recall}[thm]{回忆}
+\newtheorem{question}[thm]{问题}
+\newtheorem{observation}[thm]{观察}
+
+\newcommand{\R}{\mathcal{R}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\author{}
+\title{特殊优化模型方法}
+
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% main body
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{二次规划}
+\label{sec:7.2}
+% finished
+
+具有二次目标函数和线性约束的约束优化问题被称为二次规划 (quadratic programming, QP) 问题. 这是一类非常常见的约束优化问题, 且它们也常常作为一般的约束优化问题的子问题出现. 二次规划问题的一般形式为
+\begin{equation}
+\label{eq:quadratic-programming-1}
+\begin{array}{cl}
+\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & a_i^T x = b_i, ~~ i \in \mathcal{E} = \{1, \ldots, m_1\}, \\
+& a_i^T x \leqslant b_i, ~~ i \in \mathcal{I} = \{m_1 + 1, \ldots, m\},
+\end{array}
+\end{equation}
+其中$G$是$n$阶对称方阵, $d, a_i,$ 是$n$维列向量, $b_i$是常数, $i \in \mathcal{E} \cup \mathcal{I},$ 约束条件有等式约束以及不等式约束. 以上形式的二次规划问题可以将约束条件以矩阵的形式表达为更加紧凑的形式：
+\begin{equation}
+\label{eq:quadratic-programming-2}
+\begin{array}{cl}
+\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & A^T_{\mathcal{E}} x = b_{\mathcal{E}}, ~~ A^T_{\mathcal{I}} x \preccurlyeq b_{\mathcal{I}},
+\end{array}
+\end{equation}
+其中$A_{\mathcal{E}} = (a_1, \ldots, a_{m_1}), b_{\mathcal{E}} = (b_1, \ldots, b_{m_1})^T;$ $A_{\mathcal{I}} = (a_{m_1+1}, \ldots, a_m), b_{\mathcal{I}} = (b_{m_1+1}1, \ldots, b_m)^T.$ $A^T_{\mathcal{I}} x \preccurlyeq b_{\mathcal{I}}$表示向量$A^T_{\mathcal{I}} b_{\mathcal{I}}$的每个元素都小于等于向量$b$相应位置元素. 问题\eqref{eq:quadratic-programming-2}的KKT条件为
+\begin{equation}
+\label{eq:quadratic-programming-kkt}
+\begin{aligned}
+& \nabla q(x^*) + A \lambda^* = 0, \\
+& A^T_{\mathcal{E}} x^* - b_{\mathcal{E}} = 0, \\
+& \lambda^*_{\mathcal{I}} \succcurlyeq 0, ~ A_{\mathcal{I}}^T x^* - b_{\mathcal{I}} \preccurlyeq 0, ~ (\lambda^*_{\mathcal{I}})^T (A_{\mathcal{I}}^T x^* - b_{\mathcal{I}}) = 0,
+\end{aligned}
+\end{equation}
+其中$A = (a_1, \ldots, a_m);$ $\lambda^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$为拉格朗日乘子, $\lambda^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ $x^*$为KKT点.
+
+与线性规划问题类似, 一个二次规划问题总是能在有限步内求解, 或者证明其是不可行的或者无(下）界的. 当二次规划问题有解时, 若目标函数$q(x) = \frac{1}{2} x^T G x + d^T x$的Hessian阵$G$是半正定的, 那么$q(x)$是凸函数, 则该二次规划问题是凸规划问题, 其KKT点即为全局极小值点; 如果$G$是正定的, 则解是唯一的(唯一的全局极小值点). 当$G$不定时, 目标函数$q(x)$非凸, 可能有多个鞍点以及局部极小值点, 这些局部极小值点可能不是全局最优解. 此时, 求解全局最优解是一个NP-难的问题\cite{Murty_1987}.
+
+
+\subsection{等式约束的二次规划问题}
+\label{subsec:7.2.1}
+% NOT finished
+
+我们首先考虑最简单的等式约束的二次规划问题, 问题形式如下
+\begin{equation}
+\label{eq:quadratic-programming-eq-constrained}
+\begin{array}{cl}
+\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & A^T x = b,
+\end{array}
+\end{equation}
+其中$A = (a_1, \ldots, a_m)^T$是一个$n \times m$的矩阵, $b\in \R^m.$ 我们假设$A$列满秩, 即$A$的秩为$m \leqslant n.$ 如若不然, 只需要去掉线性相关的约束即可.
+
+等式约束的二次规划问题的KKT条件可以从式\eqref{eq:quadratic-programming-kkt}简化为
+\begin{equation}
+\label{eq:quadratic-programming-kkt-2}
+\begin{aligned}
+& G x^* + d^T + A \lambda^* = 0, \\
+& A^T x^* - b = 0.
+\end{aligned}
+\end{equation}
+写为矩阵形式, 即为
+\begin{equation}
+\label{eq:quadratic-programming-kkt-2-mat}
+\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix} \begin{pmatrix} x^* \\ \lambda^* \end{pmatrix} = \begin{pmatrix} -d^T \\ b \end{pmatrix}.
+\end{equation}
+上式中的矩阵$\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix}$被称作KKT矩阵.
+
+TODO: 待写....
+
+求解等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的一个最直接的想法是通过等约束条件消去部分变量, 将问题化为无约束极小化问题进行求解. 我们将矩阵$A, G,$ 向量$d$, 以及变量$x$进行分块
+\begin{equation*}
+A = \begin{pmatrix} A_1 \\ A_2 \end{pmatrix}, ~ G = \begin{pmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{pmatrix}, ~ d = \begin{pmatrix} d_1 \\ d_2 \end{pmatrix}, ~ x = \begin{pmatrix} x_1 \\ x_2 \end{pmatrix},
+\end{equation*}
+其中$A_1$是可逆的$m$阶方阵, $x_1 \in \R^{m},$ $x_2 \in \R^{n-m},$ $G$与$d$的划分与$x$的划分相容. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}中的约束方程组$A^T x = b$就可写作$A_1^T x_1 + A_2^T x_2 = b.$ 由于$A_1$可逆, 利用高斯消元法求解关于$x_1$的线性方程组$A_1x_1 = b - A_2x_2$得
+\begin{equation}
+\label{eq:quadratic-programming-eq-constrained-subs}
+x_1 = A_1^{-1} (b - A_2x_2).
+\end{equation}
+将上式代入目标函数$q(x),$ 可得关于$x_2$的二次函数
+\begin{equation}
+\begin{aligned}
+\psi (x_2) := & \frac{1}{2} x_2^T \left( G_{22} - G_{21} A_1^{-T} A_2^T - A_2 A_1^{-1} G_{12} + A_2 A_1^{-1} G_{12} A_1^{-T} A_2^T \right) x_2 \\
+& + x_2^T \left( G_{21} - A_2 A_1^{-1} G_{11} \right) A_1^{-T} b + \frac{1}{2} b^T A_1^{-1} G_{11} A_1^{-T} b \\
+& + x_2^T \left( d_2 - A_2 A_1^{-1} d_1 \right) + d_1^T A_1^{-T} b.
+\end{aligned}
+\end{equation}
+于是, 等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}转化为了无约束极小化问题
+\begin{equation*}
+\text{minimize} ~~ \psi(x_2)
+\end{equation*}
+如果$\nabla^2 \psi$正定, 解(一阶条件)线性方程组$\nabla \psi (x_2) = 0$可得唯一解$x_2^*,$ 回代入\eqref{eq:quadratic-programming-eq-constrained-subs}可得$x_1^* = A_1^{-1} (b - A_2x_2^*).$ 由KKT条件\eqref{eq:quadratic-programming-kkt-2}, 拉格朗日乘子$\lambda^*$由
+\begin{equation*}
+\begin{pmatrix} A_1 \\ A_2 \end{pmatrix} \lambda^* = A \lambda^* = -\nabla q(x^*) = - G x^* - d = - \begin{pmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{pmatrix} \begin{pmatrix} x_1^* \\ x_2^* \end{pmatrix} - \begin{pmatrix} d_1 \\ d_2 \end{pmatrix}
+\end{equation*}
+确定. 解得拉格朗日乘子的显式表达$\lambda^* = -A_1^{-1} \left( G_{11}x_1^* + G_{12}x_2^* + d_1 \right).$
+
+\begin{eg}
+\label{eg:7.2.1}
+待写
+\end{eg}
+
+
+\subsection{实用二次规划算法概述}
+\label{subsec:7.2.2}
+% NOT finished
+
+\bibliographystyle{sbc}
+\bibliography{references}
+
+\end{document}
