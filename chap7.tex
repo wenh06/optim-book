@@ -122,14 +122,14 @@
 写为矩阵形式, 即为
 \begin{equation}
 \label{eq:quadratic-programming-kkt-2-mat}
-\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix} \begin{pmatrix} x^* \\ \lambda^* \end{pmatrix} = \begin{pmatrix} -d \\ b \end{pmatrix}.
+\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix} \begin{bmatrix} x^* \\ \lambda^* \end{bmatrix} = \begin{bmatrix} -d \\ b \end{bmatrix}.
 \end{equation}
-上式中的系数矩阵$\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix}$被称作拉格朗日矩阵, 也被称作KKT矩阵.
+上式中的系数矩阵$\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}$被称作拉格朗日矩阵, 也被称作KKT矩阵.
 
 
 求解等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的一个最直接的想法是通过等约束条件消去部分变量, 将问题化为无约束极小化问题进行求解. 我们将矩阵$A, G,$ 向量$d$, 以及变量$x$进行分块
 \begin{equation*}
-A = \begin{pmatrix} A_1 \\ A_2 \end{pmatrix}, ~ G = \begin{pmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{pmatrix}, ~ d = \begin{pmatrix} d_1 \\ d_2 \end{pmatrix}, ~ x = \begin{pmatrix} x_1 \\ x_2 \end{pmatrix},
+A = \begin{bmatrix} A_1 \\ A_2 \end{bmatrix}, ~ G = \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix}, ~ d = \begin{bmatrix} d_1 \\ d_2 \end{bmatrix}, ~ x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix},
 \end{equation*}
 其中$A_1$是可逆的$m$阶方阵, $x_1 \in \R^{m},$ $x_2 \in \R^{n-m},$ $G$与$d$的划分与$x$的划分相容. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}中的约束方程组$A^T x = b$就可写作$A_1^T x_1 + A_2^T x_2 = b.$ 由于$A_1$可逆, 利用高斯消元法求解关于$x_1$的线性方程组$A_1x_1 = b - A_2x_2$得
 \begin{equation}
@@ -150,7 +150,7 @@ x_1 = A_1^{-1} (b - A_2x_2).
 \end{equation*}
 如果$\nabla^2 \psi$正定, 解(一阶条件)线性方程组$\nabla \psi (x_2) = 0$可得唯一解$x_2^*,$ 回代入\eqref{eq:quadratic-programming-eq-constrained-subs}可得$x_1^* = A_1^{-1} (b - A_2x_2^*).$ 由KKT条件\eqref{eq:quadratic-programming-kkt-2}, 拉格朗日乘子$\lambda^*$由
 \begin{equation*}
-\begin{pmatrix} A_1 \\ A_2 \end{pmatrix} \lambda^* = A \lambda^* = -\nabla q(x^*) = - G x^* - d = - \begin{pmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{pmatrix} \begin{pmatrix} x_1^* \\ x_2^* \end{pmatrix} - \begin{pmatrix} d_1 \\ d_2 \end{pmatrix}
+\begin{bmatrix} A_1 \\ A_2 \end{bmatrix} \lambda^* = A \lambda^* = -\nabla q(x^*) = - G x^* - d = - \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix} \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} - \begin{bmatrix} d_1 \\ d_2 \end{bmatrix}
 \end{equation*}
 确定. 解得拉格朗日乘子的显式表达$\lambda^* = -A_1^{-1} \left( G_{11}x_1^* + G_{12}x_2^* + d_1 \right).$
 
@@ -159,23 +159,24 @@ x_1 = A_1^{-1} (b - A_2x_2).
 待写
 \end{eg}
 
-直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们还可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^T x = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换.
+直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们还可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^T x = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换, 是直接消元法\eqref{eq:quadratic-programming-eq-constrained-subs}的推广.
 
 我们知道, 对于非齐次线性方程组$A^Tx = b,$ 它如果有解, 那么它的通解可以表示为
 \begin{equation}
 \label{eq:general-elim-1}
 x = Y b + s
 \end{equation}
-其中$Y \in \R^{n\times m}$是系数矩阵$A^T$的某个广义逆, $s$是齐次线性方程组$A^T x = 0$的解(实际上, $s$可以进一步表示为$\left( I_n - Y A^T \right) t, ~ t \in \R^{n}$), 或者说属于$A$的列零空间(null column space). $s$也被称作可行点$x$处的可行增量. 我们回忆一下, $m\times n$的矩阵$A^T$的广义逆, 指的是一个$n\times m$的矩阵$Y,$ 满足$A^T Y A^T = A^T.$ 同时, 非齐次线性方程组$A^Tx = b$有解当且仅当$A^T Y b = b.$ 我们取$Y$和$Z$分别是$n\times m$与$n \times (n-m)$的矩阵, 满足
-$$
-\begin{pmatrix} Y & Z\end{pmatrix} \text{ 非奇异, 且~} A^T Y = I_m, ~ A^T Z = 0.
-$$
+其中$Y \in \R^{n\times m}$是系数矩阵$A^T$的某个广义逆, $s$是齐次线性方程组$A^T x = 0$的解, 或者说属于$A$的列零空间(null column space). $s$也被称作可行点$x$处的可行增量. 我们回忆一下, $m\times n$的矩阵$A^T$的广义逆, 指的是一个$n\times m$的矩阵$Y,$ 满足$A^T Y A^T = A^T.$ 同时, 非齐次线性方程组$A^Tx = b$有解当且仅当$A^T Y b = b.$ 假设我们取定了$n\times m$的矩阵$Y$以及$n \times (n-m)$的矩阵$Z,$ 满足
+\begin{equation}
+\label{eq:eq:general-elim-req}
+\begin{bmatrix} Y & Z\end{bmatrix} \text{ 非奇异, 且~} A^T Y = I_m, ~ A^T Z = 0.
+\end{equation}
 也就是说$Y$是$A^T$的一个右广义逆(比广义逆的定义$A^T Y A^T = A^T$更进一步要求$A^T Y = I_m$). 而矩阵$Z$的列$z_1, \ldots, z_{n-m}$构成了$A$的列零空间的一组基, 也被称作既约(reduced)坐标方向, 矩阵$Z^T G Z$被称作二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的既约Hessian阵. 那么可行增量$s$可以表示为$z_1, \ldots, z_{n-m}$的线性组合
 \begin{equation}
 \label{eq:general-elim-2}
 s = Z y = \sum\limits_{i=1}^{n-m} y_i z_i,
 \end{equation}
-其中$y_1, \ldots, y_{n−m}$是每个既约坐标方向的分量, 我们称$y = (y_1, \ldots, y_{n−m})^T$为既约变量. 将式\eqref{eq:general-elim-2}代入式\eqref{eq:general-elim-1}, 于是每一个可行点$x$都可以表示为
+其中$y_1, \ldots, y_{n-m}$是每个既约坐标方向的分量, 我们称$y = (y_1, \ldots, y_{n-m})^T$为既约变量. 将式\eqref{eq:general-elim-2}代入式\eqref{eq:general-elim-1}, 于是每一个可行点$x$都可以表示为
 \begin{equation}
 \label{eq:general-elim-3}
 x = Y b + Z y.
@@ -183,14 +184,42 @@ x = Y b + Z y.
 这样, 我们就可以用既约变量$y$代换原变量$x,$ 将等式约束消去, 将原问题转化为了无约束的既约二次函数的极小化问题
 \begin{equation}
 \label{eq:general-elim-4}
-\text{minimize} ~~ \psi(y) := \frac{1}{2} y^T Z^T G Z y + \left( d + GYb \right)^T Z y + \frac{1}{2} \left( 2d + G Y b \right)^T Y b.
+\text{minimize} ~~ \psi(y) := \frac{1}{2} y^T Z^T G Z y + \left( d + G Y b \right)^T Z y + \frac{1}{2} \left( 2d + G Y b \right)^T Y b.
 \end{equation}
+
+下面我们来解无约束的极小化问题\eqref{eq:general-elim-4}. 考虑一阶条件
+\begin{equation*}
+0 = \nabla \psi (y) = Z^T G Z y + Z^T \left( d + G Y b \right),
+\end{equation*}
+若既约Hessian阵$Z^T G Z$是正定的, 那么有唯一解. 解关于$y$的线性方程组
+\begin{equation*}
+Z^T G Z y = - Z^T \left( d + G Y b \right)
+\end{equation*}
+得唯一解$y^*,$ 再代入变量替换式\eqref{eq:quadratic-programming-eq-constrained-subs}得到原问题的唯一解$x^* = Y b + Z y^*.$ 由KKT条件\eqref{eq:quadratic-programming-kkt}, 拉格朗日乘子满足$A\lambda^* = -\left( Gx^* + d \right) =: - g^*,$ 两边同时左乘$Y^T,$ 有
+\begin{equation*}
+\lambda^* = \left( A^T Y \right)^T \lambda^* = -Y^T g^*.
+\end{equation*}
+
+到目前为止, 我们还没有介绍如何选取, 或者说构造矩阵$Y$和$Z.$ 矩阵$Y, Z$的构造方法有很多种, 通常首选的是正交分解法. 我们对矩阵$A$进行QR分解, 即
+\begin{equation}
+\label{eq:quadratic-programming-qr-decomp-1}
+A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} = Q_1 R,
+\end{equation}
+其中$Q$是$n\times n$的正交阵, $R$是$m\times m$的可逆上三角阵. $Q_1, Q_2$分别是$n\times m$和$n\times (n - m)$的矩阵. 然后选取
+\begin{equation}
+\label{eq:quadratic-programming-qr-decomp-2}
+Y = Q_1 R^{-T}, ~~ Z = Q_2
+\end{equation}
+即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y, Z$的要求.
+
+待写。。。。
 
 \begin{eg}[广义消元法]
 \label{eg:7.2.2}
 待写
 \end{eg}
 
+我们还可以直接从等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的KKT条件\eqref{eq:quadratic-programming-kkt-2-mat}入手, 来寻求该问题的解.
 
 \subsection{实用二次规划算法概述}
 \label{subsec:7.2.2}
@@ -198,6 +227,19 @@ x = Y b + Z y.
 
 \subsection*{习题}
 % NOT finished
+
+\begin{enumerate}
+\item 考虑等式约束的二次规划问题
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & A^T x = b,
+\end{array}
+\end{equation*}
+设$A$列满秩, $Z$为矩阵$A$的列零空间的一组基构成的矩阵, 既约Hessian阵$Z^T G Z$正定. 证明该二次规划问题有唯一极小点, 该点就是唯一的全局最优解.
+
+\item SCHUR-COMPLEMENT METHOD
+\end{enumerate}
 
 \bibliographystyle{sbc}
 \bibliography{references}
