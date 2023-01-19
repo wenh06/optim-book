@@ -159,7 +159,32 @@ x_1 = A_1^{-1} (b - A_2x_2).
 待写
 \end{eg}
 
-直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^Tx = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换.
+直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们还可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^T x = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换.
+
+我们知道, 对于非齐次线性方程组$A^Tx = b,$ 它如果有解, 那么它的通解可以表示为
+\begin{equation}
+\label{eq:general-elim-1}
+x = Y b + s
+\end{equation}
+其中$Y \in \R^{n\times m}$是系数矩阵$A^T$的某个广义逆, $s$是齐次线性方程组$A^T x = 0$的解(实际上, $s$可以进一步表示为$\left( I_n - Y A^T \right) t, ~ t \in \R^{n}$), 或者说属于$A$的列零空间(null column space). $s$也被称作可行点$x$处的可行增量. 我们回忆一下, $m\times n$的矩阵$A^T$的广义逆, 指的是一个$n\times m$的矩阵$Y,$ 满足$A^T Y A^T = A^T.$ 同时, 非齐次线性方程组$A^Tx = b$有解当且仅当$A^T Y b = b.$ 我们取$Y$和$Z$分别是$n\times m$与$n \times (n-m)$的矩阵, 满足
+$$
+\begin{pmatrix} Y & Z\end{pmatrix} \text{ 非奇异, 且~} A^T Y = I_m, ~ A^T Z = 0.
+$$
+也就是说$Y$是$A^T$的一个右广义逆(比广义逆的定义$A^T Y A^T = A^T$更进一步要求$A^T Y = I_m$). 而矩阵$Z$的列$z_1, \ldots, z_{n-m}$构成了$A$的列零空间的一组基, 也被称作既约(reduced)坐标方向, 矩阵$Z^T G Z$被称作二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的既约Hessian阵. 那么可行增量$s$可以表示为$z_1, \ldots, z_{n-m}$的线性组合
+\begin{equation}
+\label{eq:general-elim-2}
+s = Z y = \sum\limits_{i=1}^{n-m} y_i z_i,
+\end{equation}
+其中$y_1, \ldots, y_{n−m}$是每个既约坐标方向的分量, 我们称$y = (y_1, \ldots, y_{n−m})^T$为既约变量. 将式\eqref{eq:general-elim-2}代入式\eqref{eq:general-elim-1}, 于是每一个可行点$x$都可以表示为
+\begin{equation}
+\label{eq:general-elim-3}
+x = Y b + Z y.
+\end{equation}
+这样, 我们就可以用既约变量$y$代换原变量$x,$ 将等式约束消去, 将原问题转化为了无约束的既约二次函数的极小化问题
+\begin{equation}
+\label{eq:general-elim-4}
+\text{minimize} ~~ \psi(y) := \frac{1}{2} y^T Z^T G Z y + \left( d + GYb \right)^T Z y + \frac{1}{2} \left( 2d + G Y b \right)^T Y b.
+\end{equation}
 
 \begin{eg}[广义消元法]
 \label{eg:7.2.2}
