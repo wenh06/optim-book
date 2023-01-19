@@ -115,18 +115,17 @@
 \begin{equation}
 \label{eq:quadratic-programming-kkt-2}
 \begin{aligned}
-& G x^* + d^T + A \lambda^* = 0, \\
+& G x^* + d + A \lambda^* = 0, \\
 & A^T x^* - b = 0.
 \end{aligned}
 \end{equation}
 写为矩阵形式, 即为
 \begin{equation}
 \label{eq:quadratic-programming-kkt-2-mat}
-\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix} \begin{pmatrix} x^* \\ \lambda^* \end{pmatrix} = \begin{pmatrix} -d^T \\ b \end{pmatrix}.
+\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix} \begin{pmatrix} x^* \\ \lambda^* \end{pmatrix} = \begin{pmatrix} -d \\ b \end{pmatrix}.
 \end{equation}
-上式中的矩阵$\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix}$被称作KKT矩阵.
+上式中的系数矩阵$\begin{pmatrix} G & A \\ A^T & 0 \end{pmatrix}$被称作拉格朗日矩阵, 也被称作KKT矩阵.
 
-TODO: 待写....
 
 求解等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的一个最直接的想法是通过等约束条件消去部分变量, 将问题化为无约束极小化问题进行求解. 我们将矩阵$A, G,$ 向量$d$, 以及变量$x$进行分块
 \begin{equation*}
@@ -155,14 +154,24 @@ x_1 = A_1^{-1} (b - A_2x_2).
 \end{equation*}
 确定. 解得拉格朗日乘子的显式表达$\lambda^* = -A_1^{-1} \left( G_{11}x_1^* + G_{12}x_2^* + d_1 \right).$
 
-\begin{eg}
+\begin{eg}[直接消元法]
 \label{eg:7.2.1}
+待写
+\end{eg}
+
+直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^Tx = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换.
+
+\begin{eg}[广义消元法]
+\label{eg:7.2.2}
 待写
 \end{eg}
 
 
 \subsection{实用二次规划算法概述}
 \label{subsec:7.2.2}
+% NOT finished
+
+\subsection*{习题}
 % NOT finished
 
 \bibliographystyle{sbc}
