@@ -16,6 +16,10 @@
 \usepackage{mathalfa}
 \usepackage{enumitem}
 
+\usepackage{arydshln}
+\setlength{\dashlinegap}{2pt}
+\setlength{\dashlinedash}{2pt}
+
 \usepackage[slantfont,boldfont]{xeCJK}
 \usepackage{fontspec}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -111,30 +115,14 @@
 \end{equation}
 其中$A = (a_1, \ldots, a_m)^T$是一个$n \times m$的矩阵, $b\in \R^m.$ 我们假设$A$列满秩, 即$A$的秩为$m \leqslant n.$ 如若不然, 只需要去掉线性相关的约束即可.
 
-等式约束的二次规划问题的KKT条件可以从式\eqref{eq:quadratic-programming-kkt}简化为
-\begin{equation}
-\label{eq:quadratic-programming-kkt-2}
-\begin{aligned}
-& G x^* + d + A \lambda^* = 0, \\
-& A^T x^* - b = 0.
-\end{aligned}
-\end{equation}
-写为矩阵形式, 即为
-\begin{equation}
-\label{eq:quadratic-programming-kkt-2-mat}
-\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix} \begin{bmatrix} x^* \\ \lambda^* \end{bmatrix} = \begin{bmatrix} -d \\ b \end{bmatrix}.
-\end{equation}
-上式中的系数矩阵$\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}$被称作拉格朗日矩阵, 也被称作KKT矩阵.
-
-
 求解等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的一个最直接的想法是通过等约束条件消去部分变量, 将问题化为无约束极小化问题进行求解. 我们将矩阵$A, G,$ 向量$d$, 以及变量$x$进行分块
 \begin{equation*}
 A = \begin{bmatrix} A_1 \\ A_2 \end{bmatrix}, ~ G = \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix}, ~ d = \begin{bmatrix} d_1 \\ d_2 \end{bmatrix}, ~ x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix},
 \end{equation*}
-其中$A_1$是可逆的$m$阶方阵, $x_1 \in \R^{m},$ $x_2 \in \R^{n-m},$ $G$与$d$的划分与$x$的划分相容. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}中的约束方程组$A^T x = b$就可写作$A_1^T x_1 + A_2^T x_2 = b.$ 由于$A_1$可逆, 利用高斯消元法求解关于$x_1$的线性方程组$A_1x_1 = b - A_2x_2$得
+其中$A_1$是可逆的$m$阶方阵, $x_1 \in \R^{m},$ $x_2 \in \R^{n-m},$ $G$与$d$的划分与$x$的划分相容. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}中的约束方程组$A^T x = b$就可写作$A_1^T x_1 + A_2^T x_2 = b.$ 由于$A_1$可逆, 可以利用高斯消元法求解关于$x_1$的线性方程组$A_1^Tx_1 = b - A_2^Tx_2$得
 \begin{equation}
 \label{eq:quadratic-programming-eq-constrained-subs}
-x_1 = A_1^{-1} (b - A_2x_2).
+x_1 = A_1^{-T} (b - A_2^Tx_2).
 \end{equation}
 将上式代入目标函数$q(x),$ 可得关于$x_2$的二次函数
 \begin{equation}
@@ -148,15 +136,44 @@ x_1 = A_1^{-1} (b - A_2x_2).
 \begin{equation*}
 \text{minimize} ~~ \psi(x_2)
 \end{equation*}
-如果$\nabla^2 \psi$正定, 解(一阶条件)线性方程组$\nabla \psi (x_2) = 0$可得唯一解$x_2^*,$ 回代入\eqref{eq:quadratic-programming-eq-constrained-subs}可得$x_1^* = A_1^{-1} (b - A_2x_2^*).$ 由KKT条件\eqref{eq:quadratic-programming-kkt-2}, 拉格朗日乘子$\lambda^*$由
-\begin{equation*}
+如果$\nabla^2 \psi$正定, 解(一阶条件)线性方程组$\nabla \psi (x_2) = 0$可得唯一解$x_2^*,$ 回代入\eqref{eq:quadratic-programming-eq-constrained-subs}可得$x_1^* = A_1^{-1} (b - A_2x_2^*).$ 拉格朗日乘子$\lambda^*$由KKT条件\eqref{eq:quadratic-programming-kkt}给出, 即
+\begin{equation}
+\label{eq:quadratic-programming-eq-lambda}
 \begin{bmatrix} A_1 \\ A_2 \end{bmatrix} \lambda^* = A \lambda^* = -\nabla q(x^*) = - G x^* - d = - \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix} \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} - \begin{bmatrix} d_1 \\ d_2 \end{bmatrix}
-\end{equation*}
+\end{equation}
 确定. 解得拉格朗日乘子的显式表达$\lambda^* = -A_1^{-1} \left( G_{11}x_1^* + G_{12}x_2^* + d_1 \right).$
 
-\begin{eg}[直接消元法]
+\begin{eg}
 \label{eg:7.2.1}
-待写
+我们用直接消元法求解下列等式约束的二次规划问题
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(x) = x_1^2 + x_2^2 + 2x_3^2 + 5x_1x_2 - 3x_2 - 7x_3, \\
+\text{subject to} & x_1 + x_2 + x_3 = 1, \\
+& x_1 - 2x_2 - 3x_3 = -2,
+\end{array}
+\end{equation*}
+那么相应的矩阵及其划分为
+\begin{equation*}
+G = \left[\begin{array}{@{}cc:c@{}} 2 & 5 & 0 \\ 5 & 2 & 0 \\ \hdashline 0 & 0 & 4 \end{array}\right], ~~ A = \left[\begin{array}{@{}cc@{}} 1 & 1 \\ 1 & -2 \\ \hdashline 1 & -3 \end{array}\right], ~~ d = \left[\begin{array}{@{}c@{}} 0 \\ -3 \\ \hdashline -7 \end{array}\right].
+\end{equation*}
+
+我们将约束条件写为
+\begin{equation*}
+\begin{aligned}
+x_1 + x_2 & = 1 - x_3, \\
+x_1 - 2x_2 & = -2 + 3x_3.
+\end{aligned}
+\end{equation*}
+利用高斯消元法, 解得$x_1 = \frac{1}{3} x_3, ~ x_2 = 1 - \frac{4}{3} x_3.$ 代入原目标函数得
+\begin{equation*}
+\psi(x_3) = \frac{5 x_{3}^{2}}{3} - 4 x_{3} - 2.
+\end{equation*}
+$\psi$的Hessian阵$\nabla^2 \psi = \psi'' = \frac{10}{3} > 0,$ 于是有唯一解. 由$0 = \nabla \psi (x_3) = \frac{10 x_{3}}{3} - 4$解得$x_3^* = \frac{6}{5}.$ 回代得$x_1^* = \frac{2}{5},$ $x_2^* = -\frac{3}{5},$ 即$x^* = \left( \frac{2}{5}, -\frac{3}{5}, \frac{6}{5} \right)^T.$ 最后, 解方程组\eqref{eq:quadratic-programming-eq-lambda}, 即
+\begin{equation*}
+\begin{bmatrix} 1 & 1 \\ 1 & -2 \\ 1 & -3 \end{bmatrix} ~ \begin{bmatrix} \lambda_1^* \\ \lambda_2^* \end{bmatrix} = - \begin{bmatrix} 2 & \frac{5}{2} & 0 \\ \frac{5}{2} & 2 & 0 \\ 0 & 0 & 4 \end{bmatrix} \begin{bmatrix} \frac{2}{5} \\ -\frac{3}{5} \\ \frac{6}{5} \end{bmatrix} - \begin{bmatrix} 0 \\ -3 \\ -7 \end{bmatrix},
+\end{equation*}
+的拉格朗日乘子$\lambda_1^* = \frac{11}{5}, \lambda_2^* = 0.$
 \end{eg}
 
 直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们还可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^T x = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换, 是直接消元法\eqref{eq:quadratic-programming-eq-constrained-subs}的推广.
@@ -188,19 +205,22 @@ x = Y b + Z y.
 \end{equation}
 
 下面我们来解无约束的极小化问题\eqref{eq:general-elim-4}. 考虑一阶条件
-\begin{equation*}
+\begin{equation}
+\label{eq:general-elim-5}
 0 = \nabla \psi (y) = Z^T G Z y + Z^T \left( d + G Y b \right),
-\end{equation*}
+\end{equation}
 若既约Hessian阵$Z^T G Z$是正定的, 那么有唯一解. 解关于$y$的线性方程组
-\begin{equation*}
+\begin{equation}
+\label{eq:general-elim-y}
 Z^T G Z y = - Z^T \left( d + G Y b \right)
-\end{equation*}
+\end{equation}
 得唯一解$y^*,$ 再代入变量替换式\eqref{eq:quadratic-programming-eq-constrained-subs}得到原问题的唯一解$x^* = Y b + Z y^*.$ 由KKT条件\eqref{eq:quadratic-programming-kkt}, 拉格朗日乘子满足$A\lambda^* = -\left( Gx^* + d \right) =: - g^*,$ 两边同时左乘$Y^T,$ 有
-\begin{equation*}
+\begin{equation}
+\label{eq:general-elim-lambda}
 \lambda^* = \left( A^T Y \right)^T \lambda^* = -Y^T g^*.
-\end{equation*}
+\end{equation}
 
-到目前为止, 我们还没有介绍如何选取, 或者说构造矩阵$Y$和$Z.$ 矩阵$Y, Z$的构造方法有很多种, 通常首选的是正交分解法. 我们对矩阵$A$进行QR分解, 即
+到目前为止, 我们还没有介绍如何选取, 或者说构造矩阵$Y$和$Z.$ 矩阵$Y, Z$的构造方法有很多种, 通常首选的是正交分解法(orthogonal factorization method). 我们对矩阵$A$进行QR分解, 即
 \begin{equation}
 \label{eq:quadratic-programming-qr-decomp-1}
 A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} = Q_1 R,
@@ -210,20 +230,38 @@ A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmat
 \label{eq:quadratic-programming-qr-decomp-2}
 Y = Q_1 R^{-T}, ~~ Z = Q_2
 \end{equation}
-即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y, Z$的要求.
-
-待写。。。。
+即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y, Z$的要求. 通过解线性方程组$R^T v = b$得到一个特解$v,$ 进而得到\eqref{eq:general-elim-3}中的特解$Y b = Y R^T v = Q_1 v.$ 接下来我们只要按照广义消元法的程序, 解关于既约变量$y$的方程组\eqref{eq:general-elim-y}得到唯一解$y^*,$ 回代得到原问题最优解$x^* = Y b + Z y^*,$ 以及用式\eqref{eq:general-elim-lambda}计算得到相应的拉格朗日乘子.
 
 \begin{eg}[广义消元法]
 \label{eg:7.2.2}
 待写
 \end{eg}
 
-我们还可以直接从等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的KKT条件\eqref{eq:quadratic-programming-kkt-2-mat}入手, 来寻求该问题的解.
+我们还可以直接从等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的KKT条件入手, 来寻求该问题的解. 等式约束的二次规划问题的KKT条件可以从式\eqref{eq:quadratic-programming-kkt}简化为
+\begin{equation}
+\label{eq:quadratic-programming-kkt-2}
+\begin{aligned}
+& G x^* + d + A \lambda^* = 0, \\
+& A^T x^* - b = 0.
+\end{aligned}
+\end{equation}
+写为矩阵形式, 即为
+\begin{equation}
+\label{eq:quadratic-programming-kkt-2-mat}
+\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix} \begin{bmatrix} x^* \\ \lambda^* \end{bmatrix} = \begin{bmatrix} -d \\ b \end{bmatrix}.
+\end{equation}
+上式中的系数矩阵$\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}$被称作拉格朗日矩阵, 也被称作KKT矩阵, 很容易看出KKT矩阵是对称不定的. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的求解就转化为了线性方程组\eqref{eq:quadratic-programming-kkt-2-mat}的求解.
 
-\subsection{实用二次规划算法概述}
+待写。。。。
+
+
+\subsection{求解二次规划问题的积极集法}
 \label{subsec:7.2.2}
 % NOT finished
+
+对于求解一般的带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}, 我们有一系列的实用算法来求解这些问题. 经典的积极集法(active-set methods)自从20世纪70年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模(成百上千个变量)的凸和非凸的二次规划问题. 梯度投影法(gradient-projection methods)是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束($a_i \leqslant x_i \leqslant b_i,$ 我们称这样的问题为BoxQP). 还有一类方法是内点法(interior-point methods), 广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于20世纪90年代. 内点法适用于求解大规模的凸二次规划问题. 本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题.
+
+待写。。。。
 
 \subsection*{习题}
 % NOT finished
