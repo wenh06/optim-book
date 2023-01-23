@@ -232,9 +232,29 @@ Y = Q_1 R^{-T}, ~~ Z = Q_2
 \end{equation}
 即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y, Z$的要求. 通过解线性方程组$R^T v = b$得到一个特解$v,$ 进而得到\eqref{eq:general-elim-3}中的特解$Y b = Y R^T v = Q_1 v.$ 接下来我们只要按照广义消元法的程序, 解关于既约变量$y$的方程组\eqref{eq:general-elim-y}得到唯一解$y^*,$ 回代得到原问题最优解$x^* = Y b + Z y^*,$ 以及用式\eqref{eq:general-elim-lambda}计算得到相应的拉格朗日乘子.
 
-\begin{eg}[广义消元法]
+\begin{eg}
 \label{eg:7.2.2}
-待写
+我们用广义消元法来求解例\eqref{eg:7.2.1}中的二次规划问题. 首先得到约束条件系数矩阵转置$A$的QR分解
+\begin{equation*}
+A = \begin{bmatrix} 1 & 1 \\ 1 & -2 \\ 1 & -3 \end{bmatrix} = \left[\begin{array}{@{}cc:c@{}} \frac{\sqrt{3}}{3} & \frac{7 \sqrt{78}}{78} & \frac{\sqrt{26}}{26} \\ \frac{\sqrt{3}}{3} & - \frac{\sqrt{78}}{39} & - \frac{2 \sqrt{26}}{13} \\ \frac{\sqrt{3}}{3} & - \frac{5 \sqrt{78}}{78} & \frac{3 \sqrt{26}}{26} \end{array}\right] ~ \left[\begin{array}{@{}cc@{}} \sqrt{3} & - \frac{4 \sqrt{3}}{3} \\ 0 & \frac{\sqrt{78}}{3} \\ \hdashline 0 & 0 \end{array}\right]
+\end{equation*}
+令
+\begin{equation*}
+Y = \left[\begin{matrix} \frac{\sqrt{3}}{3} & \frac{7 \sqrt{78}}{78} \\ \frac{\sqrt{3}}{3} & - \frac{\sqrt{78}}{39} \\ \frac{\sqrt{3}}{3} & - \frac{5 \sqrt{78}}{78} \end{matrix}\right] ~ \left[\begin{matrix} \sqrt{3} & - \frac{4 \sqrt{3}}{3} \\ 0 & \frac{\sqrt{78}}{3} \end{matrix}\right]^{-T} = \frac{1}{26} \left[\begin{matrix} 18 & 7 \\ 6 & -2 \\ 2 & -5 \end{matrix}\right], ~~ Z = \frac{1}{\sqrt{26}} \left[\begin{matrix} 1 \\ -4 \\ 3 \end{matrix}\right]
+\end{equation*}
+此时, $Z^T G Z = \frac{15}{13} > 0,$ 有唯一解. 代入关于既约变量$y$的线性方程组\eqref{eq:general-elim-y}有
+\begin{equation*}
+\frac{15}{13} y = - Z^T \left( d + G Y b \right) = \frac{48 \sqrt{26}}{169},
+\end{equation*}
+解得$y^* = \frac{16 \sqrt{26}}{65}.$ 回代得到原问题的最优解
+\begin{equation*}
+x^* = Y b + Z y^* = \left[\begin{matrix} \frac{2}{5} \\ - \frac{3}{5} \\ \frac{6}{5} \end{matrix}\right],
+\end{equation*}
+以及利用式\eqref{eq:general-elim-lambda}得到拉格朗日乘子
+\begin{equation*}
+\lambda^* = - Y^T \left( Gx^* + d \right) = \left[\begin{matrix} \frac{11}{5} \\ 0 \end{matrix}\right].
+\end{equation*}
+这与我们在例\eqref{eg:7.2.1}中用直接消元法得到的结果是一样的.
 \end{eg}
 
 我们还可以直接从等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的KKT条件入手, 来寻求该问题的解. 等式约束的二次规划问题的KKT条件可以从式\eqref{eq:quadratic-programming-kkt}简化为
