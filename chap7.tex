@@ -96,7 +96,7 @@
 & \lambda^*_{\mathcal{I}} \succcurlyeq 0, ~ A_{\mathcal{I}}^T x^* - b_{\mathcal{I}} \preccurlyeq 0, ~ (\lambda^*_{\mathcal{I}})^T (A_{\mathcal{I}}^T x^* - b_{\mathcal{I}}) = 0,
 \end{aligned}
 \end{equation}
-其中$A = (a_1, \ldots, a_m);$ $\lambda^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$为拉格朗日乘子, $\lambda^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ $x^*$为KKT点.
+其中$A = (a_1, \ldots, a_m);$ $\lambda^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$为拉格朗日乘子, $\lambda^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ $x^*$为KKT点. 值得注意的是, 由于二次规划问题线性约束规范总成立, 二次规划问题的任一解都满足KKT条件\eqref{eq:quadratic-programming-kkt}.
 
 与线性规划问题类似, 一个二次规划问题总是能在有限步内求解, 或者证明其是不可行的或者无(下）界的. 当二次规划问题有解时, 若目标函数$q(x) = \frac{1}{2} x^T G x + d^T x$的Hessian阵$G$是半正定的, 那么$q(x)$是凸函数, 则该二次规划问题是凸规划问题, 其KKT点即为全局极小值点; 如果$G$是正定的, 则解是唯一的(唯一的全局极小值点). 当$G$不定时, 目标函数$q(x)$非凸, 可能有多个鞍点以及局部极小值点, 这些局部极小值点可能不是全局最优解. 此时, 求解全局最优解是一个NP-难的问题\cite{Murty_1987}.
 
@@ -155,7 +155,7 @@ x_1 = A_1^{-T} (b - A_2^Tx_2).
 \end{equation*}
 那么相应的矩阵及其划分为
 \begin{equation*}
-G = \left[\begin{array}{@{}cc:c@{}} 2 & 5 & 0 \\ 5 & 2 & 0 \\ \hdashline 0 & 0 & 4 \end{array}\right], ~~ A = \left[\begin{array}{@{}cc@{}} 1 & 1 \\ 1 & -2 \\ \hdashline 1 & -3 \end{array}\right], ~~ d = \left[\begin{array}{@{}c@{}} 0 \\ -3 \\ \hdashline -7 \end{array}\right].
+A = \left[\begin{array}{@{}cc@{}} 1 & 1 \\ 1 & -2 \\ \hdashline 1 & -3 \end{array}\right], ~~ G = \left[\begin{array}{@{}cc:c@{}} 2 & 5 & 0 \\ 5 & 2 & 0 \\ \hdashline 0 & 0 & 4 \end{array}\right], ~~ d = \left[\begin{array}{@{}c@{}} 0 \\ -3 \\ \hdashline -7 \end{array}\right].
 \end{equation*}
 
 我们将约束条件写为
@@ -171,9 +171,9 @@ x_1 - 2x_2 & = -2 + 3x_3.
 \end{equation*}
 $\psi$的Hessian阵$\nabla^2 \psi = \psi'' = \frac{10}{3} > 0,$ 于是有唯一解. 由$0 = \nabla \psi (x_3) = \frac{10 x_{3}}{3} - 4$解得$x_3^* = \frac{6}{5}.$ 回代得$x_1^* = \frac{2}{5},$ $x_2^* = -\frac{3}{5},$ 即$x^* = \left( \frac{2}{5}, -\frac{3}{5}, \frac{6}{5} \right)^T.$ 最后, 解方程组\eqref{eq:quadratic-programming-eq-lambda}, 即
 \begin{equation*}
-\begin{bmatrix} 1 & 1 \\ 1 & -2 \\ 1 & -3 \end{bmatrix} ~ \begin{bmatrix} \lambda_1^* \\ \lambda_2^* \end{bmatrix} = - \begin{bmatrix} 2 & \frac{5}{2} & 0 \\ \frac{5}{2} & 2 & 0 \\ 0 & 0 & 4 \end{bmatrix} \begin{bmatrix} \frac{2}{5} \\ -\frac{3}{5} \\ \frac{6}{5} \end{bmatrix} - \begin{bmatrix} 0 \\ -3 \\ -7 \end{bmatrix},
+\begin{bmatrix} 1 & 1 \\ 1 & -2 \\ 1 & -3 \end{bmatrix} ~ \begin{bmatrix} \lambda_1^* \\ \lambda_2^* \end{bmatrix} = - \begin{bmatrix} 2 & 5 & 0 \\ 5 & 2 & 0 \\ 0 & 0 & 4 \end{bmatrix} \begin{bmatrix} \frac{2}{5} \\ -\frac{3}{5} \\ \frac{6}{5} \end{bmatrix} - \begin{bmatrix} 0 \\ -3 \\ -7 \end{bmatrix},
 \end{equation*}
-的拉格朗日乘子$\lambda_1^* = \frac{11}{5}, \lambda_2^* = 0.$
+算得拉格朗日乘子$\lambda_1^* = \frac{11}{5}, \lambda_2^* = 0.$
 \end{eg}
 
 直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们还可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^T x = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换, 是直接消元法\eqref{eq:quadratic-programming-eq-constrained-subs}的推广.
@@ -279,7 +279,33 @@ x^* = Y b + Z y^* = \left[\begin{matrix} \frac{2}{5} \\ - \frac{3}{5} \\ \frac{6
 \label{subsec:7.2.2}
 % NOT finished
 
-对于求解一般的带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}, 我们有一系列的实用算法来求解这些问题. 经典的积极集法(active-set methods)自从20世纪70年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模(成百上千个变量)的凸和非凸的二次规划问题. 梯度投影法(gradient-projection methods)是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束($a_i \leqslant x_i \leqslant b_i,$ 我们称这样的问题为BoxQP). 还有一类方法是内点法(interior-point methods), 广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于20世纪90年代. 内点法适用于求解大规模的凸二次规划问题. 本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题.
+对于求解一般的带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}, 我们有一系列的实用算法来求解这些问题. 经典的积极集法(active-set methods)自从20世纪70年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模(成百上千个变量)的凸和非凸的二次规划问题. 梯度投影法(gradient-projection methods)是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束的二次规划问题($a_i \leqslant x_i \leqslant b_i,$ 我们称这样的问题为BoxQP). 还有一类方法是内点法(interior-point methods), 广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于20世纪90年代. 内点法适用于求解大规模的凸二次规划问题. 本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题.
+
+我们回忆一下, 对于二次规划问题\eqref{eq:quadratic-programming-1}, 积极集$\mathcal{A}(x)$的定义为
+\begin{equation}
+\label{eq:qp-active-set}
+\mathcal{A} = \mathcal{A}(x) = \left\{ i ~ \middle| ~ a_i^T x = b_i, ~ i \in \mathcal{E} \cup \mathcal{I} \right\},
+\end{equation}
+即在点$x$处, 等式成立的约束条件的下标组成的集合. 在积极集法中, 我们将积极集$\mathcal{A}$确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题\eqref{eq:quadratic-programming-1}的解处的正确的积极约束.
+
+更具体来说, 在第$k$次迭代, 我们从可行点$x^{(k)}$出发, 积极集为$\mathcal{A} = \mathcal{A}(x^{(k)}).$ 为描述简单, 我们假设原问题是凸二次规划问题. 在这一步迭代中, 我们求解一个仅包括积极约束的等式约束二次规划问题
+\begin{equation}
+\label{eq:qp-active-set-1}
+\begin{array}{cl}
+\text{minimize} & \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & a_i^T x = b_i, ~ i \in \mathcal{A}.
+\end{array}
+\end{equation}
+
+更方便的做法是将原点平移到$x^{(k)},$ 令$s = x - x^{(k)},$ 求解问题
+\begin{equation}
+\label{eq:qp-active-set-2}
+\begin{array}{cl}
+\text{minimize} & \frac{1}{2} s^T G s + (g^{(k)})^T s, \\
+\text{subject to} & a_i^T s = 0, ~ i \in \mathcal{A},
+\end{array}
+\end{equation}
+其中$g^{(k)} = \nabla q(x^{(k)}) = G x^{(k)} + d$是原二次规划问题\eqref{eq:quadratic-programming-1}的目标函数$q(x)$在点$x^{(k)}$处的梯度向量. 这个问题是一个等式约束的二次规划问题, 可以用上一小节\S\ref{subsec:7.2.1}中介绍的等式约束二次规划问题的求解方法进行求解. 记其解为$s^{(k)},$ 拉格朗日乘子为$\lambda^{(k)}.$
 
 待写。。。。
 
@@ -297,6 +323,25 @@ x^* = Y b + Z y^* = \left[\begin{matrix} \frac{2}{5} \\ - \frac{3}{5} \\ \frac{6
 设$A$列满秩, $Z$为矩阵$A$的列零空间的一组基构成的矩阵, 既约Hessian阵$Z^T G Z$正定. 证明该二次规划问题有唯一极小点, 该点就是唯一的全局最优解.
 
 \item SCHUR-COMPLEMENT METHOD
+
+\item 写出二次规划问题
+\begin{equation*}
+\begin{array}{cl}
+\text{maximize} & q(x) = 6x_1 + 4x_2 - 13 - x_1^2 - x_2^2, \\
+\text{subject to} & x_1 + x_2 \leqslant 3, \\
+& x_1, ~ x_2 \geqslant 0
+\end{array}
+\end{equation*}
+的KKT条件. 写出上述规划问题的对偶问题, 以及对偶问题的对偶问题.
+
+\item 分别利用直接消元法以及正交分解法(广义消元法)求解如下的等式约束的二次规划问题, 并检查它们得到的解是否相同.
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(x) = x_1^2 + x_2^2 + x_3^2 + 2x_3, \\
+\text{subject to} & x_1 + 2x_2 - x_3 = 4, \\
+& x_1 - x_2 + x_3 = -2.
+\end{array}
+\end{equation*}
 \end{enumerate}
 
 \bibliographystyle{sbc}
