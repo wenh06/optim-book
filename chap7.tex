@@ -15,6 +15,7 @@
 \usepackage{txfonts}
 \usepackage{mathalfa}
 \usepackage{enumitem}
+\usepackage{bm}
 
 \usepackage{arydshln}
 \setlength{\dashlinegap}{2pt}
@@ -42,7 +43,7 @@
 \newcommand{\mylabel}[2]{#2\def\@currentlabel{#2}\label{#1}}
 \makeatother
 
-% \newcommand{\V}[1]{\bf{#1}}
+\newcommand{\V}[1]{{\bm{#1}}}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -83,88 +84,87 @@
 \begin{equation}
 \label{eq:quadratic-programming-1}
 \begin{array}{cl}
-\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
-\text{subject to} & a_i^T x = b_i, ~~ i \in \mathcal{E} = \{1, \ldots, m_1\}, \\
-& a_i^T x \leqslant b_i, ~~ i \in \mathcal{I} = \{m_1 + 1, \ldots, m\},
+\text{minimize} & q(\V{x}) := \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}, \\
+\text{subject to} & \V{a}_i^T \V{x} = b_i, ~~ i \in \mathcal{E} = \{1, \ldots, m_1\}, \\
+& \V{a}_i^T \V{x} \leqslant b_i, ~~ i \in \mathcal{I} = \{m_1 + 1, \ldots, m\},
 \end{array}
 \end{equation}
-其中$G$是$n$阶对称方阵, $d, a_i,$ 是$n$维列向量, $b_i$是常数, $i \in \mathcal{E} \cup \mathcal{I},$ 约束条件有等式约束以及不等式约束. 以上形式的二次规划问题可以将约束条件以矩阵的形式表达为更加紧凑的形式：
+其中$G$是$n$阶对称方阵, $\V{d}, \V{a}_i,$ 是$n$维列向量, $b_i$是常数, $i \in \mathcal{E} \cup \mathcal{I},$ 约束条件有等式约束以及不等式约束. 以上形式的二次规划问题可以将约束条件以矩阵的形式表达为更加紧凑的形式：
 \begin{equation}
 \label{eq:quadratic-programming-2}
 \begin{array}{cl}
-\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
-\text{subject to} & A^T_{\mathcal{E}} x = b_{\mathcal{E}}, ~~ A^T_{\mathcal{I}} x \preccurlyeq b_{\mathcal{I}},
+\text{minimize} & q(\V{x}) := \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}, \\
+\text{subject to} & A^T_{\mathcal{E}} \V{x} = \V{b}_{\mathcal{E}}, ~~ A^T_{\mathcal{I}} x \preccurlyeq \V{b}_{\mathcal{I}},
 \end{array}
 \end{equation}
-其中$A_{\mathcal{E}} = (a_1, \ldots, a_{m_1}), b_{\mathcal{E}} = (b_1, \ldots, b_{m_1})^T;$ $A_{\mathcal{I}} = (a_{m_1+1}, \ldots, a_m), b_{\mathcal{I}} = (b_{m_1+1}1, \ldots, b_m)^T.$ $A^T_{\mathcal{I}} x \preccurlyeq b_{\mathcal{I}}$表示向量$A^T_{\mathcal{I}} b_{\mathcal{I}}$的每个元素都小于等于向量$b$相应位置元素. 问题\eqref{eq:quadratic-programming-2}的KKT条件为
+其中$A_{\mathcal{E}} = (\V{a}_1, \ldots, \V{a}_{m_1}), \V{b}_{\mathcal{E}} = (b_1, \ldots, b_{m_1})^T;$ $A_{\mathcal{I}} = (\V{a}_{m_1+1}, \ldots, \V{a}_m), \V{b}_{\mathcal{I}} = (b_{m_1+1}1, \ldots, b_m)^T.$ $A^T_{\mathcal{I}} \V{x} \preccurlyeq \V{b}_{\mathcal{I}}$表示向量$A^T_{\mathcal{I}} \V{b}_{\mathcal{I}}$的每个元素都小于等于向量$\V{b}_{\mathcal{I}}$相应位置元素. 问题\eqref{eq:quadratic-programming-2}的KKT条件为
 \begin{equation}
 \label{eq:quadratic-programming-kkt}
 \begin{aligned}
-& \nabla q(x^*) + A \lambda^* = 0, \\
-& A^T_{\mathcal{E}} x^* - b_{\mathcal{E}} = 0, \\
-& \lambda^*_{\mathcal{I}} \succcurlyeq 0, ~ A_{\mathcal{I}}^T x^* - b_{\mathcal{I}} \preccurlyeq 0, ~ (\lambda^*_{\mathcal{I}})^T (A_{\mathcal{I}}^T x^* - b_{\mathcal{I}}) = 0,
+& \nabla q(\V{x}^*) + A \V{\lambda}^* = \V{0}, \\
+& A^T_{\mathcal{E}} \V{x}^* - \V{b}_{\mathcal{E}} = \V{0}, \\
+& \V{\lambda}^*_{\mathcal{I}} \succcurlyeq \V{0}, ~ A_{\mathcal{I}}^T \V{x}^* - \V{b}_{\mathcal{I}} \preccurlyeq \V{0}, ~ (\V{\lambda}^*_{\mathcal{I}})^T (A_{\mathcal{I}}^T \V{x}^* - \V{b}_{\mathcal{I}}) = \V{0},
 \end{aligned}
 \end{equation}
-其中$A = (a_1, \ldots, a_m);$ $\lambda^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$为拉格朗日乘子, $\lambda^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ $x^*$为KKT点. 值得注意的是, 由于二次规划问题线性约束规范总成立, 二次规划问题的任一解都满足KKT条件\eqref{eq:quadratic-programming-kkt}.
+其中$A = (\V{a}_1, \ldots, \V{a}_m);$ $\V{\lambda}^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$为拉格朗日乘子, $\V{\lambda}^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ $\V{x}^*$为KKT点. 值得注意的是, 由于二次规划问题线性约束规范总成立, 二次规划问题的任一解都满足KKT条件\eqref{eq:quadratic-programming-kkt}.
 
-与线性规划问题类似, 一个二次规划问题总是能在有限步内求解, 或者证明其是不可行的或者无(下）界的. 当二次规划问题有解时, 若目标函数$q(x) = \frac{1}{2} x^T G x + d^T x$的Hessian阵$G$是半正定的, 那么$q(x)$是凸函数, 则该二次规划问题是凸规划问题, 其KKT点即为全局极小值点; 如果$G$是正定的, 则解是唯一的(唯一的全局极小值点). 当$G$不定时, 目标函数$q(x)$非凸, 可能有多个鞍点以及局部极小值点, 这些局部极小值点可能不是全局最优解. 此时, 求解全局最优解是一个NP-难的问题\cite{Murty_1987}.
-
+与线性规划问题类似, 一个二次规划问题总是能在有限步内求解, 或者证明其是不可行的或者无(下）界的. 当二次规划问题有解时, 若目标函数$q(\V{x}) = \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}$的Hessian阵$G$是半正定的, 那么$q(\V{x})$是凸函数, 则该二次规划问题是凸规划问题, 其KKT点即为全局极小值点; 如果$G$是正定的, 则解是唯一的(唯一的全局极小值点). 当$G$不定时, 目标函数$q(\V{x})$非凸, 可能有多个鞍点以及局部极小值点, 这些局部极小值点可能不是全局最优解. 此时, 求解全局最优解是一个NP-难的问题\cite{Murty_1987}.
 
 \subsection{等式约束的二次规划问题}
 \label{subsec:7.2.1}
-% NOT finished
+% almost finished
 
 我们首先考虑最简单的等式约束的二次规划问题, 问题形式如下
 \begin{equation}
 \label{eq:quadratic-programming-eq-constrained}
 \begin{array}{cl}
-\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
-\text{subject to} & A^T x = b,
+\text{minimize} & q(\V{x}) := \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}, \\
+\text{subject to} & A^T \V{x} = \V{b},
 \end{array}
 \end{equation}
-其中$A = (a_1, \ldots, a_m)^T$是一个$n \times m$的矩阵, $b\in \R^m.$ 我们假设$A$列满秩, 即$A$的秩为$m \leqslant n.$ 如若不然, 只需要去掉线性相关的约束即可.
+其中$A = (\V{a}_1, \ldots, \V{a}_m)^T$是一个$n \times m$的矩阵, $\V{b} \in \R^m.$ 我们假设$A$列满秩, 即$A$的秩为$m \leqslant n.$ 如若不然, 只需要去掉线性相关的约束即可.
 
-求解等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的一个最直接的想法是通过等约束条件消去部分变量, 将问题化为无约束极小化问题进行求解. 我们将矩阵$A, G,$ 向量$d$, 以及变量$x$进行分块
+求解等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的一个最直接的想法是通过等约束条件消去部分变量, 将问题化为无约束极小化问题进行求解. 我们将矩阵$A, G,$ 向量$\V{d}$, 以及变量$\V{x}$进行分块
 \begin{equation*}
-A = \begin{bmatrix} A_1 \\ A_2 \end{bmatrix}, ~ G = \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix}, ~ d = \begin{bmatrix} d_1 \\ d_2 \end{bmatrix}, ~ x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix},
+A = \begin{bmatrix} A_1 \\ A_2 \end{bmatrix}, ~ G = \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix}, ~ \V{d} = \begin{bmatrix} \V{d}_1 \\ \V{d}_2 \end{bmatrix}, ~ \V{x} = \begin{bmatrix} \V{x}_1 \\ \V{x}_2 \end{bmatrix},
 \end{equation*}
-其中$A_1$是可逆的$m$阶方阵, $x_1 \in \R^{m},$ $x_2 \in \R^{n-m},$ $G$与$d$的划分与$x$的划分相容. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}中的约束方程组$A^T x = b$就可写作$A_1^T x_1 + A_2^T x_2 = b.$ 由于$A_1$可逆, 可以利用高斯消元法求解关于$x_1$的线性方程组$A_1^Tx_1 = b - A_2^Tx_2$得
+其中$A_1$是可逆的$m$阶方阵, $\V{x}_1 \in \R^{m},$ $\V{x}_2 \in \R^{n-m},$ $G$与$\V{d}$的划分与$\V{x}$的划分相容. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}中的约束方程组$A^T \V{x} = \V{b}$就可写作$A_1^T \V{x}_1 + A_2^T \V{x}_2 = \V{b}.$ 由于$A_1$可逆, 可以利用高斯消元法求解关于$\V{x}_1$的线性方程组$A_1^T \V{x}_1 = \V{b} - A_2^T \V{x}_2$得
 \begin{equation}
 \label{eq:quadratic-programming-eq-constrained-subs}
-x_1 = A_1^{-T} (b - A_2^Tx_2).
+\V{x}_1 = A_1^{-T} (\V{b} - A_2^T \V{x}_2).
 \end{equation}
-将上式代入目标函数$q(x),$ 可得关于$x_2$的二次函数
+将上式代入目标函数$q(\V{x}),$ 可得关于$\V{x}_2$的二次函数
 \begin{equation}
 \begin{aligned}
-\psi (x_2) := & \frac{1}{2} x_2^T \left( G_{22} - G_{21} A_1^{-T} A_2^T - A_2 A_1^{-1} G_{12} + A_2 A_1^{-1} G_{12} A_1^{-T} A_2^T \right) x_2 \\
-& + x_2^T \left( G_{21} - A_2 A_1^{-1} G_{11} \right) A_1^{-T} b + \frac{1}{2} b^T A_1^{-1} G_{11} A_1^{-T} b \\
-& + x_2^T \left( d_2 - A_2 A_1^{-1} d_1 \right) + d_1^T A_1^{-T} b.
+\psi (\V{x}_2) := & \frac{1}{2} \V{x}_2^T \left( G_{22} - G_{21} A_1^{-T} A_2^T - A_2 A_1^{-1} G_{12} + A_2 A_1^{-1} G_{12} A_1^{-T} A_2^T \right) \V{x}_2 \\
+& + \V{x}_2^T \left( G_{21} - A_2 A_1^{-1} G_{11} \right) A_1^{-T} \V{b} + \frac{1}{2} \V{b}^T A_1^{-1} G_{11} A_1^{-T} \V{b} \\
+& + \V{x}_2^T \left( \V{d}_2 - A_2 A_1^{-1} \V{d}_1 \right) + \V{d}_1^T A_1^{-T} \V{b}.
 \end{aligned}
 \end{equation}
 于是, 等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}转化为了无约束极小化问题
 \begin{equation*}
-\text{minimize} ~~ \psi(x_2)
+\text{minimize} ~~ \psi(\V{x}_2)
 \end{equation*}
-如果$\nabla^2 \psi$正定, 解(一阶条件)线性方程组$\nabla \psi (x_2) = 0$可得唯一解$x_2^*,$ 回代入\eqref{eq:quadratic-programming-eq-constrained-subs}可得$x_1^* = A_1^{-1} (b - A_2x_2^*).$ 拉格朗日乘子$\lambda^*$由KKT条件\eqref{eq:quadratic-programming-kkt}给出, 即
+如果$\nabla^2 \psi$正定, 解(一阶条件)线性方程组$\nabla \psi (\V{x}_2) = 0$可得唯一解$\V{x}_2^*,$ 回代入\eqref{eq:quadratic-programming-eq-constrained-subs}可得$\V{x}_1^* = A_1^{-1} ( \V{b} - A_2 \V{x}_2^* ).$ 拉格朗日乘子$\V{\lambda}^*$由KKT条件\eqref{eq:quadratic-programming-kkt}给出, 即
 \begin{equation}
 \label{eq:quadratic-programming-eq-lambda}
-\begin{bmatrix} A_1 \\ A_2 \end{bmatrix} \lambda^* = A \lambda^* = -\nabla q(x^*) = - G x^* - d = - \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix} \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} - \begin{bmatrix} d_1 \\ d_2 \end{bmatrix}
+\begin{bmatrix} A_1 \\ A_2 \end{bmatrix} \V{\lambda}^* = A \V{\lambda}^* = -\nabla q(\V{x}^*) = - G \V{x}^* - \V{d} = - \begin{bmatrix} G_{11} & G_{12} \\ G_{21} & G_{22} \end{bmatrix} \begin{bmatrix} \V{x}_1^* \\ \V{x}_2^* \end{bmatrix} - \begin{bmatrix} \V{d}_1 \\ \V{d}_2 \end{bmatrix}
 \end{equation}
-确定. 解得拉格朗日乘子的显式表达$\lambda^* = -A_1^{-1} \left( G_{11}x_1^* + G_{12}x_2^* + d_1 \right).$
+确定. 解得拉格朗日乘子的显式表达$\V{\lambda}^* = -A_1^{-1} \left( G_{11} \V{x}_1^* + G_{12} \V{x}_2^* + \V{d}_1 \right).$
 
 \begin{eg}
 \label{eg:7.2.1}
 我们用直接消元法求解下列等式约束的二次规划问题
 \begin{equation*}
 \begin{array}{cl}
-\text{minimize} & q(x) = x_1^2 + x_2^2 + 2x_3^2 + 5x_1x_2 - 3x_2 - 7x_3, \\
+\text{minimize} & q(\V{x}) = x_1^2 + x_2^2 + 2x_3^2 + 5x_1x_2 - 3x_2 - 7x_3, \\
 \text{subject to} & x_1 + x_2 + x_3 = 1, \\
 & x_1 - 2x_2 - 3x_3 = -2,
 \end{array}
 \end{equation*}
 那么相应的矩阵及其划分为
 \begin{equation*}
-A = \left[\begin{array}{@{}cc@{}} 1 & 1 \\ 1 & -2 \\ \hdashline 1 & -3 \end{array}\right], ~~ G = \left[\begin{array}{@{}cc:c@{}} 2 & 5 & 0 \\ 5 & 2 & 0 \\ \hdashline 0 & 0 & 4 \end{array}\right], ~~ d = \left[\begin{array}{@{}c@{}} 0 \\ -3 \\ \hdashline -7 \end{array}\right].
+A = \left[\begin{array}{@{}cc@{}} 1 & 1 \\ 1 & -2 \\ \hdashline 1 & -3 \end{array}\right], ~~ G = \left[\begin{array}{@{}cc:c@{}} 2 & 5 & 0 \\ 5 & 2 & 0 \\ \hdashline 0 & 0 & 4 \end{array}\right], ~~ \V{d} = \left[\begin{array}{@{}c@{}} 0 \\ -3 \\ \hdashline -7 \end{array}\right].
 \end{equation*}
 
 我们将约束条件写为
@@ -178,60 +178,60 @@ x_1 - 2x_2 & = -2 + 3x_3.
 \begin{equation*}
 \psi(x_3) = \frac{5 x_{3}^{2}}{3} - 4 x_{3} - 2.
 \end{equation*}
-$\psi$的Hessian阵$\nabla^2 \psi = \psi'' = \frac{10}{3} > 0,$ 于是有唯一解. 由$0 = \nabla \psi (x_3) = \frac{10 x_{3}}{3} - 4$解得$x_3^* = \frac{6}{5}.$ 回代得$x_1^* = \frac{2}{5},$ $x_2^* = -\frac{3}{5},$ 即$x^* = \left( \frac{2}{5}, -\frac{3}{5}, \frac{6}{5} \right)^T.$ 最后, 解方程组\eqref{eq:quadratic-programming-eq-lambda}, 即
+$\psi$的Hessian阵$\nabla^2 \psi = \psi'' = \frac{10}{3} > 0,$ 于是有唯一解. 由$0 = \nabla \psi (x_3) = \frac{10 x_{3}}{3} - 4$解得$x_3^* = \frac{6}{5}.$ 回代得$x_1^* = \frac{2}{5},$ $x_2^* = -\frac{3}{5},$ 即$\V{x}^* = \left( \frac{2}{5}, -\frac{3}{5}, \frac{6}{5} \right)^T.$ 最后, 解方程组\eqref{eq:quadratic-programming-eq-lambda}, 即
 \begin{equation*}
 \begin{bmatrix} 1 & 1 \\ 1 & -2 \\ 1 & -3 \end{bmatrix} ~ \begin{bmatrix} \lambda_1^* \\ \lambda_2^* \end{bmatrix} = - \begin{bmatrix} 2 & 5 & 0 \\ 5 & 2 & 0 \\ 0 & 0 & 4 \end{bmatrix} \begin{bmatrix} \frac{2}{5} \\ -\frac{3}{5} \\ \frac{6}{5} \end{bmatrix} - \begin{bmatrix} 0 \\ -3 \\ -7 \end{bmatrix},
 \end{equation*}
 算得拉格朗日乘子$\lambda_1^* = \frac{11}{5}, \lambda_2^* = 0.$
 \end{eg}
 
-直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们还可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^T x = b$的通解, 回代入目标函数$q(x),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换, 是直接消元法\eqref{eq:quadratic-programming-eq-constrained-subs}的推广.
+直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的最优方法. 我们还可以采用广义消元法(generalized elimination)来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表达问题\eqref{eq:quadratic-programming-eq-constrained}等式约束(线性方程组)$A^T \V{x} = \V{b}$的通解, 回代入目标函数$q(\V{x}),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换, 是直接消元法\eqref{eq:quadratic-programming-eq-constrained-subs}的推广.
 
-我们知道, 对于非齐次线性方程组$A^Tx = b,$ 它如果有解, 那么它的通解可以表示为
+我们知道, 对于非齐次线性方程组$A^T \V{x} = \V{b},$ 它如果有解, 那么它的通解可以表示为
 \begin{equation}
 \label{eq:general-elim-1}
-x = Y b + s
+\V{x} = Y \V{b} + \V{s}
 \end{equation}
-其中$Y \in \R^{n\times m}$是系数矩阵$A^T$的某个广义逆, $s$是齐次线性方程组$A^T x = 0$的解, 或者说属于$A$的列零空间(null column space). $s$也被称作可行点$x$处的可行增量. 我们回忆一下, $m\times n$的矩阵$A^T$的广义逆, 指的是一个$n\times m$的矩阵$Y,$ 满足$A^T Y A^T = A^T.$ 同时, 非齐次线性方程组$A^Tx = b$有解当且仅当$A^T Y b = b.$ 假设我们取定了$n\times m$的矩阵$Y$以及$n \times (n-m)$的矩阵$Z,$ 满足
+其中$Y \in \R^{n\times m}$是系数矩阵$A^T$的某个广义逆, $\V{s}$是齐次线性方程组$A^T \V{x} = 0$的解, 或者说属于$A$的列零空间(null column space). $\V{s}$也被称作可行点$\V{x}$处的可行增量. 我们回忆一下, $m\times n$的矩阵$A^T$的广义逆, 指的是一个$n\times m$的矩阵$Y,$ 满足$A^T Y A^T = A^T.$ 同时, 非齐次线性方程组$A^T \V{x} = \V{b}$有解当且仅当$A^T Y \V{b} = \V{b}.$ 假设我们取定了$n \times m$的矩阵$Y$以及$n \times (n-m)$的矩阵$Z,$ 满足
 \begin{equation}
 \label{eq:eq:general-elim-req}
 \begin{bmatrix} Y & Z\end{bmatrix} \text{ 非奇异, 且~} A^T Y = I_m, ~ A^T Z = 0.
 \end{equation}
-也就是说$Y$是$A^T$的一个右广义逆(比广义逆的定义$A^T Y A^T = A^T$更进一步要求$A^T Y = I_m$). 而矩阵$Z$的列$z_1, \ldots, z_{n-m}$构成了$A$的列零空间的一组基, 也被称作既约(reduced)坐标方向, 矩阵$Z^T G Z$被称作二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的既约Hessian阵. 那么可行增量$s$可以表示为$z_1, \ldots, z_{n-m}$的线性组合
+也就是说$Y$是$A^T$的一个右广义逆(比广义逆的定义$A^T Y A^T = A^T$更进一步要求$A^T Y = I_m$). 而矩阵$Z$的列$\V{z}_1, \ldots, \V{z}_{n-m}$构成了$A$的列零空间的一组基, 也被称作既约(reduced)坐标方向, 矩阵$Z^T G Z$被称作二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的既约Hessian阵. 那么可行增量$\V{s}$可以表示为$\V{z}_1, \ldots, \V{z}_{n-m}$的线性组合
 \begin{equation}
 \label{eq:general-elim-2}
-s = Z y = \sum\limits_{i=1}^{n-m} y_i z_i,
+\V{s} = Z \V{y} = \sum\limits_{i=1}^{n-m} y_i \V{z}_i,
 \end{equation}
-其中$y_1, \ldots, y_{n-m}$是每个既约坐标方向的分量, 我们称$y = (y_1, \ldots, y_{n-m})^T$为既约变量. 将式\eqref{eq:general-elim-2}代入式\eqref{eq:general-elim-1}, 于是每一个可行点$x$都可以表示为
+其中$y_1, \ldots, y_{n-m}$是每个既约坐标方向的分量, 我们称$\V{y} = (y_1, \ldots, y_{n-m})^T$为既约变量. 将式\eqref{eq:general-elim-2}代入式\eqref{eq:general-elim-1}, 于是每一个可行点$\V{x}$都可以表示为
 \begin{equation}
 \label{eq:general-elim-3}
-x = Y b + Z y.
+\V{x} = Y \V{b} + Z \V{y}.
 \end{equation}
-这样, 我们就可以用既约变量$y$代换原变量$x,$ 将等式约束消去, 将原问题转化为了无约束的既约二次函数的极小化问题
+这样, 我们就可以用既约变量$\V{y}$代换原变量$\V{x},$ 将等式约束消去, 将原问题转化为了无约束的既约二次函数的极小化问题
 \begin{equation}
 \label{eq:general-elim-4}
-\text{minimize} ~~ \psi(y) := \frac{1}{2} y^T Z^T G Z y + \left( d + G Y b \right)^T Z y + \frac{1}{2} \left( 2d + G Y b \right)^T Y b.
+\text{minimize} ~~ \psi(\V{y}) := \frac{1}{2} \V{y}^T Z^T G Z \V{y} + \left( \V{d} + G Y \V{b} \right)^T Z \V{y} + \frac{1}{2} \left( 2\V{d} + G Y \V{b} \right)^T Y \V{b}.
 \end{equation}
 
 下面我们来解无约束的极小化问题\eqref{eq:general-elim-4}. 考虑一阶条件
 \begin{equation}
 \label{eq:general-elim-5}
-0 = \nabla \psi (y) = Z^T G Z y + Z^T \left( d + G Y b \right),
+0 = \nabla \psi (\V{y}) = Z^T G Z \V{y} + Z^T \left( \V{d} + G Y \V{b} \right),
 \end{equation}
-若既约Hessian阵$Z^T G Z$是正定的, 那么有唯一解. 解关于$y$的线性方程组
+若既约Hessian阵$Z^T G Z$是正定的, 那么有唯一解. 解关于$\V{y}$的线性方程组
 \begin{equation}
 \label{eq:general-elim-y}
-Z^T G Z y = - Z^T \left( d + G Y b \right)
+Z^T G Z \V{y} = - Z^T \left( \V{d} + G Y \V{b} \right)
 \end{equation}
-得唯一解$y^*,$ 再代入变量替换式\eqref{eq:quadratic-programming-eq-constrained-subs}得到原问题的唯一解$x^* = Y b + Z y^*.$ 由KKT条件\eqref{eq:quadratic-programming-kkt}, 拉格朗日乘子满足
+得唯一解$\V{y}^*,$ 再代入变量替换式\eqref{eq:quadratic-programming-eq-constrained-subs}得到原问题的唯一解$\V{x}^* = Y \V{b} + Z \V{y}^*.$ 由KKT条件\eqref{eq:quadratic-programming-kkt}, 拉格朗日乘子满足
 \begin{equation}
 \label{eq:general-elim-lagrange}
-A\lambda^* = -\left( Gx^* + d \right) =: - g^*,
+A \V{\lambda}^* = -\left( G \V{x}^* + \V{d} \right) =: - \V{g}^*,
 \end{equation}
 两边同时左乘$Y^T,$ 有
 \begin{equation}
 \label{eq:general-elim-lambda}
-\lambda^* = \left( A^T Y \right)^T \lambda^* = -Y^T g^*.
+\V{\lambda}^* = \left( A^T Y \right)^T \V{\lambda}^* = -Y^T \V{g}^*.
 \end{equation}
 
 到目前为止, 我们还没有介绍如何选取, 或者说构造矩阵$Y$和$Z.$ 矩阵$Y, Z$的构造方法有很多种, 通常首选的是正交分解法(orthogonal factorization method). 我们对矩阵$A$进行QR分解, 即
@@ -239,12 +239,12 @@ A\lambda^* = -\left( Gx^* + d \right) =: - g^*,
 \label{eq:quadratic-programming-qr-decomp-1}
 A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} = Q_1 R,
 \end{equation}
-其中$Q$是$n\times n$的正交阵, $R$是$m\times m$的可逆上三角阵. $Q_1, Q_2$分别是$n\times m$和$n\times (n - m)$的矩阵. 然后选取
+其中$Q$是$n \times n$的正交阵, $R$是$m \times m$的可逆上三角阵. $Q_1, Q_2$分别是$n \times m$和$n \times (n - m)$的矩阵. 然后选取
 \begin{equation}
 \label{eq:quadratic-programming-qr-decomp-2}
 Y = Q_1 R^{-T}, ~~ Z = Q_2
 \end{equation}
-即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y, Z$的要求. 通过解线性方程组$R^T v = b$得到一个特解$v,$ 进而得到\eqref{eq:general-elim-3}中的特解$Y b = Y R^T v = Q_1 v.$ 接下来我们只要按照广义消元法的程序, 解关于既约变量$y$的方程组\eqref{eq:general-elim-y}得到唯一解$y^*,$ 回代得到原问题最优解$x^* = Y b + Z y^*,$ 以及用式\eqref{eq:general-elim-lambda}计算得到相应的拉格朗日乘子.
+即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y, Z$的要求. 通过解线性方程组$R^T \V{v} = \V{b}$得到一个特解$\V{v},$ 进而得到\eqref{eq:general-elim-3}中的特解$Y \V{b} = Y R^T \V{v} = Q_1 \V{v}.$ 接下来我们只要按照广义消元法的程序, 解关于既约变量$\V{y}$的方程组\eqref{eq:general-elim-y}得到唯一解$\V{y}^*,$ 回代得到原问题最优解$\V{x}^* = Y \V{b} + Z \V{y}^*,$ 以及用式\eqref{eq:general-elim-lambda}计算得到相应的拉格朗日乘子.
 
 \begin{eg}
 \label{eg:7.2.2}
@@ -262,11 +262,11 @@ Y = \left[\begin{matrix} \frac{\sqrt{3}}{3} & \frac{7 \sqrt{78}}{78} \\ \frac{\s
 \end{equation*}
 解得$y^* = \frac{16 \sqrt{26}}{65}.$ 回代得到原问题的最优解
 \begin{equation*}
-x^* = Y b + Z y^* = \left[\begin{matrix} \frac{2}{5} \\ - \frac{3}{5} \\ \frac{6}{5} \end{matrix}\right],
+\V{x}^* = Y \V{b} + Z y^* = \left[\begin{matrix} \frac{2}{5} \\ - \frac{3}{5} \\ \frac{6}{5} \end{matrix}\right],
 \end{equation*}
 以及利用式\eqref{eq:general-elim-lambda}得到拉格朗日乘子
 \begin{equation*}
-\lambda^* = - Y^T \left( Gx^* + d \right) = \left[\begin{matrix} \frac{11}{5} \\ 0 \end{matrix}\right].
+\V{\lambda}^* = - Y^T \left( G \V{x}^* + \V{d} \right) = \left[\begin{matrix} \frac{11}{5} \\ 0 \end{matrix}\right].
 \end{equation*}
 这与我们在例\eqref{eg:7.2.1}中用直接消元法得到的结果是一样的.
 \end{eg}
@@ -275,14 +275,14 @@ x^* = Y b + Z y^* = \left[\begin{matrix} \frac{2}{5} \\ - \frac{3}{5} \\ \frac{6
 \begin{equation}
 \label{eq:quadratic-programming-kkt-2}
 \begin{aligned}
-& G x^* + d + A \lambda^* = 0, \\
-& A^T x^* - b = 0.
+& G \V{x}^* + \V{d} + A \V{\lambda}^* = \V{0}, \\
+& A^T \V{x}^* - \V{b} = \V{0}.
 \end{aligned}
 \end{equation}
 写为矩阵形式, 即为
 \begin{equation}
 \label{eq:quadratic-programming-kkt-2-mat}
-\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix} \begin{bmatrix} x^* \\ \lambda^* \end{bmatrix} = \begin{bmatrix} -d \\ b \end{bmatrix}.
+\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix} \begin{bmatrix} \V{x}^* \\ \V{\lambda}^* \end{bmatrix} = \begin{bmatrix} -\V{d} \\ \V{b} \end{bmatrix}.
 \end{equation}
 上式中的系数矩阵$\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}$被称作拉格朗日矩阵, 也被称作KKT矩阵, 很容易看出KKT矩阵是对称不定的. 那么等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}的求解就转化为了线性方程组\eqref{eq:quadratic-programming-kkt-2-mat}的求解.
 
@@ -298,34 +298,34 @@ x^* = Y b + Z y^* = \left[\begin{matrix} \frac{2}{5} \\ - \frac{3}{5} \\ \frac{6
 我们回忆一下, 对于二次规划问题\eqref{eq:quadratic-programming-1}, 积极集$\mathcal{A}(x)$的定义为
 \begin{equation}
 \label{eq:qp-active-set}
-\mathcal{A} = \mathcal{A}(x) = \left\{ i : ~ a_i^T x = b_i, ~ i \in \mathcal{E} \cup \mathcal{I} \right\},
+\mathcal{A} = \mathcal{A}(\V{x}) = \left\{ i : ~ \V{a}_i^T \V{x} = b_i, ~ i \in \mathcal{E} \cup \mathcal{I} \right\},
 \end{equation}
-即在点$x$处, 等式成立的约束条件的下标组成的集合. 在积极集法中, 我们将积极集$\mathcal{A}$确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题\eqref{eq:quadratic-programming-1}的解处的正确的积极约束.
+即在点$\V{x}$处, 等式成立的约束条件的下标组成的集合. 在积极集法中, 我们将积极集$\mathcal{A}$确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题\eqref{eq:quadratic-programming-1}的解处的正确的积极约束.
 
-更具体来说, 在第$k$次迭代, 我们从可行点$x^{(k)}$出发, 积极集为$\mathcal{A} = \mathcal{A}(x^{(k)}).$ 为描述简单, 我们假设原问题是凸二次规划问题. 在这一步迭代中, 我们求解一个仅包括积极约束的等式约束二次规划问题
+更具体来说, 在第$k$次迭代, 我们从可行点$\V{x}^{(k)}$出发, 积极集为$\mathcal{A} = \mathcal{A}(\V{x}^{(k)}).$ 为描述简单, 我们假设原问题是凸二次规划问题. 在这一步迭代中, 我们求解一个仅包括积极约束的等式约束二次规划问题
 \begin{equation}
 \label{eq:qp-active-set-1}
 \begin{array}{cl}
-\text{minimize} & \frac{1}{2} x^T G x + d^T x, \\
-\text{subject to} & a_i^T x = b_i, ~ i \in \mathcal{A}.
+\text{minimize} & \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}, \\
+\text{subject to} & \V{a}_i^T \V{x} = b_i, ~ i \in \mathcal{A}.
 \end{array}
 \end{equation}
-更方便的做法是将原点平移到$x^{(k)},$ 令$s = x - x^{(k)},$ 求解问题
+更方便的做法是将原点平移到$\V{x}^{(k)},$ 令$\V{s} = \V{x} - \V{x}^{(k)},$ 求解问题
 \begin{equation}
 \label{eq:qp-active-set-2}
 \begin{array}{cl}
-\text{minimize} & \frac{1}{2} s^T G s + (g^{(k)})^T s, \\
-\text{subject to} & a_i^T s = 0, ~ i \in \mathcal{A},
+\text{minimize} & \frac{1}{2} \V{s}^T G \V{s} + (\V{g}^{(k)})^T \V{s}, \\
+\text{subject to} & \V{a}_i^T \V{s} = 0, ~ i \in \mathcal{A},
 \end{array}
 \end{equation}
-其中$g^{(k)} = \nabla q(x^{(k)}) = G x^{(k)} + d$是原二次规划问题\eqref{eq:quadratic-programming-1}的目标函数$q(x)$在点$x^{(k)}$处的梯度向量. 这个问题是一个等式约束的二次规划问题, 可以用上一小节\S\ref{subsec:7.2.1}中介绍的等式约束二次规划问题的求解方法进行求解.
+其中$\V{g}^{(k)} = \nabla q(\V{x}^{(k)}) = G \V{x}^{(k)} + \V{d}$是原二次规划问题\eqref{eq:quadratic-programming-1}的目标函数$q(\V{x})$在点$\V{x}^{(k)}$处的梯度向量. 这个问题是一个等式约束的二次规划问题, 可以用上一小节\S\ref{subsec:7.2.1}中介绍的等式约束二次规划问题的求解方法进行求解.
 
-记问题\eqref{eq:qp-active-set-2}的解为$s^{(k)},$ 我们需要对各种可能的情况进行分类讨论.
+记问题\eqref{eq:qp-active-set-2}的解为$\V{s}^{(k)},$ 我们需要对各种可能的情况进行分类讨论.
 
-如果$s^{(k)} = 0,$ 即$x^{(k)}$是当前等式约束问题\eqref{eq:qp-active-set-1}的解, 那么可以根据式\eqref{eq:general-elim-lagrange}计算积极约束的拉格朗日乘子, 记为$\lambda^{(k)},$ 即有
+如果$\V{s}^{(k)} = \V{0},$ 即$\V{x}^{(k)}$是当前等式约束问题\eqref{eq:qp-active-set-1}的解, 那么可以根据式\eqref{eq:general-elim-lagrange}计算积极约束的拉格朗日乘子, 记为$\V{\lambda}^{(k)},$ 即有
 \begin{equation}
 \label{eq:qp-active-set-lambda}
-g^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} \alpha_i = 0.
+\V{g}^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} \alpha_i = 0.
 \end{equation}
 此时, 除对偶可行性条件$\lambda_i \geqslant 0, ~ i \in \mathcal{I}$以外, 其余KKT条件\eqref{eq:quadratic-programming-kkt}均满足. 当与原问题不等式约束对应的拉格朗日乘子均非负, 即
 \begin{equation*}
@@ -337,34 +337,34 @@ q = \argmin_{i \in \mathcal{A} \cap \mathcal{I}} \lambda_i^{(k)},
 \end{equation*}
 有$\lambda_q^{(k)} < 0.$ 令$\mathcal{A} = \mathcal{A} \setminus \{ q \},$ 代入问题\eqref{eq:qp-active-set-2}, 并求解此新的子问题.
 
-如果$s^{(k)} \neq 0,$ 即$x^{(k)}$不是当前等式约束问题\eqref{eq:qp-active-set-1}的解, 那么我们进一步检验试探点$x^{(k)} + s^{(k)}$是否满足其他不在积极集$\mathcal{A}$中的约束条件. 如果都满足的话, 我们令
+如果$\V{s}^{(k)} \neq \V{0},$ 即$\V{x}^{(k)}$不是当前等式约束问题\eqref{eq:qp-active-set-1}的解, 那么我们进一步检验试探点$\V{x}^{(k)} + \V{s}^{(k)}$是否满足其他不在积极集$\mathcal{A}$中的约束条件. 如果都满足的话, 我们令
 \begin{equation}
 \label{eq:qp-active-set-next-step-1}
-x^{(k+1)} = x^{(k)} + s^{(k)},
+\V{x}^{(k+1)} = \V{x}^{(k)} + \V{s}^{(k)},
 \end{equation}
 积极集保持不变, 进入下一步迭代搜索. 如果不然, 即存在指标$i \not\in \mathcal{A},$ 使得
 \begin{equation*}
-a_i^T x^{(k)} - b + s^{(k)} > 0
+\V{a}_i^T \V{x}^{(k)} - \V{b} + \V{s}^{(k)} > 0
 \end{equation*}
-此时试探点$x^{(k)} + s^{(k)}$不是原问题的可行点, 需要将其投影到原问题的可行域. 我们沿着方向$p^{(k)} = s^{(k)}$进行线搜索, 选一个小于$1$但尽可能大的步长
+此时试探点$\V{x}^{(k)} + \V{s}^{(k)}$不是原问题的可行点, 需要将其投影到原问题的可行域. 我们沿着方向$\V{p}^{(k)} = \V{s}^{(k)}$进行线搜索, 选一个小于$1$但尽可能大的步长
 \begin{equation}
 \label{eq:qp-active-set-step-len-1}
 \begin{aligned}
-\bar{\alpha}_k & = \max \left\{ \alpha : ~ \alpha > 0, ~ a_i^T x^{(k)} - b_i + \alpha a_i^T p^{(k)} \leqslant 0, ~ a_i^T p^{(k)} > 0, ~ \forall i \not\in \mathcal{A} \right\}, \\
-& = \min_{\substack{i: i \not\in \mathcal{A} \\ a_i^T p^{(k)} > 0}} \frac{b_i - a_i^T x^{(k)}}{a_i^T p^{(k)}}
+\bar{\alpha}_k & = \max \left\{ \alpha : ~ \alpha > 0, ~ \V{a}_i^T \V{x}^{(k)} - b_i + \alpha \V{a}_i^T \V{p}^{(k)} \leqslant 0, ~ \V{a}_i^T \V{p}^{(k)} > 0, ~ \forall i \not\in \mathcal{A} \right\}, \\
+& = \min_{\substack{i: i \not\in \mathcal{A} \\ \V{a}_i^T \V{p}^{(k)} > 0}} \frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}
 \end{aligned}
 \end{equation}
-取下标$j$使得第$j$个约束取得上式中$\frac{b_i - a_i^T x^{(k)}}{a_i^T p^{(k)}}$的最大值, 即
+取下标$j$使得第$j$个约束取得上式中$\frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}$的最大值, 即
 \begin{equation}
 \label{eq:qp-active-set-step-len-2}
-\bar{\alpha}_k = \frac{b_j - a_j^T x^{(k)}}{a_j^T p^{(k)}}, ~~ j = \argmin_{\substack{i: i \not\in \mathcal{A} \\ a_i^T p^{(k)} > 0}} \frac{b_i - a_i^T x^{(k)}}{a_i^T p^{(k)}},
+\bar{\alpha}_k = \frac{b_j - \V{a}_j^T \V{x}^{(k)}}{\V{a}_j^T \V{p}^{(k)}}, ~~ j = \argmin_{\substack{i: i \not\in \mathcal{A} \\ \V{a}_i^T \V{p}^{(k)} > 0}} \frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}},
 \end{equation}
 并称指标$j$对应的约束为阻滞(blocking)约束. 我们取
 \begin{equation}
 \label{eq:qp-active-set-next-step-2}
-x^{(k+1)} = x^{(k)} + \bar{\alpha}_k s^{(k)}, ~~ \mathcal{A} = \mathcal{A} \cup \{ j \}.
+\V{x}^{(k+1)} = \V{x}^{(k)} + \bar{\alpha}_k \V{s}^{(k)}, ~~ \mathcal{A} \gets \mathcal{A} \cup \{ j \}.
 \end{equation}
-这里我们把指标$j$添加到了积极集, 是因为对于$x^{(k+1)},$ 指标$j$对应的约束条件等式成立, 非积极约束$j$变成积极的. 迭代格式\eqref{eq:qp-active-set-next-step-1}与\eqref{eq:qp-active-set-next-step-2}可以统一表述为: 以等式问题\eqref{eq:qp-active-set-2}的解$s^{(k)}$为搜索方向$p^{(k)},$ 以
+这里我们把指标$j$添加到了积极集, 是因为对于$\V{x}^{(k+1)},$ 指标$j$对应的约束条件等式成立, 非积极约束$j$变成积极的. 迭代格式\eqref{eq:qp-active-set-next-step-1}与\eqref{eq:qp-active-set-next-step-2}可以统一表述为: 以等式问题\eqref{eq:qp-active-set-2}的解$\V{s}^{(k)}$为搜索方向$\V{p}^{(k)},$ 以
 \begin{equation}
 \label{eq:qp-active-set-step-len-uniform}
 \alpha_k = \min (1, \bar{\alpha}_k)
@@ -372,7 +372,7 @@ x^{(k+1)} = x^{(k)} + \bar{\alpha}_k s^{(k)}, ~~ \mathcal{A} = \mathcal{A} \cup 
 为迭代步长, 得下一步的迭代点
 \begin{equation}
 \label{eq:qp-active-set-next-step-uniform}
-x^{(k+1)} = x^{(k)} + \alpha_k p^{(k)},
+\V{x}^{(k+1)} = \V{x}^{(k)} + \alpha_k \V{p}^{(k)},
 \end{equation}
 同时根据是否有阻滞约束确定是否更新积极集: 若$\alpha_k < 1,$ 有约束阻滞$j,$ 则将$j$添加到积极集$\mathcal{A}.$
 
@@ -381,25 +381,25 @@ x^{(k+1)} = x^{(k)} + \alpha_k p^{(k)},
 \begin{algorithm}
 \caption{求解带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}的积极集法}
 \label{algo:active-set}
-随机选取一个可行点$x^{(0)},$ 确定相应的积极集$\mathcal{A}$\;
+随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A}$\;
 $k \gets 0.$\;
 \While {true}{
-    求等式约束二次规划问题\eqref{eq:qp-active-set-2}解$s$\;
-    \eIf{$s = 0$}{
-        由\eqref{eq:qp-active-set-lambda}式计算拉格朗日乘子$\lambda^{(k)}$\;
+    求等式约束二次规划问题\eqref{eq:qp-active-set-2}解$\V{s}$\;
+    \eIf{$\V{s} = 0$}{
+        由\eqref{eq:qp-active-set-lambda}式计算拉格朗日乘子$\V{\lambda}^{(k)}$\;
         计算下标$q \gets \min \{ i : ~ \lambda^{(k)}_i, ~ i \in \mathcal{A} \cap \mathcal{I} \}$\;
         \eIf{$\lambda^{(k)}_q \geqslant 0$}{
-            $x^* \gets x^{(k)}$\;
-            算法终止, 返回$x^*$\;
+            $\V{x}^* \gets \V{x}^{(k)}$\;
+            算法终止, 返回$\V{x}^*$\;
         }{
-            $x_{k+1} \gets x_{k}$\;
+            $\V{x}^{(k+1)} \gets \V{x}^{(k)}$\;
             将下标$q$从积极集$\mathcal{A}$中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$\;
         }
     }{
-        取线搜索方向$p^{(k)} \gets s$\;
+        取线搜索方向$\V{p}^{(k)} \gets \V{s}$\;
         由式\eqref{eq:qp-active-set-step-len-2}计算$\bar{\alpha}_k$以及相应的约束条件的下标$j$\;
         取步长$\alpha_k \gets \min (1, \bar{\alpha}_k)$\;
-        令$x^{(k+1)} \gets x^{(k)} + \alpha_k p^{(k)}$\;
+        令$\V{x}^{(k+1)} \gets \V{x}^{(k)} + \alpha_k \V{p}^{(k)}$\;
         \If{步长$\alpha_k < 1$}{
             将阻滞约束条件的下标$j$添加到积极集$\mathcal{A}$中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$\;
         }
@@ -411,6 +411,16 @@ $k \gets 0.$\;
 \begin{eg}
 \label{eg:qp-active-set-algo}
 我们来举例说明用积极集法求解含不等式约束的二次规划问题的步骤. 考虑如下的二次规划问题
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
+\text{subject to} & -x_1 + 2x_2 - 2 \leqslant 0, \\
+& x_1 + 2x_2 - 6 \leqslant 0, \\
+& x_1 - 2x_2 -2 \leqslant 0, \\
+& -x_1 \leqslant 0, \\
+& -x_2 \leqslant 0.
+\end{array}
+\end{equation*}
 \end{eg}
 
 \subsection*{习题}
