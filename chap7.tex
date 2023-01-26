@@ -13,13 +13,15 @@
 \usepackage{graphicx}
 \usepackage{amsmath,amsfonts,amssymb,mathrsfs}
 \usepackage{txfonts}
+\usepackage{float}
 \usepackage{mathalfa}
 \usepackage{enumitem}
 \usepackage{bm}
 \usepackage{relsize}
-\usepackage[figurename=图]{caption}
+\usepackage[figurename=图,tablename=表]{caption}
 \usepackage{chngcntr}
 \counterwithin{figure}{section}
+\counterwithin{table}{section}
 
 \usepackage{arydshln}
 \setlength{\dashlinegap}{2pt}
@@ -71,11 +73,17 @@
 \newcommand{\R}{\mathcal{R}}
 
 \numberwithin{equation}{section}
+
+\renewcommand\arraystretch{1.3}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \author{}
 \title{特殊优化模型方法}
+
+\setcounter{chapter}{7}
+
+\setcounter{section}{2}
 
 \begin{document}
 \maketitle
@@ -386,16 +394,16 @@ q = \argmin_{i \in \mathcal{A} \cap \mathcal{I}} \lambda_i^{(k)},
 
 至此, 我们可以以伪代码的形式, 将经典的积极集法表示为算法\ref{algo:active-set}.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{求解带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}的积极集法}
 \label{algo:active-set}
 随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A}$\;
 $k \gets 0.$\;
 \While {true}{
-    求等式约束二次规划问题\eqref{eq:qp-active-set-2}解$\V{s}$\;
-    \eIf{$\V{s} = 0$}{
+    求等式约束二次规划问题\eqref{eq:qp-active-set-2}解$\V{s}^{(k)}$\;
+    \eIf{$\V{s}^{(k)} = 0$}{
         由\eqref{eq:qp-active-set-lambda}式计算拉格朗日乘子$\V{\lambda}^{(k)}$\;
-        计算下标$q \gets \min \{ i : ~ \lambda^{(k)}_i, ~ i \in \mathcal{A} \cap \mathcal{I} \}$\;
+        计算下标$q \gets \argmin\limits_{i \in \mathcal{A} \cap \mathcal{I}} \lambda_i^{(k)}$\;
         \eIf{$\lambda^{(k)}_q \geqslant 0$}{
             $\V{x}^* \gets \V{x}^{(k)}$\;
             算法终止, 返回$\V{x}^*$\;
@@ -404,11 +412,11 @@ $k \gets 0.$\;
             将下标$q$从积极集$\mathcal{A}$中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$\;
         }
     }{
-        取线搜索方向$\V{p}^{(k)} \gets \V{s}$\;
+        取线搜索方向$\V{p}^{(k)} \gets \V{s}^{(k)}$\;
         由式\eqref{eq:qp-active-set-step-len-2}计算$\bar{\alpha}_k$以及相应的约束条件的下标$j$\;
         取步长$\alpha_k \gets \min (1, \bar{\alpha}_k)$\;
         令$\V{x}^{(k+1)} \gets \V{x}^{(k)} + \alpha_k \V{p}^{(k)}$\;
-        \If{步长$\alpha_k < 1$}{
+        \If{$\alpha_k < 1$}{
             将阻滞约束条件的下标$j$添加到积极集$\mathcal{A}$中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$\;
         }
     }
@@ -424,49 +432,75 @@ $k \gets 0.$\;
 \text{minimize} & q(\V{x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
 \text{subject to} & -x_1 + 2x_2 - 2 \leqslant 0, \\
 & x_1 + 2x_2 - 6 \leqslant 0, \\
-& x_1 - 2x_2 -2 \leqslant 0, \\
+& x_1 - 2x_2 - 2 \leqslant 0, \\
 & -x_1 \leqslant 0, \\
 & -x_2 \leqslant 0,
 \end{array}
 \end{equation*}
-我们用积极集法进行求解.
+我们用积极集法进行求解. 该问题的可行域可见图\ref{fig:active-set-eg}, 由其中实线以及坐标轴围成的阴影区域.
 
-\begin{figure}
-\centering
-\begin{tikzpicture}[scale=1.8, circle defined by/.style args={center #1 and point #2}{insert path={let \p1=($(#2)-(#1)$),\n1={veclen(\x1,\y1)} in (#1) circle[radius=\n1]}}]
-\coordinate (C) at (1, 2.5);
-\draw[-{Stealth}] (-0.5, 0)--(5, 0) node [right] {$x$};
-\draw[-{Stealth}] (0, -0.5)--(0, 4.2) node [above] {$y$};
-\draw (0, 1) node (p1) [left] {$(0, 1)$} -- (2, 2) node (p2) [above] {$(2, 2)$} -- (4, 1) node (p3) [right] {$(4, 1)$} -- (2, 0) node (p4) [below] {$(2, 0)$};
-\node[below = -0.1 of p4] (x01) {$\V{x}^{(0)}, \V{x}^{(1)}$};
-\draw[dashed, line width=3] (2, 0) -- (1, 0) node (x23) [below] {$\V{x}^{(2)}, \V{x}^{(3)}$};
-\path[name path = line1] (0, 1) -- (2, 2);
-\path[name path = vertical1] (1, 0) -- (1, 4);
-\draw[dashed, line width=3, name intersections = {of = line1 and vertical1, by = {x4}}]  (1, 0) -- (x4);
-\node[above = -0.1 of x4] {$\V{x}^{(4)}$};
-\coordinate (c1) at (0, 1);
-\coordinate (c2) at (2, 2);
-\coordinate (x5) at ($(c1)!(C)!(c2)$);
-\draw[dashed, line width=3] (x4) -- (x5);
-\node[above = -0.1 of x5] {$\V{x}^{(5)}$};
-\draw[dashed, circle defined by=center C and point x5];
-\coordinate (midx5) at ($(C)!0.5!(x5)$);
-\draw[dashed, circle defined by=center C and point midx5];
-\coordinate (p6) at ($(C)!1.5!(x5)$);
-\draw[dashed, circle defined by=center C and point p6];
-\begin{scope}
-\clip (-.6, -.3) rectangle (2.5, 1.9);
-\coordinate (p7) at (1, 0);
-\draw[dashed, circle defined by=center C and point p7];
-\coordinate (p8) at ($(C)!0.75!(p7)$);
-\draw[dashed, circle defined by=center C and point p8];
-\end{scope}
-\end{tikzpicture}
-\caption{积极集法求解例\ref{eg:qp-active-set-algo}的迭代示意图}
-\label{fig:active-set-eg}
-\end{figure}
+\input{tikz-figures/active-set-eg.tex}
 
+我们选取初始点$\V{x}^{(0)} = (2, 0)^T,$ 用$1-5$依次作为约束的指标. 在初始点$\V{x}^{(0)}$处, 约束$3$和$5$满足等式关系, 是积极约束, 所以初始积极集$\mathcal{A} = \{ 3, 5 \}.$ 当前需要求解的等式问题\eqref{eq:qp-active-set-1}为
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
+\text{subject to} & x_1 - 2x_2 - 2 = 0, \\
+& x_2 = 0,
+\end{array}
+\end{equation*}
+或者经过平移的问题\eqref{eq:qp-active-set-2}
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
+\text{subject to} & s_1 - 2s_2 = 0, \\
+& s_2 = 0.
+\end{array}
+\end{equation*}
+很容易看到$\V{x}^{(0)}$(即$\V{s}^{(0)} = \V{0}$)是该问题的解. 由式\eqref{eq:qp-active-set-lambda}求解积极约束的拉格朗日乘子, 即求解方程组
+\begin{equation*}
+\begin{bmatrix} 1 \\ -2 \end{bmatrix} \lambda_3^{(0)} + \begin{bmatrix} 0 \\ -1 \end{bmatrix} \lambda_5^{(0)} = \begin{bmatrix} -2 \\ 5 \end{bmatrix},
+\end{equation*}
+得$\lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1.$ 下标$q = \argmin\limits_{i \in \{ 3, 5 \}} \lambda_i^{(0)} = 3.$ 由于$\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$ 因此我们置$\V{x}^{(1)} = \V{x}^{(0)},$ 同时将下标$q = 3$从积极集中删去, 进入下一步迭代. 接下来我们需要求解等式问题
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
+\text{subject to} & s_2 = 0.
+\end{array}
+\end{equation*}
+容易解得$\V{s}^{(1)} = (-1, 0)^T.$ 此时, 试探点$\V{x}^{(1)} + \V{s}^{(1)} = (1, 0)^T$是可行点, 置$\V{x}^{(2)} = \V{x}^{(1)} + \V{s}^{(1)} = (1, 0)^T,$ 同时积极集$\mathcal{A} = \{ 5 \}$保持不变, 进入下一步迭代. 容易验证$\V{x}^{(2)}$是这一步要解的等式问题的可行解, 进而可计算得相应的积极约束的拉格朗日乘子$\lambda_5^{(2)} = -5.$ 此时, 约束5变成非积极的, 积极集$\mathcal{A} = \emptyset$变为空集. 置$\V{x}^{(3)} = \V{x}^{(2)} = (1, 0)^T$进入下一步迭代. 再次求解当前的等式约束问题(实际上已成为无约束问题)
+\begin{equation*}
+\text{minimize} ~~ q(\V{s}) = s_1^2 + (s_2 - 2.5)^2,
+\end{equation*}
+得解$\V{s}^{(3)} = (0, 2.5)^T.$ 试探点$\V{x}^{(3)} + \V{s}^{(3)} = (1, 2.5)^T$不是可行点, 因此需要以$\V{p}^{(3)} = \V{s}^{(3)}$为方向进行线搜索$\V{x}^{(3)} + \alpha_3 \V{p}^{(3)},$ 并由式\eqref{eq:qp-active-set-step-len-2}以及式\eqref{eq:qp-active-set-step-len-uniform}算得最优步长$\alpha_3 = 0.6,$ 以及相应阻滞约束的下标$j = 1.$ 置$\V{x}^{(4)} = \V{x}^{(3)} + \alpha_3 \V{p}^{(3)} = (1, 1.5)^T,$ 并将阻滞约束的下标$j = 1$添加到积极集得$\mathcal{A} = \{ 1 \},$ 进入下一步迭代. 再次求解当前的等式问题, 得$\V{s}^{(4)} = (0.4, 0.2)^T.$ 相应的试探点$\V{x}^{(4)} + \V{s}^{(4)} = (1.4, 1.7)^T$可行, 于是得新的迭代点$\V{x}^{(5)} = (1.4, 1.7)^T.$ 由于$\V{x}^{(5)}$是当前等式问题的可行点, 且解得积极约束的拉格朗日乘子$\lambda_1^{(5)} = 0.8 > 0,$ 算法终止条件达成, 得原问题的最优解
+\begin{equation*}
+\V{x}^* = \V{x}^{(5)} = (1.4, 1.7)^T.
+\end{equation*}
+
+我们将每一步的数值结果总结在表\ref{tab:active-set-eg}中.
+
+\begin{table}[H]
+    \caption{积极集法求解例\ref{eg:qp-active-set-algo}数值结果}
+    \label{tab:active-set-eg}
+    \centering
+    \begin{tabular}{ccccccccc}
+    \hline
+    $k$ & $\V{x}^{(k)}$ & $\mathcal{A}$ & $\V{s}^{(k)}$ & 试探点可行 & $\V{\lambda}^{(k)}$ & $q$ & $\alpha_k$ & $j$ \\
+    \hline
+    $0$ & $(2, 0)^T$ & $\{ 3, 5 \}$ & $(0, 0)^T$ & $\checkmark$ & $\lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1$ & $3$ \\
+    $1$ & $(2, 0)^T$ & $\{ 5 \}$ & $(-1, 0)^T$ & $\checkmark$ & & & $1$ \\
+    $2$ & $(1, 0)^T$ & $\{ 5 \}$ & $(0, 0)^T$ & $\checkmark$ & $\lambda_5^{(2)} = -5$ & $5$ \\
+    $3$ & $(1, 0)^T$ & $\emptyset$ & $(0, 2.5)^T$ & $\times$ & & & $0.6$ & $1$ \\
+    $4$ & $(1, 1.5)^T$ & $\{ 1 \}$ & $(0.4, 0.2)^T$ & $\checkmark$ & & & $1$ \\
+    $5$ & $(1.4, 1.7)^T$ & $\{ 1 \}$ & $(0, 0)^T$ & $\checkmark$ & $\lambda_1^{(5)} = 0.8$ \\
+    \hline
+    \end{tabular}
+\end{table}
 \end{eg}
+
+我们接下来对积极集法进行进一步的说明, 以阐明一些尚未讨论的问题. 首先是关于初始可行点$\V{x}^{(0)}$的选取
+
+待写。。。。
 
 \subsection*{习题}
 % NOT finished
