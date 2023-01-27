@@ -1,12 +1,15 @@
 \begin{figure}[H]
 \centering
-\larger
+\larger[1]
 \begin{tikzpicture}[scale=2.4, circle defined by/.style args={center #1 and point #2}{insert path={let \p1=($(#2)-(#1)$),\n1={veclen(\x1,\y1)} in (#1) circle[radius=\n1]}}]
 % \draw[gray!30, thin, dashed] (-0.5, -0.5) grid (4.6, 3.9);
 \coordinate (C) at (1, 2.5);
+% coordinate axes
 \draw[-{Stealth}] (-0.5, 0)--(4.7, 0) node [right] {$x_1$};
 \draw[-{Stealth}] (0, -0.5)--(0, 3.7) node [above] {$x_2$};
+% feasible region
 \draw[fill=gray!20] (0, 1) node (p1) [left] {$(0, 1)$} -- (2, 2) node (p2) [above] {$(2, 2)$} -- (4, 1) node (p3) [right] {$(4, 1)$} -- (2, 0) node (p4) [below] {$(2, 0)$} -- (0, 0);
+% iterations of the active-set algorithm
 \node[below = -0.1 of p4] (x01) {$\V{x}^{(0)}, \V{x}^{(1)}$};
 \draw[dashed, line width=3] (2, 0) -- (1, 0) node (x23) [below] {$\V{x}^{(2)}, \V{x}^{(3)}$};
 \path[name path = line1] (0, 1) -- (2, 2);
@@ -18,11 +21,16 @@
 \coordinate (x5) at ($(c1)!(C)!(c2)$);
 \draw[dashed, line width=3] (x4) -- (x5);
 \node[above = -0.1 of x5] {$\V{x}^{(5)}$};
+% contour: circles
+\begin{scope}
+% \clip (-.6, -.3) rectangle (3, 3.2);
 \draw[dashed, circle defined by=center C and point x5];
 \coordinate (midx5) at ($(C)!0.5!(x5)$);
 \draw[dashed, circle defined by=center C and point midx5];
 \coordinate (p6) at ($(C)!1.5!(x5)$);
 \draw[dashed, circle defined by=center C and point p6];
+\end{scope}
+% contour: arcs
 \begin{scope}
 \clip (-.6, -.3) rectangle (2.5, 1.9);
 \coordinate (p7) at (1, 0);
