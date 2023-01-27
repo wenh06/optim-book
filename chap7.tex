@@ -75,6 +75,8 @@
 \numberwithin{equation}{section}
 
 \renewcommand\arraystretch{1.3}
+
+\allowdisplaybreaks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -354,7 +356,7 @@ F & = - \left( A^TG^{-1}A \right)^{-1}.\\
 
 我们可以利用式\eqref{eq:quadratic-programming-qr-decomp-general}定义的矩阵$Y,$ $Z$, 来求KKT矩阵的逆矩阵, 有
 \begin{equation}
-\label{eq:quadratic-programming-kkt-inv-1}
+\label{eq:quadratic-programming-kkt-inv-2}
 \begin{aligned}
 C & = Z \left( Z^T G Z \right)^{-1} Z^T,\\
 E & = Y - Z \left( Z^T G Z \right)^{-1} Z^T G Y,\\
@@ -367,28 +369,40 @@ F & = Y^T G Z \left( Z^T G Z \right)^{-1} Z^T G Y - Y^T G Y.\\
 \label{subsec:7.2.2}
 % NOT finished
 
-对于求解一般的带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}, 我们有一系列的实用算法来求解这些问题. 经典的积极集法(active-set methods)自从20世纪70年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模(成百上千个变量)的凸和非凸的二次规划问题. 梯度投影法(gradient-projection methods)是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束的二次规划问题($a_i \leqslant x_i \leqslant b_i,$ 我们称这样的问题为BoxQP). 还有一类方法是内点法(interior-point methods), 广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于20世纪90年代. 内点法适用于求解大规模的凸二次规划问题. 本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题.
+对于求解一般的带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}, 我们有一系列的实用算法来求解这些问题. 经典的积极集法(active-set methods)自从20世纪70年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模(成百上千个变量)的凸和非凸的二次规划问题. 梯度投影法(gradient-projection methods)是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束的二次规划问题($a_i \leqslant x_i \leqslant b_i,$ 我们称这样的问题为BoxQP). 还有一类方法是内点法(interior-point methods), 广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于20世纪90年代. 内点法适用于求解大规模的凸二次规划问题. 本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题. 为描述简单, 我们假设原问题是凸二次规划问题.
 
 我们回忆一下, 对于二次规划问题\eqref{eq:quadratic-programming-1}, 积极集$\mathcal{A}(x)$的定义为
 \begin{equation}
 \label{eq:qp-active-set}
 \mathcal{A} = \mathcal{A}(\V{x}) = \left\{ i : ~ \V{a}_i^T \V{x} = b_i, ~ i \in \mathcal{E} \cup \mathcal{I} \right\},
 \end{equation}
-即在点$\V{x}$处, 等式成立的约束条件的下标组成的集合. 在积极集法中, 我们将积极集$\mathcal{A}$确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题\eqref{eq:quadratic-programming-1}的解处的正确的积极约束.
-
-更具体来说, 在第$k$次迭代, 我们从可行点$\V{x}^{(k)}$出发, 积极集为$\mathcal{A} = \mathcal{A}(\V{x}^{(k)}).$ 为描述简单, 我们假设原问题是凸二次规划问题. 在这一步迭代中, 我们求解一个仅包括积极约束的等式约束二次规划问题
+即在点$\V{x}$处, 等式成立的约束条件的下标组成的集合. 我们将一般的二次规划的KKT条件\eqref{eq:quadratic-programming-kkt}根据积极集$\mathcal{A}(\V{x}^*)$改写一下, 即有
+\begin{equation}
+\label{eq:qp-active-set-kkt}
+\begin{aligned}
+& G \V{x}^* + d + \sum\limits_{i \in \mathcal{A}(\V{x}^*)} \lambda_i^* \V{a}_i = \V{0}, \\
+& \V{a}_i \V{x}^* = b_i, ~~ \forall i \in \mathcal{A}(\V{x}^*), \\
+& \V{a}_i \V{x}^* \leqslant b_i, ~~ \forall i \in \mathcal{I} \setminus \mathcal{A}(\V{x}^*), \\
+& \lambda_i^* \geqslant 0, ~~ \forall i \in \mathcal{I} \cap \mathcal{A}(\V{x}^*).
+\end{aligned}
+\end{equation}
+不难发现, $\V{x}^*$也是下面等式问题的KKT点
 \begin{equation}
 \label{eq:qp-active-set-1}
 \begin{array}{cl}
 \text{minimize} & \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}, \\
-\text{subject to} & \V{a}_i^T \V{x} = b_i, ~ i \in \mathcal{A}.
+\text{subject to} & \V{a}_i^T \V{x} = b_i, ~ i \in \mathcal{A}(\V{x}^*).
 \end{array}
 \end{equation}
-更方便的做法是将原点平移到$\V{x}^{(k)},$ 令$\V{s} = \V{x} - \V{x}^{(k)},$ 求解问题
+这说明, 求解含不等式约束的二次规划问题几乎(注意KKT条件\eqref{eq:qp-active-set-kkt}中的最后两个条件)等价于求解一个等式约束的二次规划问题, 如果我们事先知道$\mathcal{A}(\V{x}^*)$(但通常这是不可能的, 因此不能通过求解等式问题\eqref{eq:qp-active-set-1}来求解原二次规划问题\eqref{eq:quadratic-programming-1}).
+
+在积极集法中, 依据以上的观察, 我们将积极集$\mathcal{A}$确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题\eqref{eq:quadratic-programming-1}的解处的正确的积极约束.
+
+更具体来说, 在第$k$次迭代, 我们从可行点$\V{x}^{(k)}$出发, 积极集为$\mathcal{A} = \mathcal{A}(\V{x}^{(k)}).$ 在这一步迭代中, 我们求解等式问题\eqref{eq:qp-active-set-1}. 更方便的做法是将原点平移到$\V{x}^{(k)},$ 令$\V{s} = \V{x} - \V{x}^{(k)},$ 求解问题
 \begin{equation}
 \label{eq:qp-active-set-2}
 \begin{array}{cl}
-\text{minimize} & \frac{1}{2} \V{s}^T G \V{s} + (\V{g}^{(k)})^T \V{s}, \\
+\text{minimize} & \frac{1}{2} \V{s}^T G \V{s} + \left( \V{g}^{(k)} \right)^T \V{s}, \\
 \text{subject to} & \V{a}_i^T \V{s} = 0, ~ i \in \mathcal{A},
 \end{array}
 \end{equation}
@@ -425,10 +439,10 @@ q = \argmin_{i \in \mathcal{A} \cap \mathcal{I}} \lambda_i^{(k)},
 \label{eq:qp-active-set-step-len-1}
 \begin{aligned}
 \bar{\alpha}_k & = \max \left\{ \alpha : ~ \alpha > 0, ~ \V{a}_i^T \V{x}^{(k)} - b_i + \alpha \V{a}_i^T \V{p}^{(k)} \leqslant 0, ~ \V{a}_i^T \V{p}^{(k)} > 0, ~ \forall i \not\in \mathcal{A} \right\}, \\
-& = \min_{\substack{i: i \not\in \mathcal{A} \\ \V{a}_i^T \V{p}^{(k)} > 0}} \frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}
+& = \min_{\substack{i: i \not\in \mathcal{A} \\ \V{a}_i^T \V{p}^{(k)} > 0}} \frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}.
 \end{aligned}
 \end{equation}
-取下标$j$使得第$j$个约束取得上式中$\frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}$的最大值, 即
+注意$\bar{\alpha}_k$是严格小于$1$的, 因为此时的试探点$\V{x}^{(k)} + \V{s}^{(k)}$不可行. 取下标$j$使得第$j$个约束取得上式中$\frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}$的最大值, 即
 \begin{equation}
 \label{eq:qp-active-set-step-len-2}
 \bar{\alpha}_k = \frac{b_j - \V{a}_j^T \V{x}^{(k)}}{\V{a}_j^T \V{p}^{(k)}}, ~~ j = \argmin_{\substack{i: i \not\in \mathcal{A} \\ \V{a}_i^T \V{p}^{(k)} > 0}} \frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}},
@@ -452,11 +466,10 @@ q = \argmin_{i \in \mathcal{A} \cap \mathcal{I}} \lambda_i^{(k)},
 
 至此, 我们可以以伪代码的形式, 将经典的积极集法表示为算法\ref{algo:active-set}.
 
-\begin{algorithm}[H]
+\begin{algorithm}[ht]
 \caption{求解带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}的积极集法}
 \label{algo:active-set}
-随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A}$\;
-$k \gets 0.$\;
+随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$\;
 \While {true}{
     求等式约束二次规划问题\eqref{eq:qp-active-set-2}解$\V{s}^{(k)}$\;
     \eIf{$\V{s}^{(k)} = 0$}{
@@ -556,7 +569,7 @@ $k \gets 0.$\;
 \end{table}
 \end{eg}
 
-我们接下来对积极集法进行进一步的说明, 以阐明一些尚未讨论的问题. 首先是关于初始可行点$\V{x}^{(0)}$的选取
+我们接下来对积极集法进行进一步的说明, 以阐明一些尚未讨论的问题. 首先是关于初始可行点$\V{x}^{(0)}$的选取. 我们可以利用人工变量法, 求解辅助问题得$\V{x}^{(0)}.$
 
 待写。。。。
 
@@ -597,6 +610,8 @@ $k \gets 0.$\;
 & x_1 - x_2 + x_3 = -2.
 \end{array}
 \end{equation*}
+
+\item 用积极集法求解下面的二次规划问题
 \end{enumerate}
 
 \bibliographystyle{sbc}
