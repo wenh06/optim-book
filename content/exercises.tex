@@ -1,0 +1,40 @@
+\subsection*{习题}
+% NOT finished
+
+\begin{enumerate}
+\item 考虑等式约束的二次规划问题
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(x) := \frac{1}{2} x^T G x + d^T x, \\
+\text{subject to} & A^T x = b,
+\end{array}
+\end{equation*}
+设$A$列满秩, $Z$为矩阵$A$的列零空间的一组基构成的矩阵, 既约Hessian阵$Z^T G Z$正定. 证明
+\begin{itemize}
+    \item[(1)] KKT矩阵$\begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}$非奇异;
+    \item[(2)] 该二次规划问题有唯一极小点, 该点就是唯一的全局最优解.
+\end{itemize}
+
+\item 写出二次规划问题
+\begin{equation*}
+\begin{array}{cl}
+\text{maximize} & q(x) = 6x_1 + 4x_2 - 13 - x_1^2 - x_2^2, \\
+\text{subject to} & x_1 + x_2 \leqslant 3, \\
+& x_1, ~ x_2 \geqslant 0
+\end{array}
+\end{equation*}
+的KKT条件. 写出上述规划问题的对偶问题, 以及对偶问题的对偶问题.
+
+\item SCHUR-COMPLEMENT METHOD
+
+\item 分别利用直接消元法以及正交分解法(广义消元法)求解如下的等式约束的二次规划问题, 并检查它们得到的解是否相同.
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(x) = x_1^2 + x_2^2 + x_3^2 + 2x_3, \\
+\text{subject to} & x_1 + 2x_2 - x_3 = 4, \\
+& x_1 - x_2 + x_3 = -2.
+\end{array}
+\end{equation*}
+
+\item 用积极集法求解下面的二次规划问题
+\end{enumerate}

@@ -1,0 +1,215 @@
+\subsection{求解二次规划问题的积极集法}
+\label{subsec:7.2.2}
+% finished
+
+对于求解一般的带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}, 我们有一系列的实用算法来求解这些问题. 经典的积极集法(active-set methods)自从20世纪70年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模(成百上千个变量)的凸和非凸的二次规划问题. 梯度投影法(gradient-projection methods)是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束的二次规划问题($a_i \leqslant x_i \leqslant b_i,$ 我们称这样的问题为BoxQP). 还有一类方法是内点法(interior-point methods), 广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于20世纪90年代. 内点法适用于求解大规模的凸二次规划问题. 本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题. 为描述简单, 我们假设原问题是凸二次规划问题.
+
+我们回忆一下, 对于二次规划问题\eqref{eq:quadratic-programming-1}, 积极集$\mathcal{A}(x)$的定义为
+\begin{equation}
+\label{eq:qp-active-set}
+\mathcal{A} = \mathcal{A}(\V{x}) = \left\{ i : ~ \V{a}_i^T \V{x} = b_i, ~ i \in \mathcal{E} \cup \mathcal{I} \right\},
+\end{equation}
+即在点$\V{x}$处, 等式成立的约束条件的指标(index)组成的集合. 我们将一般的二次规划的KKT条件\eqref{eq:quadratic-programming-kkt}根据积极集$\mathcal{A}(\V{x}^*)$改写一下, 即有
+\begin{equation}
+\label{eq:qp-active-set-kkt}
+\begin{aligned}
+& G \V{x}^* + d + \sum\limits_{i \in \mathcal{A}(\V{x}^*)} \lambda_i^* \V{a}_i = \V{0}, \\
+& \V{a}_i \V{x}^* = b_i, ~~ \forall i \in \mathcal{A}(\V{x}^*), \\
+& \V{a}_i \V{x}^* \leqslant b_i, ~~ \forall i \in \mathcal{I} \setminus \mathcal{A}(\V{x}^*), \\
+& \lambda_i^* \geqslant 0, ~~ \forall i \in \mathcal{I} \cap \mathcal{A}(\V{x}^*).
+\end{aligned}
+\end{equation}
+不难发现, $\V{x}^*$也是下面等式问题的KKT点
+\begin{equation}
+\label{eq:qp-active-set-1}
+\begin{array}{cl}
+\text{minimize} & \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}, \\
+\text{subject to} & \V{a}_i^T \V{x} = b_i, ~ i \in \mathcal{A}(\V{x}^*).
+\end{array}
+\end{equation}
+这说明, 求解含不等式约束的二次规划问题几乎(注意KKT条件\eqref{eq:qp-active-set-kkt}中的最后两个条件)等价于求解一个等式约束的二次规划问题, 如果我们事先知道$\mathcal{A}(\V{x}^*).$ 但通常这是不可能的, 因此不能通过求解等式问题\eqref{eq:qp-active-set-1}来求解原二次规划问题\eqref{eq:quadratic-programming-1}.
+
+在积极集法中, 依据以上的观察, 我们将积极集$\mathcal{A}$确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题\eqref{eq:quadratic-programming-1}的解处的正确的积极约束.
+
+更具体来说, 在第$k$次迭代, 我们从可行点$\V{x}^{(k)}$出发, 积极集为$\mathcal{A} = \mathcal{A}(\V{x}^{(k)}).$ 在这一步迭代中, 我们求解等式问题\eqref{eq:qp-active-set-1}. 更方便的做法是将原点平移到$\V{x}^{(k)},$ 令$\V{s} = \V{x} - \V{x}^{(k)},$ 求解问题
+\begin{equation}
+\label{eq:qp-active-set-2}
+\begin{array}{cl}
+\text{minimize} & \frac{1}{2} \V{s}^T G \V{s} + \left( \V{g}^{(k)} \right)^T \V{s}, \\
+\text{subject to} & \V{a}_i^T \V{s} = 0, ~ i \in \mathcal{A},
+\end{array}
+\end{equation}
+其中$\V{g}^{(k)} = \nabla q(\V{x}^{(k)}) = G \V{x}^{(k)} + \V{d}$是原二次规划问题\eqref{eq:quadratic-programming-1}的目标函数$q(\V{x})$在点$\V{x}^{(k)}$处的梯度向量. 这个问题是一个等式约束的二次规划问题, 可以用上一小节\S\ref{subsec:7.2.1}中介绍的等式约束二次规划问题的求解方法进行求解.
+
+记问题\eqref{eq:qp-active-set-2}的解为$\V{s}^{(k)},$ 我们需要对各种可能的情况进行分类讨论.
+
+如果$\V{s}^{(k)} = \V{0},$ 即$\V{x}^{(k)}$是当前等式约束问题\eqref{eq:qp-active-set-1}的解, 那么可以根据式\eqref{eq:general-elim-lagrange}计算积极约束的拉格朗日乘子, 记为$\V{\lambda}^{(k)},$ 即有
+\begin{equation}
+\label{eq:qp-active-set-lambda}
+\V{g}^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} \alpha_i = 0.
+\end{equation}
+此时, 除对偶可行性条件$\lambda_i \geqslant 0, ~ i \in \mathcal{I}$以外, 其余KKT条件\eqref{eq:qp-active-set-kkt}均满足. 当与原问题不等式约束对应的拉格朗日乘子均非负, 即
+\begin{equation*}
+\lambda_i^{(k)} \geqslant 0, ~ \forall i \in \mathcal{I} \cap \mathcal{A},
+\end{equation*}
+则$x^{(k)}$是原问题的KKT点, 迭代结束, 求解完毕. 若不然, 则设
+\begin{equation*}
+q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
+\end{equation*}
+有$\lambda_q^{(k)} < 0.$ 令$\mathcal{A} = \mathcal{A} \setminus \{ q \},$ 代入问题\eqref{eq:qp-active-set-2}, 并求解此新的子问题.
+
+如果$\V{s}^{(k)} \neq \V{0},$ 即$\V{x}^{(k)}$不是当前等式约束问题\eqref{eq:qp-active-set-1}的解, 那么我们进一步检验试探点
+\begin{equation}
+\label{eq:qp-active-set-test-point}
+\bar{\V{x}}^{(k)} = \V{x}^{(k)} + \V{s}^{(k)}
+\end{equation}
+是否满足其他不在积极集$\mathcal{A}$中的不等式约束条件. 如果都满足的话, 我们令
+\begin{equation}
+\label{eq:qp-active-set-next-step-1}
+\V{x}^{(k+1)} = \bar{\V{x}}^{(k)} = \V{x}^{(k)} + \V{s}^{(k)},
+\end{equation}
+积极集保持不变, 进入下一步迭代搜索. 如果不然, 即存在指标$i \not\in \mathcal{A},$ 使得
+\begin{equation*}
+\V{a}_i^T \V{x}^{(k)} - \V{b} + \V{s}^{(k)} > 0
+\end{equation*}
+此时试探点$\bar{\V{x}}^{(k)}$不是原问题的可行点, 需要将其投影到原问题的可行域. 我们沿着方向$\V{p}^{(k)} = \V{s}^{(k)}$进行线搜索, 选一个小于$1$但尽可能大的步长
+\begin{equation}
+\label{eq:qp-active-set-step-len-1}
+\begin{aligned}
+\bar{\alpha}_k & = \max \left\{ \alpha : ~ \alpha > 0, ~ \V{a}_i^T \V{x}^{(k)} - b_i + \alpha \V{a}_i^T \V{p}^{(k)} \leqslant 0, ~ \V{a}_i^T \V{p}^{(k)} > 0, ~ \forall i \not\in \mathcal{A} \right\}, \\
+& = \min_{\substack{i: i \not\in \mathcal{A} \\ \V{a}_i^T \V{p}^{(k)} > 0}} \frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}.
+\end{aligned}
+\end{equation}
+注意$\bar{\alpha}_k$是严格小于$1$的, 因为此时的试探点$\V{x}^{(k)} + \V{s}^{(k)}$不可行. 取指标$j$使得第$j$个约束取得上式中$\frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}}$的最大值, 即
+\begin{equation}
+\label{eq:qp-active-set-step-len-2}
+\bar{\alpha}_k = \frac{b_j - \V{a}_j^T \V{x}^{(k)}}{\V{a}_j^T \V{p}^{(k)}}, ~~ j = \argmin_{\substack{i: i \not\in \mathcal{A} \\ \V{a}_i^T \V{p}^{(k)} > 0}} \frac{b_i - \V{a}_i^T \V{x}^{(k)}}{\V{a}_i^T \V{p}^{(k)}},
+\end{equation}
+并称指标$j$对应的约束为阻滞(blocking)约束. 我们取
+\begin{equation}
+\label{eq:qp-active-set-next-step-2}
+\V{x}^{(k+1)} = \V{x}^{(k)} + \bar{\alpha}_k \V{s}^{(k)}, ~~ \mathcal{A} \gets \mathcal{A} \cup \{ j \}.
+\end{equation}
+这里我们把指标$j$添加到了积极集, 是因为对于$\V{x}^{(k+1)},$ 指标$j$对应的约束条件等式成立, 非积极约束$j$变成积极的. 迭代格式\eqref{eq:qp-active-set-next-step-1}与\eqref{eq:qp-active-set-next-step-2}可以统一表述为: 以等式问题\eqref{eq:qp-active-set-2}的解$\V{s}^{(k)}$为搜索方向$\V{p}^{(k)},$ 以
+\begin{equation}
+\label{eq:qp-active-set-step-len-uniform}
+\alpha_k = \min (1, \bar{\alpha}_k)
+\end{equation}
+为迭代步长, 得下一步的迭代点
+\begin{equation}
+\label{eq:qp-active-set-next-step-uniform}
+\V{x}^{(k+1)} = \V{x}^{(k)} + \alpha_k \V{p}^{(k)},
+\end{equation}
+同时根据是否有阻滞约束确定是否更新积极集: 若$\alpha_k < 1,$ 有约束阻滞$j,$ 则将$j$添加到积极集$\mathcal{A}.$
+
+至此, 我们可以以伪代码的形式, 将经典的积极集法表示为算法\ref{algo:active-set}.
+
+\begin{algorithm}[ht]
+\caption{求解带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}的积极集法}
+\label{algo:active-set}
+随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$\;
+\While {true}{
+    求等式约束二次规划问题\eqref{eq:qp-active-set-2}解$\V{s}^{(k)}$\;
+    \eIf{$\V{s}^{(k)} = 0$}{
+        由\eqref{eq:qp-active-set-lambda}式计算拉格朗日乘子$\V{\lambda}^{(k)}$\;
+        计算指标$q \gets \argmin\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$\;
+        \eIf{$\lambda^{(k)}_q \geqslant 0$}{
+            $\V{x}^* \gets \V{x}^{(k)}$\;
+            算法终止, 返回$\V{x}^*$\;
+        }{
+            $\V{x}^{(k+1)} \gets \V{x}^{(k)}$\;
+            将指标$q$从积极集$\mathcal{A}$中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$\;
+        }
+    }{
+        取线搜索方向$\V{p}^{(k)} \gets \V{s}^{(k)}$\;
+        由式\eqref{eq:qp-active-set-step-len-2}计算$\bar{\alpha}_k$以及相应的约束条件的指标$j$\;
+        取步长$\alpha_k \gets \min (1, \bar{\alpha}_k)$\;
+        令$\V{x}^{(k+1)} \gets \V{x}^{(k)} + \alpha_k \V{p}^{(k)}$\;
+        \If{$\alpha_k < 1$}{
+            将阻滞约束条件的指标$j$添加到积极集$\mathcal{A}$中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$\;
+        }
+    }
+    $k \gets k + 1$\;
+}
+\end{algorithm}
+
+\begin{eg}
+\label{eg:qp-active-set-algo}
+我们来举例说明用积极集法求解含不等式约束的二次规划问题的步骤. 考虑如下的二次规划问题
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
+\text{subject to} & -x_1 + 2x_2 - 2 \leqslant 0, \\
+& x_1 + 2x_2 - 6 \leqslant 0, \\
+& x_1 - 2x_2 - 2 \leqslant 0, \\
+& -x_1 \leqslant 0, \\
+& -x_2 \leqslant 0,
+\end{array}
+\end{equation*}
+我们用积极集法进行求解. 该问题的可行域可见图\ref{fig:active-set-eg}, 由其中实线以及坐标轴围成的阴影区域.
+
+\input{tikz-figures/active-set-eg.tex}
+
+我们选取初始点$\V{x}^{(0)} = (2, 0)^T,$ 用$1$至$5$依次作为约束条件的指标. 在初始点$\V{x}^{(0)}$处, 约束$3$和$5$满足等式关系, 是积极约束, 所以初始积极集$\mathcal{A} = \{ 3, 5 \}.$ 当前需要求解的等式问题\eqref{eq:qp-active-set-1}为
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
+\text{subject to} & x_1 - 2x_2 - 2 = 0, \\
+& x_2 = 0,
+\end{array}
+\end{equation*}
+或者经过平移的问题\eqref{eq:qp-active-set-2}
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
+\text{subject to} & s_1 - 2s_2 = 0, \\
+& s_2 = 0.
+\end{array}
+\end{equation*}
+很容易看到$\V{x}^{(0)}$(即$\V{s}^{(0)} = \V{0}$)是该问题的解. 由式\eqref{eq:qp-active-set-lambda}求解积极约束的拉格朗日乘子, 即求解方程组
+\begin{equation*}
+\begin{bmatrix} 1 \\ -2 \end{bmatrix} \lambda_3^{(0)} + \begin{bmatrix} 0 \\ -1 \end{bmatrix} \lambda_5^{(0)} = \begin{bmatrix} -2 \\ 5 \end{bmatrix},
+\end{equation*}
+得$\lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1.$ 指标$q = \argmin\limits_{i \in \{ 3, 5 \}} \lambda_i^{(0)} = 3.$ 由于$\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$ 因此我们置$\V{x}^{(1)} = \V{x}^{(0)},$ 同时将指标$q = 3$从积极集中删去, 进入下一步迭代. 接下来我们需要求解等式问题
+\begin{equation*}
+\begin{array}{cl}
+\text{minimize} & q(\V{s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
+\text{subject to} & s_2 = 0.
+\end{array}
+\end{equation*}
+容易解得$\V{s}^{(1)} = (-1, 0)^T.$ 此时, 试探点$\V{x}^{(1)} + \V{s}^{(1)} = (1, 0)^T$是可行点, 置$\V{x}^{(2)} = \V{x}^{(1)} + \V{s}^{(1)} = (1, 0)^T,$ 同时积极集$\mathcal{A} = \{ 5 \}$保持不变, 进入下一步迭代. 容易验证$\V{x}^{(2)}$是这一步要解的等式问题的可行解, 进而可计算得相应的积极约束的拉格朗日乘子$\lambda_5^{(2)} = -5.$ 此时, 约束5变成非积极的, 积极集$\mathcal{A} = \emptyset$变为空集. 置$\V{x}^{(3)} = \V{x}^{(2)} = (1, 0)^T$进入下一步迭代. 再次求解当前的等式约束问题(实际上已成为无约束问题)
+\begin{equation*}
+\text{minimize} ~~ q(\V{s}) = s_1^2 + (s_2 - 2.5)^2,
+\end{equation*}
+得解$\V{s}^{(3)} = (0, 2.5)^T.$ 试探点$\V{x}^{(3)} + \V{s}^{(3)} = (1, 2.5)^T$不是可行点, 因此需要以$\V{p}^{(3)} = \V{s}^{(3)}$为方向进行线搜索$\V{x}^{(3)} + \alpha_3 \V{p}^{(3)},$ 并由式\eqref{eq:qp-active-set-step-len-2}以及式\eqref{eq:qp-active-set-step-len-uniform}算得最优步长$\alpha_3 = 0.6,$ 以及相应阻滞约束的指标$j = 1.$ 置$\V{x}^{(4)} = \V{x}^{(3)} + \alpha_3 \V{p}^{(3)} = (1, 1.5)^T,$ 并将阻滞约束的指标$j = 1$添加到积极集得$\mathcal{A} = \{ 1 \},$ 进入下一步迭代. 再次求解当前的等式问题, 得$\V{s}^{(4)} = (0.4, 0.2)^T.$ 相应的试探点$\V{x}^{(4)} + \V{s}^{(4)} = (1.4, 1.7)^T$可行, 于是得新的迭代点$\V{x}^{(5)} = (1.4, 1.7)^T.$ 由于$\V{x}^{(5)}$是当前等式问题的可行点, 且解得积极约束的拉格朗日乘子$\lambda_1^{(5)} = 0.8 > 0,$ 算法终止条件达成, 得原问题的最优解
+\begin{equation*}
+\V{x}^* = \V{x}^{(5)} = (1.4, 1.7)^T.
+\end{equation*}
+
+我们将每一步的数值结果总结在表\ref{tab:active-set-eg}中. 表中的``$\backslash$''表示当前迭代步不需要计算相应的量.
+
+\begin{table}[H]
+    \caption{积极集法求解例\ref{eg:qp-active-set-algo}数值结果}
+    \label{tab:active-set-eg}
+    \centering
+    \begin{tabular}{cccccccccc}
+    \hline
+    $k$ & $\V{x}^{(k)}$ & $\mathcal{A}$ & $\V{s}^{(k)}$ & $\bar{\V{x}}^{(k)}$可行 & $\V{\lambda}^{(k)}$ & $q$ & $\alpha_k$ & $j$ & $q(\V{x}^{(k)})$ \\
+    \hline
+    \multirow{2}{*}{$0$} & \multirow{2}{*}{$(2, 0)^T$} & \multirow{2}{*}{$\{ 3, 5 \}$} & \multirow{2}{*}{$(0, 0)^T$} & \multirow{2}{*}{$\checkmark$} & $\lambda_3^{(0)} = -2$ & \multirow{2}{*}{$3$} & \multirow{2}{*}{$0$} & \multirow{2}{*}{$\backslash$} & \multirow{2}{*}{$7.25$} \\
+    & & & & & $\lambda_5^{(0)} = -1$ & & & \\
+    $1$ & $(2, 0)^T$ & $\{ 5 \}$ & $(-1, 0)^T$ & $\checkmark$ & $\backslash$ & $\backslash$ & $1$ & $\backslash$ & $7.25$ \\
+    $2$ & $(1, 0)^T$ & $\{ 5 \}$ & $(0, 0)^T$ & $\checkmark$ & $\lambda_5^{(2)} = -5$ & $5$ & $0$ & $\backslash$ & $6.25$ \\
+    $3$ & $(1, 0)^T$ & $\emptyset$ & $(0, 2.5)^T$ & $\times$ & $\backslash$ & $\backslash$ & $0.6$ & $1$ & $6.25$ \\
+    $4$ & $(1, 1.5)^T$ & $\{ 1 \}$ & $(0.4, 0.2)^T$ & $\checkmark$ & $\backslash$ & $\backslash$ & $1$ & $\backslash$ & $1$ \\
+    $5$ & $(1.4, 1.7)^T$ & $\{ 1 \}$ & $(0, 0)^T$ & $\checkmark$ & $\lambda_1^{(5)} = 0.8$ & $\backslash$ & $\backslash$ & $\backslash$ & $0.8$ \\
+    \hline
+    \end{tabular}
+\end{table}
+\end{eg}
+
+我们接下来对积极集法进行进一步的说明, 以阐明一些尚未讨论的问题. 首先是关于初始可行点$\V{x}^{(0)}$以及初始积极集$\mathcal{A}$的选取. 我们可以利用人工变量法, 求解辅助问题得$\V{x}^{(0)}.$ $\mathcal{A}$可以选取为$\mathcal{A}(\V{x}^{(0)}),$ 也可以选取$\mathcal{A}(\V{x}^{(0)})$的任何一个子集, 即$\mathcal{A} \subseteq \mathcal{A}(\V{x}^{(0)}).$ 不同的选取方式会导致不同的迭代过程, 但算得的最终结果是一样的, 这里不作过多讨论.
+
+其次是积极集法的有限终止性. 事实上, 我们已经从表\ref{tab:active-set-eg}中观察到了, 如果$\alpha_k \neq 0,$ 那么目标函数值总是下降的. 更具体来说, 我们假设初始积极集$\mathcal{A}$中约束的梯度是线性无关的, 那么对积极集的修正策略可以确保梯度线性无关这一性质对后面所有的积极集都成立. 这样一来, 等式问题\eqref{eq:qp-active-set-2}总是适定的. 一个重要的观察是, 如果某一步(设为第$k$步)的等式问题\eqref{eq:qp-active-set-2}解为$\V{s}^{(k)} = \V{0},$ 那么当前点$\V{x}^{(k)}$是等式问题\eqref{eq:qp-active-set-1}的全局极小值点. 如果算法在这一步未终止, 即当前点$\V{x}^{(k)}$不是原问题\eqref{eq:quadratic-programming-1}的解, 此时会有某个积极约束变成非积极的, 下一步的搜索方向$\V{p}^{(k+1)}$会是目标函数$q(\V{x})$的严格下降方向. 那么此后迭代步中的目标函数值都会严格小于$q(\V{x}^{(k)}),$ 进而知此后迭代步中的积极集不可能与当前第$k$步的积极集相同, 否则与$\V{x}^{(k)}$是等式问题\eqref{eq:qp-active-set-1}的全局极小值点这一事实产生矛盾. 另一个重要观察是, 设$\V{s}^{(k)} = \V{0},$ 那么至多$n$步迭代之后的第$k'$步, 我们又会遇到$\V{s}^{(k')} = \V{0}$是等式问题\eqref{eq:qp-active-set-2}的解这种情况. 证明我们留给读者完成. 那么综上所述, 积极集法的每$n$次迭代中, 我们至少会遇到其中某一步, 使得当前点是等式问题\eqref{eq:qp-active-set-1}的全局极小值, 并且在往后的迭代中, 这一步的积极集不会再次出现. 但是, 所有可能的积极集的数目是有限的, 也就是说, 积极集法必然在有限步之内以找到原问题的最优解而结束.
+
+我们最后要强调的是, 积极集法的重要特征是: 积极集改变后, 要有效求解等式约束的二次规划问题\eqref{eq:qp-active-set-2}. 在每次迭代中, 我们并不重新分解KKT矩阵($O(n3)$的运算复杂度), 而是根据积极集$\mathcal{A}$的变化更新算法所需要的因子($O(n2)$的运算复杂度). 不同的方法采用不同的矩阵分解以便这种更新是可行且有效的.

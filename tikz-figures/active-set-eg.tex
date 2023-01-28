@@ -9,8 +9,8 @@
 % \draw[gray!30, thin, dashed] (-0.5, -0.5) grid (4.6, 3.9);
 \coordinate (C) at (1, 2.5);
 % coordinate axes
-\draw[-{Stealth}] (-0.3, 0)--(4.7, 0) node [right] {$x_1$};
-\draw[-{Stealth}] (0, -0.3)--(0, 3.7) node [above] {$x_2$};
+\draw[-{Stealth}] (-0.3, 0) -- (4.7, 0) node [right] {$x_1$};
+\draw[-{Stealth}] (0, -0.3) -- (0, 3.7) node [above] {$x_2$};
 % feasible region
 \draw[fill=gray!20] (0, 1) node (p1) [left] {$(0, 1)$} -- (2, 2) node (p2) [above] {$(2, 2)$} -- (4, 1) node (p3) [right] {$(4, 1)$} -- (2, 0) node (p4) [below] {$(2, 0)$} -- (0, 0);
 % iterations of the active-set algorithm
@@ -48,6 +48,7 @@
 \draw[dashed, circle defined by=center C and point p8];
 \end{scope}
 
+% optional plots
 \ifsteparrows
 \path ([xshift=5]x01.south) edge [draw, bend left, -{Stealth}] ([xshift=-7]x01.south);
 \path ([yshift=3]x01.west) edge [draw, -{Stealth}] ([xshift=-4, yshift=-3]x23.east);
