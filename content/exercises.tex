@@ -25,7 +25,7 @@
 \item 设$\V{x}^*$是二次规划问题\eqref{eq:quadratic-programming-1}的解, 证明$\V{x}^*$也是下列线性规划问题的解
 \begin{equation*}
 \begin{array}{cl}
-\text{minimize} & \V{x}^T \left( G \V{x} + \V{d} \right), \\
+\text{minimize} & \V{x}^T \left( G \V{x}^* + \V{d} \right), \\
 \text{subject to} & \V{a}_i^T \V{x} = b_i, ~~ i \in \mathcal{E}, \\
 & \V{a}_i^T \V{x} \leqslant b_i, ~~ i \in \mathcal{I},
 \end{array}
@@ -64,7 +64,7 @@
 
 \item 证明二次规划问题\eqref{eq:quadratic-programming-1}的KKT条件\eqref{eq:quadratic-programming-kkt}与利用积极集表达的KKT条件\eqref{eq:qp-active-set-kkt}等价.
 
-\item 分别以$\{3\},$ $\{5\},$ 以及$\emptyset$为初始积极集$\mathcal{A},$ 用积极集法求解例\ref{eg:qp-active-set-algo}中的不等式约束的二次规划问题.
+\item 分别以$\{3\},$ $\{5\},$ 以及$\emptyset$为初始积极集$\mathcal{A},$ 用积极集法求解例\ref{eg:qp-active-set-algo}~中的不等式约束的二次规划问题.
 
 \item 假设积极集法选取的初始积极集$\mathcal{A}$中约束的梯度是线性无关的, 即$\{ \V{a}_i: ~ i \in \mathcal{A} \}$是线性无关组, 并且在随后某一步, 根据式\eqref{eq:qp-active-set-step-len-2}添加了一条阻滞约束$j$到积极集$\mathcal{A}$中. 证明阻滞约束的梯度$\V{a}_j$与该集合中其余向量线性无关.
 
@@ -72,7 +72,7 @@
 
 \item 假设在积极集法的第$k$步, 我们按式\eqref{eq:qp-active-set-inactive-index}删去一条非积极约束$q.$ 证明下一步的搜索方向$\V{p}^{(k+1)}$是目标函数$q(\V{x})$的严格下降方向(即$\left( \V{p}^{(k+1)} \right)^T \V{g}^{(k+1)} < 0$), 且该方向是严格可行的(即$\left( \V{p}^{(k+1)} \right)^T \V{a}_q > 0$).
 
-\item 利用矩阵增加或者减少一行时的QR分解的更新方法编写积极集法\ref{algo:active-set}的程序, 并用其求解二次规划问题
+\item 利用矩阵增加或者减少一行时的QR分解的更新方法编写积极集法\ref{algo:active-set}~的程序, 并用其求解二次规划问题
 \begin{equation*}
 \begin{array}{cl}
 \text{minimize} & x_1^2 + 2x_2^2 -2x_1x_2 - 2x_1 - 6x_2, \\

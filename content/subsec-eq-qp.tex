@@ -155,9 +155,9 @@ I_n = \begin{bmatrix} Y^T \\ Z^T \end{bmatrix} \begin{bmatrix} A & V \end{bmatri
 \begin{equation*}
 \begin{bmatrix} Y^T \\ Z^T \end{bmatrix} = \begin{bmatrix} A & V \end{bmatrix}^{-1} = \begin{bmatrix} Q_1R & Q_2 \end{bmatrix}^{-1} = \begin{bmatrix} R^{-1} Q_1^T \\ Q_2^T \end{bmatrix},
 \end{equation*}
-我们得到了正交分解法. 尽管关于矩阵$Y$和$Z$有各种各样的选取方式, 然而正交分解法通常是首选的. 原因之一是计算矩阵$Z$时涉及正交矩阵的操作, 而正交矩阵具有良好的数值稳定性； 其次是选取$Z = Q_2$可以给出条件数$\kappa(Z^⊤ G Z)$的最优上界, 即
+我们可得正交分解法. 尽管关于矩阵$Y$和$Z$有各种各样的选取方式, 然而正交分解法通常是首选的. 原因之一是计算矩阵$Z$时涉及正交矩阵的操作, 而正交矩阵具有良好的数值稳定性； 其次是选取$Z = Q_2$可以给出条件数$\kappa(Z^T G Z)$的最优上界, 即
 \begin{equation*}
-\kappa(Z^⊤ G Z) \leqslant \kappa(G).
+\kappa(Z^T G Z) \leqslant \kappa(G).
 \end{equation*}
 
 \begin{eg}
