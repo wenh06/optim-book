@@ -53,9 +53,10 @@
 \lambda_i^{(k)} \geqslant 0, ~ \forall i \in \mathcal{I} \cap \mathcal{A},
 \end{equation*}
 则$x^{(k)}$是原问题的KKT点, 迭代结束, 求解完毕. 若不然, 则设
-\begin{equation*}
+\begin{equation}
+\label{eq:qp-active-set-inactive-index}
 q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
-\end{equation*}
+\end{equation}
 有$\lambda_q^{(k)} < 0.$ 令$\mathcal{A} = \mathcal{A} \setminus \{ q \},$ 代入问题\eqref{eq:qp-active-set-2}, 并求解此新的子问题.
 
 如果$\V{s}^{(k)} \neq \V{0},$ 即$\V{x}^{(k)}$不是当前等式约束问题\eqref{eq:qp-active-set-1}的解, 那么我们进一步检验试探点
