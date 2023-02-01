@@ -5,7 +5,13 @@ import numpy as np
 from scipy import linalg as SLA
 
 
-def qp_eq(G: np.ndarray, d: np.ndarray, A: np.ndarray, b: np.ndarray) -> np.ndarray:
+def qp_eq(
+    G: np.ndarray,
+    d: np.ndarray,
+    A: np.ndarray,
+    b: np.ndarray,
+    return_lambda: bool = True,
+) -> np.ndarray:
     r"""
     Solve the equality-constrained quadratic program using QR decomposition.
 
@@ -23,13 +29,29 @@ def qp_eq(G: np.ndarray, d: np.ndarray, A: np.ndarray, b: np.ndarray) -> np.ndar
         Transpose of the constraint matrix.
     b: ndarray, shape (m,)
         Constraint vector.
+    return_lambda: bool, default True
+        Whether to return the Lagrange multipliers.
 
     Returns
     -------
     x: ndarray, shape (n,)
         Optimal solution.
-    lambda_: ndarray, shape (m,)
+    lambda_: ndarray, shape (m,), optional
         Lagrange multipliers.
+
+    Examples
+    --------
+    ```python
+    import numpy as np
+    from scipy import linalg as SLA
+
+    G_mat = np.array([[2, 5, 0], [5, 2, 0], [0, 0, 4]])
+    A_mat = np.array([[1, 1], [1, -2], [1, -3]])
+    d_vec = np.array([0, -3, -7])
+    b_vec = np.array([1, -2])
+
+    sol, lam = qp_eq(G_mat, d_vec, A_mat, b_vec)
+    ```
 
     """
     n = G.shape[0]
@@ -47,8 +69,10 @@ def qp_eq(G: np.ndarray, d: np.ndarray, A: np.ndarray, b: np.ndarray) -> np.ndar
     # Compute the solution.
     Yb = Q @ np.linalg.solve(R.T, b)
     x = Yb + Z @ np.linalg.solve(Z.T @ G @ Z, -Z.T @ (d + G @ Yb))
-    lambda_ = np.linalg.solve(A[:m], -(G @ x + d)[:m])
-    return x, lambda_
+    if return_lambda:
+        lambda_ = np.linalg.solve(A[:m], -(G @ x + d)[:m])
+        return x, lambda_
+    return x
 
 
 def qp_eq_qr(
@@ -58,6 +82,7 @@ def qp_eq_qr(
     Q: np.ndarray,
     R: np.ndarray,
     b: np.ndarray,
+    return_lambda: bool = True,
 ) -> np.ndarray:
     r"""
     Solve the equality-constrained quadratic program using QR decomposition,
@@ -81,13 +106,31 @@ def qp_eq_qr(
         Upper triangular matrix of the QR decomposition of A.
     b: ndarray, shape (m,)
         Constraint vector.
+    return_lambda: bool, default True
+        Whether to return the Lagrange multipliers.
 
     Returns
     -------
     x: ndarray, shape (n,)
         Optimal solution.
-    lambda_: ndarray, shape (m,)
+    lambda_: ndarray, shape (m,), optional
         Lagrange multipliers.
+
+    Examples
+    --------
+    ```python
+    import numpy as np
+    from scipy import linalg as SLA
+
+    G_mat = np.array([[2, 5, 0], [5, 2, 0], [0, 0, 4]])
+    A_mat = np.array([[1, 1], [1, -2], [1, -3]])
+    d_vec = np.array([0, -3, -7])
+    b_vec = np.array([1, -2])
+
+    Q_mat, R_mat = SLA.qr(A_mat)
+
+    sol, lam = qp_eq_qr(G_mat, d_vec, A_mat, Q_mat, R_mat, b_vec)
+    ```
 
     """
     n = G.shape[0]
@@ -103,8 +146,10 @@ def qp_eq_qr(
     # Compute the solution.
     Yb = Q @ np.linalg.solve(R.T, b)
     x = Yb + Z @ np.linalg.solve(Z.T @ G @ Z, -Z.T @ (d + G @ Yb))
-    lambda_ = np.linalg.solve(A[:m], -(G @ x + d)[:m])
-    return x, lambda_
+    if return_lambda:
+        lambda_ = np.linalg.solve(A[:m], -(G @ x + d)[:m])
+        return x, lambda_
+    return x
 
 
 def qp_active_set(
@@ -151,6 +196,30 @@ def qp_active_set(
     -------
     sol: ndarray, shape (n,)
         Optimal solution.
+    trace_dict: dict, optional,
+        A dict containing the intermediate results.
+
+    Examples
+    --------
+    ```python
+    import numpy as np
+    from scipy import linalg as SLA
+
+    G_mat_asm = 2 * np.eye(2, dtype=float)
+    A_mat_asm = np.array([[-1, 2], [1, 2], [1, -2], [-1, 0], [0, -1]], dtype=float).T
+    b_vec_asm = np.array([2, 6, 2, 0, 0], dtype=float)
+    d_vec_asm = np.array([-2, -5], dtype=float)
+
+    sol, trace_dict = qp_active_set(
+        G_mat_asm,
+        d_vec_asm,
+        A_mat_asm,
+        b_vec_asm,
+        np.array([2, 0], dtype=float),
+        0,
+        verbose=True,
+    )
+    ```
 
     """
     n = G.shape[0]
@@ -160,6 +229,27 @@ def qp_active_set(
     assert b.shape == (m,), "b must have shape (m,)."
     assert x0.shape == (n,), "x0 must have shape (n,)."
     assert num_eq_constraints <= m, "num_eq_constraints must be <= m."
+
+    trace_dict = {
+        "x": [],
+        "active_set": [],
+        "direction": [],
+        "lambda_": [],
+        "q": [],
+        "alpha": [],
+        "j": [],
+    }
+
+    if num_eq_constraints == m:
+        # If all constraints are equality constraints, use `qp_eq`.
+        # NOTE that in this case, we DO NOT check if x0 is feasible or not.
+        x, lambda_ = qp_eq(G, d, A, b)
+        trace_dict["x"].append(x)
+        trace_dict["lambda_"].append(lambda_)
+        if verbose:
+            return x, trace_dict
+        return x
+
     # Compute the initial constraint violation.
     c = A.T @ x0 - b
     # Check the initial guess is feasible.
@@ -173,34 +263,29 @@ def qp_active_set(
     x = x0.copy()
     # Initialize the active set.
     active_set = np.where(A.T @ x0 == b)[0]
-
-    # Compute the initial gradient vector.
-    g = G @ x + d
     # Compute the initial QR decomposition of A_active.
     Q, R = SLA.qr(A[:, active_set], mode="full")
-
-    trace_dict = {
-        "x": [],
-        "active_set": [],
-        "direction": [],
-        "lambda_": [],
-        "q": [],
-        "alpha": [],
-        "j": [],
-    }
 
     # Initialize the number of iterations.
     num_iter = 0
     while True:
         trace_dict["x"].append(x.copy())
         trace_dict["active_set"].append(active_set.copy())
+
+        # Compute the initial gradient vector.
+        g = G @ x + d
+
         # Solve the reduced equality-constrained quadratic program,
         # get the search direction, and the Lagrange multipliers.
-        direction, lambda_ = qp_eq_qr(G, g, Q, R, b[active_set])
+        direction = qp_eq_qr(
+            G, g, A[:, active_set], Q, R, np.zeros(len(active_set)), return_lambda=False
+        )
         trace_dict["direction"].append(direction.copy())
-        trace_dict["lambda_"].append(lambda_.copy())
+
         # if direction is zero
         if np.linalg.norm(direction) < precision:
+            lambda_ = np.linalg.lstsq(A[:, active_set], -g, rcond=None)[0]
+            trace_dict["lambda_"].append(lambda_.copy())
             ind = np.argmin(lambda_)
             q = active_set[ind]
             trace_dict["q"].append(q)
@@ -212,17 +297,18 @@ def qp_active_set(
             else:
                 break
         else:
+            trace_dict["lambda_"].append(np.nan)
             # Compute the step size.
             candidates = np.array(
                 [
                     (b[i] - A[:, i].T @ x) / (A[:, i].T @ direction)
-                    for i in range(m)
+                    for i in range(num_eq_constraints, m)
                     if i not in active_set and A[:, i].T @ direction > 0
                 ]
             )
             if candidates.size > 0:
                 j = np.argmin(candidates)
-                alpha = (b[j] - A[:, j].T @ x) / (A[:, j].T @ direction)
+                alpha = min(1, candidates[j])
             else:
                 j = np.nan
                 alpha = 1
@@ -230,11 +316,12 @@ def qp_active_set(
             trace_dict["j"].append(j)
             trace_dict["alpha"].append(alpha)
             # Update the solution.
-
-            # TODO: finish the rest of the algorithm.
-
+            x += alpha * direction
+            # Update the active set.
+            if alpha < 1:
+                active_set = np.append(active_set, j)
+                Q, R = SLA.qr_insert(Q, R, A[:, j], j, which="col")
         num_iter += 1
-
         if num_iter >= max_iter:
             break
 
