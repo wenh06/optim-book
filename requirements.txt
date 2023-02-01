@@ -1,1 +1,4 @@
+numpy
+scipy
+sympy
 bib-lookup>=0.0.22
