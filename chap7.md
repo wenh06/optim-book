@@ -11,7 +11,7 @@ $$\label{eq:quadratic-programming-1}
 \end{array}$$ 其中$G$是$n$阶对称方阵, ${\bm{d}}, {\bm{a}}_i,$
 是$n$维列向量, $b_i$是常数, $i \in \mathcal{E} \cup \mathcal{I},$
 约束条件有等式约束以及不等式约束.
-以上形式的二次规划问题可以将约束条件以矩阵的形式表达为更加紧凑的形式：
+以上形式的二次规划问题可以将约束条件以矩阵的形式表达为更加紧凑的形式:
 $$\label{eq:quadratic-programming-2}
 \begin{array}{cl}
 \text{minimize} & q({\bm{x}}) := \frac{1}{2} {\bm{x}}^T G {\bm{x}} + {\bm{d}}^T {\bm{x}}, \\
@@ -686,10 +686,10 @@ reference="eq:qp-active-set-2"}. 在每次迭代中,
     & -x_1 + 2x_2 \leqslant 2, \\
     & -x_1 \leqslant 0,\\
     & -x_2 \leqslant 0.
-    \end{array}$$ 选取三个初始点:
-    一个在可行域的内部(例如$(3, 1)^T$)、一个在顶点(例如$(\frac{2}{3}, \frac{4}{3})^T$)、一个在可行域的边界上,
-    但不是顶点(例如$(4, 0)^T$),
+    \end{array}$$ 选取三个初始点: 一个在可行域的内部(例如$(3, 1)^T$);
+    一个在顶点(例如$(\frac{2}{3}, \frac{4}{3})^T$);
+    一个在可行域的边界上, 但不是顶点(例如$(4, 0)^T$).
 
-    提示：可以利用Matlab的`qr.m`, `qrinsert.m`和`qrdelete.m`函数,
+    提示: 可以利用Matlab的`qr.m`, `qrinsert.m`和`qrdelete.m`函数,
     或者利用Python `scipy`软件包的`scipy.linalg.qr`,
     `scipy.linalg.qr_insert`和`scipy.linalg.qr_delete`函数.
