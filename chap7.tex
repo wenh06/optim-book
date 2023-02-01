@@ -36,12 +36,13 @@
 \usetikzlibrary{trees,arrows.meta,decorations.pathmorphing,decorations.pathreplacing,shapes,shapes.geometric,backgrounds,positioning,calc,tikzmark,hobby,intersections}
 % \usepackage{tkz-euclide}
 
-\usepackage[slantfont,boldfont]{xeCJK}
+\usepackage[slantfont,boldfont]{xeCJK}  % 这个只有用XeLaTeX编译才需要
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % set chn font
+% 这个在Windows下应该不需要
 \setCJKmainfont{Noto Serif CJK SC}
 \setCJKsansfont{Noto Sans CJK SC}
 \setCJKmonofont{Noto Sans Mono CJK SC}
@@ -89,6 +90,7 @@
 \setcounter{section}{2}
 
 \begin{document}
+
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -97,7 +99,6 @@
 
 \section{二次规划}
 \label{sec:7.2}
-% finished
 
 \input{content/intro}
 
