@@ -12,6 +12,20 @@
 bib-lookup --gather ./chap7.tex
 ```
 
+如果没有安装`bib-lookup`，需要先在项目的根文件夹下执行
+
+```bash
+pip install bib-lookup
+```
+
+或者
+
+```bash
+pip install -r requirements.txt
+```
+
+进行安装。
+
 文件[`chap7.md`](chap7.md)是利用[`pandoc`](https://pandoc.org/)执行如下命令自动生成的Markdown文件
 
 ```bash
