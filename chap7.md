@@ -191,9 +191,10 @@ $$\label{eq:quadratic-programming-qr-decomp-2}
 Y = Q_1 R^{-T}, ~~ Z = Q_2$$
 即可满足[\[eq:eq:general-elim-req\]](#eq:eq:general-elim-req){reference-type="eqref"
 reference="eq:eq:general-elim-req"}中关于矩阵$Y,$ $Z$的要求.
-通过解线性方程组$R^T {\bm{v}} = {\bm{b}}$得到一个特解${\bm{v}},$
+通过解线性方程组 $$R^T {\bm{v}} = {\bm{b}}$$ 得到一个特解${\bm{v}},$
 进而得到[\[eq:general-elim-3\]](#eq:general-elim-3){reference-type="eqref"
-reference="eq:general-elim-3"}中的特解$Y {\bm{b}} = Y R^T {\bm{v}} = Q_1 {\bm{v}}.$
+reference="eq:general-elim-3"}中的特解
+$$Y {\bm{b}} = Y R^T {\bm{v}} = Q_1 {\bm{v}}.$$
 接下来我们只要按照广义消元法的程序,
 解关于既约变量${\bm{y}}$的方程组[\[eq:general-elim-y\]](#eq:general-elim-y){reference-type="eqref"
 reference="eq:general-elim-y"}得到唯一解${\bm{y}}^*,$

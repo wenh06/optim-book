@@ -271,7 +271,15 @@ A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmat
 \label{eq:quadratic-programming-qr-decomp-2}
 Y = Q_1 R^{-T}, ~~ Z = Q_2
 \end{equation}
-即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y,$ $Z$的要求. 通过解线性方程组$R^T \V{v} = \V{b}$得到一个特解$\V{v},$ 进而得到\eqref{eq:general-elim-3}中的特解$Y \V{b} = Y R^T \V{v} = Q_1 \V{v}.$ 接下来我们只要按照广义消元法的程序, 解关于既约变量$\V{y}$的方程组\eqref{eq:general-elim-y}得到唯一解$\V{y}^*,$ 回代得到原问题最优解$\V{x}^* = Y \V{b} + Z \V{y}^*,$ 以及用式\eqref{eq:general-elim-lambda}计算得到相应的拉格朗日乘子.
+即可满足\eqref{eq:eq:general-elim-req}中关于矩阵$Y,$ $Z$的要求. 通过解线性方程组
+\begin{equation*}
+R^T \V{v} = \V{b}
+\end{equation*}
+得到一个特解$\V{v},$ 进而得到\eqref{eq:general-elim-3}中的特解
+\begin{equation*}
+Y \V{b} = Y R^T \V{v} = Q_1 \V{v}.
+\end{equation*}
+接下来我们只要按照广义消元法的程序, 解关于既约变量$\V{y}$的方程组\eqref{eq:general-elim-y}得到唯一解$\V{y}^*,$ 回代得到原问题最优解$\V{x}^* = Y \V{b} + Z \V{y}^*,$ 以及用式\eqref{eq:general-elim-lambda}计算得到相应的拉格朗日乘子.
 
 矩阵$Y,$ $Z$的通用计算格式如下: 任选一个$n \times (n - m)$的矩阵$V$使得$\begin{bmatrix} A & V \end{bmatrix}$是非奇异的, 且逆可以分块表示为
 \begin{equation}
@@ -483,7 +491,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \label{algo:active-set}
 \SetKwInOut{Input}{输入}
 \SetKwInOut{Output}{返回}
-\Input{$n$阶对称阵$G,$ 列满秩的$n \times m$的矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m$}
+\Input{$n$阶对称阵$G,$ 列满秩的$n \times m$的矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m,$ 等式约束的数量$m_1$}
 \Output{二次规划问题\eqref{eq:quadratic-programming-1}的极小值点$\V{x}^*$}
 随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$\;
 \While {true}{
