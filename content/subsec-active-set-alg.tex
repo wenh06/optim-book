@@ -108,6 +108,10 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \begin{algorithm}[ht]
 \caption{求解带不等式约束的二次规划问题\eqref{eq:quadratic-programming-1}的积极集法}
 \label{algo:active-set}
+\SetKwInOut{Input}{输入}
+\SetKwInOut{Output}{返回}
+\Input{$n$阶对称阵$G,$ 列满秩的$n \times m$的矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m$}
+\Output{二次规划问题\eqref{eq:quadratic-programming-1}的极小值点$\V{x}^*$}
 随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$\;
 \While {true}{
     求等式约束二次规划问题\eqref{eq:qp-active-set-2}解$\V{s}^{(k)}$\;
