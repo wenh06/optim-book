@@ -110,7 +110,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \label{algo:active-set}
 \SetKwInOut{Input}{输入}
 \SetKwInOut{Output}{返回}
-\Input{$n$阶对称阵$G,$ 列满秩的$n \times m$的矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m$}
+\Input{$n$阶对称阵$G,$ 列满秩的$n \times m$的矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m,$ 等式约束的数量$m_1$}
 \Output{二次规划问题\eqref{eq:quadratic-programming-1}的极小值点$\V{x}^*$}
 随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$\;
 \While {true}{
