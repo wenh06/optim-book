@@ -1,6 +1,6 @@
 # optim-book
 
-本科生教材《最优化理论与方法》关于二次规划问题的一节（第七章第3节）
+本科生教材《最优化理论与方法》关于二次规划（Quadratic Programming）问题的一节（第七章第3节）
 
 主文件是[`chap7.tex`](chap7.tex)，每一个小节（subsection）都单独写在了各自的文件内，这些文件都放在文件夹[`content`](content)内。
 
