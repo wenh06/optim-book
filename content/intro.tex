@@ -17,7 +17,7 @@
 \text{subject to} & A^T_{\mathcal{E}} \V{x} = \V{b}_{\mathcal{E}}, ~~ A^T_{\mathcal{I}} x \preccurlyeq \V{b}_{\mathcal{I}},
 \end{array}
 \end{equation}
-其中$A_{\mathcal{E}} = (\V{a}_1, \ldots, \V{a}_{m_1}), \V{b}_{\mathcal{E}} = (b_1, \ldots, b_{m_1})^T;$ $A_{\mathcal{I}} = (\V{a}_{m_1+1}, \ldots, \V{a}_m), \V{b}_{\mathcal{I}} = (b_{m_1+1}1, \ldots, b_m)^T.$ $A^T_{\mathcal{I}} \V{x} \preccurlyeq \V{b}_{\mathcal{I}}$表示向量$A^T_{\mathcal{I}} \V{b}_{\mathcal{I}}$的每个元素都小于等于向量$\V{b}_{\mathcal{I}}$相应位置元素. 问题\eqref{eq:quadratic-programming-2}的KKT条件为
+其中$A_{\mathcal{E}} = (\V{a}_1, \ldots, \V{a}_{m_1}), \V{b}_{\mathcal{E}} = (b_1, \ldots, b_{m_1})^T;$ $A_{\mathcal{I}} = (\V{a}_{m_1+1}, \ldots, \V{a}_m), \V{b}_{\mathcal{I}} = (b_{m_1+1}1, \ldots, b_m)^T.$ $A^T_{\mathcal{I}} \V{x} \preccurlyeq \V{b}_{\mathcal{I}}$表示向量$A^T_{\mathcal{I}} \V{b}_{\mathcal{I}}$的每个元素都小于等于向量$\V{b}_{\mathcal{I}}$相应位置元素. 问题~\eqref{eq:quadratic-programming-2}~的KKT条件为
 \begin{equation}
 \label{eq:quadratic-programming-kkt}
 \begin{aligned}
@@ -26,6 +26,6 @@
 & \V{\lambda}^*_{\mathcal{I}} \succcurlyeq \V{0}, ~ A_{\mathcal{I}}^T \V{x}^* - \V{b}_{\mathcal{I}} \preccurlyeq \V{0}, ~ (\V{\lambda}^*_{\mathcal{I}})^T (A_{\mathcal{I}}^T \V{x}^* - \V{b}_{\mathcal{I}}) = \V{0},
 \end{aligned}
 \end{equation}
-其中$A = (\V{a}_1, \ldots, \V{a}_m);$ $\V{\lambda}^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$为拉格朗日乘子, $\V{\lambda}^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ $\V{x}^*$为KKT点. 值得注意的是, 由于二次规划问题线性约束规范总成立, 二次规划问题的任一解都满足KKT条件\eqref{eq:quadratic-programming-kkt}.
+其中$A = (\V{a}_1, \ldots, \V{a}_m);$ $\V{\lambda}^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$为拉格朗日乘子, $\V{\lambda}^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ $\V{x}^*$为KKT点. 值得注意的是, 由于二次规划问题线性约束规范总成立, 二次规划问题的任一解都满足KKT条件~\eqref{eq:quadratic-programming-kkt}.
 
 与线性规划问题类似, 一个二次规划问题总是能在有限步内求解, 或者证明其是不可行的或者无(下）界的. 当二次规划问题有解时, 若目标函数$q(\V{x}) = \frac{1}{2} \V{x}^T G \V{x} + \V{d}^T \V{x}$的Hessian阵$G$是半正定的, 那么$q(\V{x})$是凸函数, 则该二次规划问题是凸规划问题, 其KKT点即为全局极小值点; 如果$G$是正定的, 则解是唯一的(唯一的全局极小值点). 当$G$不定时, 目标函数$q(\V{x})$非凸, 可能有多个鞍点以及局部极小值点, 这些局部极小值点可能不是全局最优解. 此时, 求解全局最优解是一个NP-难的问题\cite{Murty_1987}.

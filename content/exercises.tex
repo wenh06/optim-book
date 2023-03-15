@@ -22,7 +22,7 @@
 \end{array}
 \end{equation*}
 
-\item 设$\V{x}^*$是二次规划问题\eqref{eq:quadratic-programming-1}的解, 证明$\V{x}^*$也是下列线性规划问题的解
+\item 设$\V{x}^*$是二次规划问题~\eqref{eq:quadratic-programming-1}~的解, 证明$\V{x}^*$也是下列线性规划问题的解
 \begin{equation*}
 \begin{array}{cl}
 \text{minimize} & \V{x}^T \left( G \V{x}^* + \V{d} \right), \\
@@ -50,27 +50,27 @@
 \item 设$G$是$n$阶可逆方阵, $A$是$n\times m$的矩阵且$A$列满秩. 令$K = \begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}.$ 证明
 \begin{itemize}
     \item[(1)] 方阵$K$可逆;
-    \item[(2)] 方阵$K$的逆矩阵可以由式\eqref{eq:quadratic-programming-kkt-inv-1}给出.
+    \item[(2)] 方阵$K$的逆矩阵可以由式~\eqref{eq:quadratic-programming-kkt-inv-1}~给出.
 \end{itemize}
 
-\item 考虑等式约束的二次规划问题\eqref{eq:quadratic-programming-eq-constrained}. 设$G$半正定, $A \neq 0$列满秩, $Z$为矩阵$A$的列零空间的一组基构成的矩阵, $K = \begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}$是KKT矩阵. 证明
+\item 考虑等式约束的二次规划问题~\eqref{eq:quadratic-programming-eq-constrained}. 设$G$半正定, $A \neq 0$列满秩, $Z$为矩阵$A$的列零空间的一组基构成的矩阵, $K = \begin{bmatrix} G & A \\ A^T & 0 \end{bmatrix}$是KKT矩阵. 证明
 \begin{itemize}
     \item[(1)] KKT矩阵$K$总是不定的;
-    \item[(2)] 若进一步假设既约Hessian阵$Z^T G Z$正定, 则KKT矩阵$K$非奇异, 并且其逆可由式\eqref{eq:quadratic-programming-kkt-inv-2}给出;
+    \item[(2)] 若进一步假设既约Hessian阵$Z^T G Z$正定, 则KKT矩阵$K$非奇异, 并且其逆可由式~\eqref{eq:quadratic-programming-kkt-inv-2}~给出;
     \item[(3)] 若既约Hessian阵$Z^T G Z$正定, 该二次规划问题有唯一极小点, 该点就是唯一的全局最优解;
-    \item[(4)] 假设方程$A^⊤ \V{x} = \V{b}, ~ G \V{x} + A \V{\lambda} = − \V{d}$有解. 如果既约Hessian阵$Z^T G Z$半正定且奇异, 那么问题\eqref{eq:quadratic-programming-eq-constrained}有无穷多解;
-    \item[(5)] 如果既约Hessian阵$Z^T G Z$不定, 或者方程$G \V{x} + A \V{\lambda} = − \V{d}$无解, 则问题\eqref{eq:quadratic-programming-eq-constrained}的目标函数无界.
+    \item[(4)] 假设方程$A^⊤ \V{x} = \V{b}, ~ G \V{x} + A \V{\lambda} = − \V{d}$有解. 如果既约Hessian阵$Z^T G Z$半正定且奇异, 那么问题~\eqref{eq:quadratic-programming-eq-constrained}~有无穷多解;
+    \item[(5)] 如果既约Hessian阵$Z^T G Z$不定, 或者方程$G \V{x} + A \V{\lambda} = − \V{d}$无解, 则问题~\eqref{eq:quadratic-programming-eq-constrained}~的目标函数无界.
 \end{itemize}
 
-\item 证明二次规划问题\eqref{eq:quadratic-programming-1}的KKT条件\eqref{eq:quadratic-programming-kkt}与利用积极集表达的KKT条件\eqref{eq:qp-active-set-kkt}等价.
+\item 证明二次规划问题~\eqref{eq:quadratic-programming-1}~的KKT条件~\eqref{eq:quadratic-programming-kkt}~与利用积极集表达的KKT条件~\eqref{eq:qp-active-set-kkt}~等价.
 
 \item 分别以$\{3\},$ $\{5\},$ 以及$\emptyset$为初始积极集$\mathcal{A},$ 用积极集法求解例\ref{eg:qp-active-set-algo}~中的不等式约束的二次规划问题.
 
-\item 假设积极集法选取的初始积极集$\mathcal{A}$中约束的梯度是线性无关的, 即$\{ \V{a}_i: ~ i \in \mathcal{A} \}$是线性无关组, 并且在随后某一步, 根据式\eqref{eq:qp-active-set-step-len-2}添加了一条阻滞约束$j$到积极集$\mathcal{A}$中. 证明阻滞约束的梯度$\V{a}_j$与该集合中其余向量线性无关.
+\item 假设积极集法选取的初始积极集$\mathcal{A}$中约束的梯度是线性无关的, 即$\{ \V{a}_i: ~ i \in \mathcal{A} \}$是线性无关组, 并且在随后某一步, 根据式~\eqref{eq:qp-active-set-step-len-2}~添加了一条阻滞约束$j$到积极集$\mathcal{A}$中. 证明阻滞约束的梯度$\V{a}_j$与该集合中其余向量线性无关.
 
-另一方面, 当我们从积极集中按式\eqref{eq:qp-active-set-inactive-index}删去一条非积极约束, 显然不会改变当前积极集中梯度向量组成线性无关组这一性质. 由此, 由归纳法可知, 积极集法的迭代步中关于积极集的修正策略, 可以移植保持积极集对应的约束的梯度向量组线性无关这一性质.
+另一方面, 当我们从积极集中按式~\eqref{eq:qp-active-set-inactive-index}~删去一条非积极约束, 显然不会改变当前积极集中梯度向量组成线性无关组这一性质. 由此, 由归纳法可知, 积极集法的迭代步中关于积极集的修正策略, 可以移植保持积极集对应的约束的梯度向量组线性无关这一性质.
 
-\item 假设在积极集法的第$k$步, 我们按式\eqref{eq:qp-active-set-inactive-index}删去一条非积极约束$q.$ 证明下一步的搜索方向$\V{p}^{(k+1)}$是目标函数$q(\V{x})$的严格下降方向(即$\left( \V{p}^{(k+1)} \right)^T \V{g}^{(k+1)} < 0$), 且该方向是严格可行的(即$\left( \V{p}^{(k+1)} \right)^T \V{a}_q > 0$).
+\item 假设在积极集法的第$k$步, 我们按式~\eqref{eq:qp-active-set-inactive-index}~删去一条非积极约束$q.$ 证明下一步的搜索方向$\V{p}^{(k+1)}$是目标函数$q(\V{x})$的严格下降方向(即$\left( \V{p}^{(k+1)} \right)^T \V{g}^{(k+1)} < 0$), 且该方向是严格可行的(即$\left( \V{p}^{(k+1)} \right)^T \V{a}_q > 0$).
 
 \item 利用矩阵增加或者减少一行时的QR分解的更新方法编写积极集法\ref{algo:active-set}~的程序, 并用其求解二次规划问题
 \begin{equation*}
