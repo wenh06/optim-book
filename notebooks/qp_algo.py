@@ -12,46 +12,54 @@ def qp_eq(
     b: np.ndarray,
     return_lambda: bool = True,
 ) -> np.ndarray:
-    r"""
-    Solve the equality-constrained quadratic program using QR decomposition.
+    """Solve the equality-constrained quadratic program
+    using QR decomposition.
 
-        .. math::
-            \min 1/2 x^T G x + d^T x,
-            s.t. a_i^T x = b, i = 1, ..., m
+    .. math::
+
+        \\begin{equation}
+        \\begin{array}{cl}
+        \\min & 1/2 x^T G x + d^T x,
+        s.t.  & a_i^T x = b, i = 1, ..., m
+        \\end{array}
+        \\end{equation}
 
     Parameters
     ----------
-    G: ndarray, shape (n, n)
-        Hessian matrix of the objective function.
-    d: ndarray, shape (n,)
-        Linear term of the objective function.
-    A: ndarray, shape (n, m)
-        Transpose of the constraint matrix.
-    b: ndarray, shape (m,)
-        Constraint vector.
+    G : numpy.ndarray
+        Hessian matrix of the objective function,
+        of shape ``(n, n)``.
+    d : numpy.ndarray
+        Linear term of the objective function,
+        of shape ``(n,)``.
+    A : numpy.ndarray
+        Transpose of the constraint matrix,
+        of shape ``(n, m)``.
+    b : numpy.ndarray
+        Constraint vector, of shape ``(m,)``.
     return_lambda: bool, default True
         Whether to return the Lagrange multipliers.
 
     Returns
     -------
-    x: ndarray, shape (n,)
-        Optimal solution.
-    lambda_: ndarray, shape (m,), optional
-        Lagrange multipliers.
+    x: numpy.ndarray
+        Optimal solution, of shape ``(n,)``.
+    lambda_: numpy.ndarray, optional
+        Lagrange multipliers, of shape ``(m,)``.
 
     Examples
     --------
-    ```python
-    import numpy as np
-    from scipy import linalg as SLA
+    .. code-block:: python
 
-    G_mat = np.array([[2, 5, 0], [5, 2, 0], [0, 0, 4]])
-    A_mat = np.array([[1, 1], [1, -2], [1, -3]])
-    d_vec = np.array([0, -3, -7])
-    b_vec = np.array([1, -2])
+        import numpy as np
+        from scipy import linalg as SLA
 
-    sol, lam = qp_eq(G_mat, d_vec, A_mat, b_vec)
-    ```
+        G_mat = np.array([[2, 5, 0], [5, 2, 0], [0, 0, 4]])
+        A_mat = np.array([[1, 1], [1, -2], [1, -3]])
+        d_vec = np.array([0, -3, -7])
+        b_vec = np.array([1, -2])
+
+        sol, lam = qp_eq(G_mat, d_vec, A_mat, b_vec)
 
     """
     n = G.shape[0]
@@ -84,53 +92,63 @@ def qp_eq_qr(
     b: np.ndarray,
     return_lambda: bool = True,
 ) -> np.ndarray:
-    r"""
+    """
     Solve the equality-constrained quadratic program using QR decomposition,
-    and the QR decomposition of the transpose of the constraint matrix is given.
+    with QR decomposition of the transpose of the constraint matrix being given.
 
-        .. math::
-            \min 1/2 x^T G x + d^T x,
-            s.t. a_i^T x = b, i = 1, ..., m
+    .. math::
+
+        \\begin{equation}
+        \\begin{array}{cl}
+        \\min & 1/2 x^T G x + d^T x,
+        s.t.  & a_i^T x = b, i = 1, ..., m
+        \\end{array}
+        \\end{equation}
 
     Parameters
     ----------
-    G: ndarray, shape (n, n)
-        Hessian matrix of the objective function.
-    d: ndarray, shape (n,)
-        Linear term of the objective function.
-    A: ndarray, shape (n, m)
-        Transpose of the constraint matrix.
-    Q: ndarray, shape (n, n), orthonormal
-        Orthogonal matrix of the QR decomposition of A.
-    R: ndarray, shape (n, m), upper triangular
-        Upper triangular matrix of the QR decomposition of A.
-    b: ndarray, shape (m,)
-        Constraint vector.
-    return_lambda: bool, default True
+    G : numpy.ndarray
+        Hessian matrix of the objective function,
+        of shape ``(n, n)``.
+    d : numpy.ndarray
+        Linear term of the objective function,
+        of shape ``(n,)``.
+    A : numpy.ndarray
+        Transpose of the constraint matrix,
+        of shape ``(n, m)``.
+    Q : numpy.ndarray
+        Orthogonal matrix of the QR decomposition of A,
+        of shape ``(n, n)``, orthonormal.
+    R : numpy.ndarray
+        Upper triangular matrix of the QR decomposition of A,
+        of shape ``(n, m)``.
+    b : numpy.ndarray
+        Constraint vector, of shape ``(m,)``.
+    return_lambda : bool, default True
         Whether to return the Lagrange multipliers.
 
     Returns
     -------
-    x: ndarray, shape (n,)
-        Optimal solution.
-    lambda_: ndarray, shape (m,), optional
-        Lagrange multipliers.
+    x : numpy.ndarray
+        Optimal solution, of shape ``(n,)``.
+    lambda_ : numpy.ndarray, optional
+        Lagrange multipliers, of shape ``(m,)``.
 
     Examples
     --------
-    ```python
-    import numpy as np
-    from scipy import linalg as SLA
+    .. code-block:: python
 
-    G_mat = np.array([[2, 5, 0], [5, 2, 0], [0, 0, 4]])
-    A_mat = np.array([[1, 1], [1, -2], [1, -3]])
-    d_vec = np.array([0, -3, -7])
-    b_vec = np.array([1, -2])
+        import numpy as np
+        from scipy import linalg as SLA
 
-    Q_mat, R_mat = SLA.qr(A_mat)
+        G_mat = np.array([[2, 5, 0], [5, 2, 0], [0, 0, 4]])
+        A_mat = np.array([[1, 1], [1, -2], [1, -3]])
+        d_vec = np.array([0, -3, -7])
+        b_vec = np.array([1, -2])
 
-    sol, lam = qp_eq_qr(G_mat, d_vec, A_mat, Q_mat, R_mat, b_vec)
-    ```
+        Q_mat, R_mat = SLA.qr(A_mat)
+
+        sol, lam = qp_eq_qr(G_mat, d_vec, A_mat, Q_mat, R_mat, b_vec)
 
     """
     n = G.shape[0]
@@ -163,63 +181,73 @@ def qp_active_set(
     precision: float = 1e-10,
     verbose: bool = False,
 ) -> np.ndarray:
-    r"""
-    Solve the quadratic program using the active-set method. (NOT finished yet!!!)
+    """Solve the quadratic program using the active-set method.
 
-        .. math::
-            \min 1/2 x^T G x + d^T x,
-            s.t. a_i^T x = b, i = 1, ..., m_1
-                 a_i^T x \le b, i = m_1, ..., m
+    (NOT finished yet!!! mainly rank checking, feasibility checking, etc.)
+
+    .. math::
+
+        \\begin{equation}
+        \\begin{array}{cl}
+        \\min & 1/2 x^T G x + d^T x,
+        s.t.  & a_i^T x = b, i = 1, ..., m_1
+              & a_i^T x \\le b, i = m_1, ..., m
+        \\end{array}
+        \\end{equation}
 
     Parameters
     ----------
-    G: ndarray, shape (n, n)
-        Hessian matrix of the objective function.
-    d: ndarray, shape (n,)
-        Linear term of the objective function.
-    A: ndarray, shape (n, m)
-        Transpose of the constraint matrix.
-    b: ndarray, shape (m,)
-        Constraint vector.
-    x0: ndarray, shape (n,)
+    G : numpy.ndarray
+        Hessian matrix of the objective function,
+        of shape ``(n, n)``.
+    d : numpy.ndarray
+        Linear term of the objective function,
+        of shape ``(n,)``.
+    A : numpy.ndarray
+        Transpose of the constraint matrix,
+        of shape ``(n, m)``.
+    b : numpy.ndarray
+        Constraint vector, of shape ``(m,)``.
+    x0 : numpy.ndarray, shape (n,)
         Initial guess.
-    num_eq_constraints: int
+    num_eq_constraints : int
         Number of equality constraints.
-    max_iter: int, optional
+    max_iter : int, optional
         Maximum number of iterations.
-    precision: float, default 1e-10
+    precision : float, default 1e-10
         Precision of the solution.
-    verbose: bool, default False
-        If True, the intermediate results are tracked and returned as a dict.
+    verbose : bool, default False
+        If True, the intermediate results are tracked
+        and returned as a dict.
 
     Returns
     -------
-    sol: ndarray, shape (n,)
-        Optimal solution.
-    trace_dict: dict, optional,
+    sol : numpy.ndarray
+        Optimal solution, of shape ``(n,)``.
+    trace_dict : dict, optional,
         A dict containing the intermediate results.
 
     Examples
     --------
-    ```python
-    import numpy as np
-    from scipy import linalg as SLA
+    .. code-block:: python
 
-    G_mat_asm = 2 * np.eye(2, dtype=float)
-    A_mat_asm = np.array([[-1, 2], [1, 2], [1, -2], [-1, 0], [0, -1]], dtype=float).T
-    b_vec_asm = np.array([2, 6, 2, 0, 0], dtype=float)
-    d_vec_asm = np.array([-2, -5], dtype=float)
+        import numpy as np
+        from scipy import linalg as SLA
 
-    sol, trace_dict = qp_active_set(
-        G_mat_asm,
-        d_vec_asm,
-        A_mat_asm,
-        b_vec_asm,
-        np.array([2, 0], dtype=float),
-        0,
-        verbose=True,
-    )
-    ```
+        G_mat_asm = 2 * np.eye(2, dtype=float)
+        A_mat_asm = np.array([[-1, 2], [1, 2], [1, -2], [-1, 0], [0, -1]], dtype=float).T
+        b_vec_asm = np.array([2, 6, 2, 0, 0], dtype=float)
+        d_vec_asm = np.array([-2, -5], dtype=float)
+
+        sol, trace_dict = qp_active_set(
+            G_mat_asm,
+            d_vec_asm,
+            A_mat_asm,
+            b_vec_asm,
+            np.array([2, 0], dtype=float),
+            0,
+            verbose=True,
+        )
 
     """
     n = G.shape[0]
