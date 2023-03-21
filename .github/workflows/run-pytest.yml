@@ -30,6 +30,6 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install -r requirements.txt
         python -m pip install pytest pytest-xdist pytest-cov # Testing packages
-    - name: Run test with pytest
+    - name: Run test with pytest and coverage
       run: |
-        pytest -v notebooks/*_test.py
+        pytest --cov=notebooks --cov-config=.coveragerc -v notebooks/*_test.py
