@@ -27,20 +27,23 @@
 \setlength{\dashlinegap}{2pt}
 \setlength{\dashlinedash}{2pt}
 
-\usepackage[ruled,linesnumbered,algosection]{algorithm2e}
-\renewcommand*{\algorithmcfname}{算法}
-\renewcommand*{\algorithmautorefname}{算法}
+% \usepackage[ruled,linesnumbered,algosection]{algorithm2e}
+% \renewcommand*{\algorithmcfname}{算法}
+% \renewcommand*{\algorithmautorefname}{算法}
 
-\makeatletter
-\renewcommand{\Indentp}[1]{%
-  \advance\leftskip by #1
-  \advance\skiptext by -#1
-  \advance\skiprule by #1}%
-\renewcommand{\Indp}{\algocf@adjustskipindent\Indentp{\algoskipindent}}
-\renewcommand{\Indpp}{\Indentp{0.5em}}%
-\renewcommand{\Indm}{\algocf@adjustskipindent\Indentp{-\algoskipindent}}
-\renewcommand{\Indmm}{\Indentp{-0.5em}}%
-\makeatother
+% \makeatletter
+% \renewcommand{\Indentp}[1]{%
+%   \advance\leftskip by #1
+%   \advance\skiptext by -#1
+%   \advance\skiprule by #1}%
+% \renewcommand{\Indp}{\algocf@adjustskipindent\Indentp{\algoskipindent}}
+% \renewcommand{\Indpp}{\Indentp{0.5em}}%
+% \renewcommand{\Indm}{\algocf@adjustskipindent\Indentp{-\algoskipindent}}
+% \renewcommand{\Indmm}{\Indentp{-0.5em}}%
+% \makeatother
+
+\usepackage{algorithm,algorithmic}
+\floatname{algorithm}{算法}
 
 \usepackage{tikz}
 \usetikzlibrary{trees,arrows.meta,decorations.pathmorphing,decorations.pathreplacing,shapes,shapes.geometric,backgrounds,positioning,calc,tikzmark,hobby,intersections}
@@ -497,37 +500,70 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 
 至此, 我们可以以伪代码的形式, 将经典的积极集法表示为算法\ref{algo:active-set}.
 
+% \begin{algorithm}[ht]
+% \caption{求解带不等式约束的二次规划问题~\eqref{eq:quadratic-programming-1}~的积极集法}
+% \label{algo:active-set}
+% \SetKwInOut{Input}{输入}
+% \SetKwInOut{Output}{返回}
+% \Input{$n$阶对称阵$G,$ 列满秩的$n \times m$矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m,$ 等式约束数量$m_1$}
+% \Output{二次规划问题~\eqref{eq:quadratic-programming-1}~的极小值点$\V{x}^*$}
+% 随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$\;
+% \While {true}{
+%     求等式约束二次规划问题~\eqref{eq:qp-active-set-2}~解$\V{s}^{(k)}$\;
+%     \eIf{$\V{s}^{(k)} = 0$}{
+%         由~\eqref{eq:qp-active-set-lambda}~式计算拉格朗日乘子$\V{\lambda}^{(k)}$\;
+%         计算指标$q \gets \argmin\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$\;
+%         \eIf{$\lambda^{(k)}_q \geqslant 0$}{
+%             $\V{x}^* \gets \V{x}^{(k)}$\;
+%             算法终止, 返回$\V{x}^*$\;
+%         }{
+%             $\V{x}^{(k+1)} \gets \V{x}^{(k)}$\;
+%             将指标$q$从积极集$\mathcal{A}$中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$\;
+%         }
+%     }{
+%         取线搜索方向$\V{p}^{(k)} \gets \V{s}^{(k)}$\;
+%         由式~\eqref{eq:qp-active-set-step-len-2}~计算$\bar{\alpha}_k$以及相应的约束条件的指标$j$\;
+%         取步长$\alpha_k \gets \min (1, \bar{\alpha}_k)$\;
+%         令$\V{x}^{(k+1)} \gets \V{x}^{(k)} + \alpha_k \V{p}^{(k)}$\;
+%         \If{$\alpha_k < 1$}{
+%             将阻滞约束条件的指标$j$添加到积极集$\mathcal{A}$中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$\;
+%         }
+%     }
+%     $k \gets k + 1$\;
+% }
+% \end{algorithm}
+
 \begin{algorithm}[ht]
 \caption{求解带不等式约束的二次规划问题~\eqref{eq:quadratic-programming-1}~的积极集法}
 \label{algo:active-set}
-\SetKwInOut{Input}{输入}
-\SetKwInOut{Output}{返回}
-\Input{$n$阶对称阵$G,$ 列满秩的$n \times m$的矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m,$ 等式约束的数量$m_1$}
-\Output{二次规划问题~\eqref{eq:quadratic-programming-1}~的极小值点$\V{x}^*$}
-随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$\;
-\While {true}{
-    求等式约束二次规划问题~\eqref{eq:qp-active-set-2}~解$\V{s}^{(k)}$\;
-    \eIf{$\V{s}^{(k)} = 0$}{
-        由~\eqref{eq:qp-active-set-lambda}~式计算拉格朗日乘子$\V{\lambda}^{(k)}$\;
-        计算指标$q \gets \argmin\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$\;
-        \eIf{$\lambda^{(k)}_q \geqslant 0$}{
-            $\V{x}^* \gets \V{x}^{(k)}$\;
-            算法终止, 返回$\V{x}^*$\;
-        }{
-            $\V{x}^{(k+1)} \gets \V{x}^{(k)}$\;
-            将指标$q$从积极集$\mathcal{A}$中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$\;
-        }
-    }{
-        取线搜索方向$\V{p}^{(k)} \gets \V{s}^{(k)}$\;
-        由式~\eqref{eq:qp-active-set-step-len-2}~计算$\bar{\alpha}_k$以及相应的约束条件的指标$j$\;
-        取步长$\alpha_k \gets \min (1, \bar{\alpha}_k)$\;
-        令$\V{x}^{(k+1)} \gets \V{x}^{(k)} + \alpha_k \V{p}^{(k)}$\;
-        \If{$\alpha_k < 1$}{
-            将阻滞约束条件的指标$j$添加到积极集$\mathcal{A}$中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$\;
-        }
-    }
-    $k \gets k + 1$\;
-}
+\hspace*{\algorithmicindent} \textbf{输入}: $n$阶对称阵$G,$ 列满秩的$n \times m$矩阵$A,$ $\V{d} \in \R^n, \V{b} \in \R^m,$ 等式约束数量$m_1$ \\
+\hspace*{\algorithmicindent} \textbf{输出}: 二次规划问题~\eqref{eq:quadratic-programming-1}~的极小值点$\V{x}^*$
+\begin{algorithmic}[1]
+\STATE 随机选取一个可行点$\V{x}^{(0)},$ 确定相应的积极集$\mathcal{A},$ $k \gets 0.$
+\WHILE{true}
+    \STATE 求等式约束二次规划问题~\eqref{eq:qp-active-set-2}~解$\V{s}^{(k)}$
+    \IF{$\V{s}^{(k)} = 0$}
+        \STATE 由~\eqref{eq:qp-active-set-lambda}~式计算拉格朗日乘子$\V{\lambda}^{(k)}$
+        \STATE 计算指标$q \gets \argmin\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$
+        \IF{$\lambda^{(k)}_q \geqslant 0$}
+            \STATE $\V{x}^* \gets \V{x}^{(k)}$
+            \STATE 算法终止, 返回$\V{x}^*$
+        \ELSE
+            \STATE $\V{x}^{(k+1)} \gets \V{x}^{(k)}$
+            \STATE 将指标$q$从积极集$\mathcal{A}$中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$
+        \ENDIF
+    \ELSE
+        \STATE 取线搜索方向$\V{p}^{(k)} \gets \V{s}^{(k)}$
+        \STATE 由式~\eqref{eq:qp-active-set-step-len-2}~计算$\bar{\alpha}_k$以及相应的约束条件的指标$j$
+        \STATE 取步长$\alpha_k \gets \min (1, \bar{\alpha}_k)$
+        \STATE 令$\V{x}^{(k+1)} \gets \V{x}^{(k)} + \alpha_k \V{p}^{(k)}$
+        \IF{$\alpha_k < 1$}
+            \STATE 将阻滞约束条件的指标$j$添加到积极集$\mathcal{A}$中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$
+        \ENDIF
+    \ENDIF
+    $k \gets k + 1$
+\ENDWHILE
+\end{algorithmic}
 \end{algorithm}
 
 \begin{eg}

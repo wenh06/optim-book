@@ -1,3 +1,9 @@
+---
+bibliography:
+- references.bib
+title: 特殊优化模型方法
+---
+
 # 二次规划 {#sec:7.2}
 
 具有二次目标函数和线性约束的约束优化问题被称为二次规划 (quadratic
@@ -442,8 +448,33 @@ $$\label{eq:qp-active-set-next-step-uniform}
 reference="algo:active-set"}.
 
 ::: algorithm
+**输入**: $n$阶对称阵$G,$ 列满秩的$n \times m$矩阵$A,$
+${\bm{d}} \in \mathcal{R}^n, {\bm{b}} \in \mathcal{R}^m,$
+等式约束数量$m_1$\
+**输出**:
+二次规划问题 [\[eq:quadratic-programming-1\]](#eq:quadratic-programming-1){reference-type="eqref"
+reference="eq:quadratic-programming-1"} 的极小值点${\bm{x}}^*$
+
+::: algorithmic
 随机选取一个可行点${\bm{x}}^{(0)},$ 确定相应的积极集$\mathcal{A},$
 $k \gets 0.$
+求等式约束二次规划问题 [\[eq:qp-active-set-2\]](#eq:qp-active-set-2){reference-type="eqref"
+reference="eq:qp-active-set-2"} 解${\bm{s}}^{(k)}$
+由 [\[eq:qp-active-set-lambda\]](#eq:qp-active-set-lambda){reference-type="eqref"
+reference="eq:qp-active-set-lambda"} 式计算拉格朗日乘子${\bm{\lambda}}^{(k)}$
+计算指标$q \gets \mathop{\mathrm{arg\,min}}\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$
+${\bm{x}}^* \gets {\bm{x}}^{(k)}$ 算法终止, 返回${\bm{x}}^*$
+${\bm{x}}^{(k+1)} \gets {\bm{x}}^{(k)}$
+将指标$q$从积极集$\mathcal{A}$中移除:
+$\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$
+取线搜索方向${\bm{p}}^{(k)} \gets {\bm{s}}^{(k)}$
+由式 [\[eq:qp-active-set-step-len-2\]](#eq:qp-active-set-step-len-2){reference-type="eqref"
+reference="eq:qp-active-set-step-len-2"} 计算$\bar{\alpha}_k$以及相应的约束条件的指标$j$
+取步长$\alpha_k \gets \min (1, \bar{\alpha}_k)$
+令${\bm{x}}^{(k+1)} \gets {\bm{x}}^{(k)} + \alpha_k {\bm{p}}^{(k)}$
+将阻滞约束条件的指标$j$添加到积极集$\mathcal{A}$中:
+$\mathcal{A} \gets \mathcal{A} \cup \{ j \}$ $k \gets k + 1$
+:::
 :::
 
 ::: {#eg:qp-active-set-algo .eg}
