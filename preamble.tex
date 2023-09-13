@@ -20,20 +20,23 @@
 \setlength{\dashlinegap}{2pt}
 \setlength{\dashlinedash}{2pt}
 
-\usepackage[ruled,linesnumbered,algosection]{algorithm2e}
-\renewcommand*{\algorithmcfname}{算法}
-\renewcommand*{\algorithmautorefname}{算法}
+% \usepackage[ruled,linesnumbered,algosection]{algorithm2e}
+% \renewcommand*{\algorithmcfname}{算法}
+% \renewcommand*{\algorithmautorefname}{算法}
 
-\makeatletter
-\renewcommand{\Indentp}[1]{%
-  \advance\leftskip by #1
-  \advance\skiptext by -#1
-  \advance\skiprule by #1}%
-\renewcommand{\Indp}{\algocf@adjustskipindent\Indentp{\algoskipindent}}
-\renewcommand{\Indpp}{\Indentp{0.5em}}%
-\renewcommand{\Indm}{\algocf@adjustskipindent\Indentp{-\algoskipindent}}
-\renewcommand{\Indmm}{\Indentp{-0.5em}}%
-\makeatother
+% \makeatletter
+% \renewcommand{\Indentp}[1]{%
+%   \advance\leftskip by #1
+%   \advance\skiptext by -#1
+%   \advance\skiprule by #1}%
+% \renewcommand{\Indp}{\algocf@adjustskipindent\Indentp{\algoskipindent}}
+% \renewcommand{\Indpp}{\Indentp{0.5em}}%
+% \renewcommand{\Indm}{\algocf@adjustskipindent\Indentp{-\algoskipindent}}
+% \renewcommand{\Indmm}{\Indentp{-0.5em}}%
+% \makeatother
+
+\usepackage{algorithm,algorithmic}
+\floatname{algorithm}{算法}
 
 \usepackage{tikz}
 \usetikzlibrary{trees,arrows.meta,decorations.pathmorphing,decorations.pathreplacing,shapes,shapes.geometric,backgrounds,positioning,calc,tikzmark,hobby,intersections}
