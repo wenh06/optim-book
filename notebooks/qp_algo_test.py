@@ -1,8 +1,6 @@
 import numpy as np
+from qp_algo import qp_active_set, qp_eq, qp_eq_qr
 from scipy import linalg as SLA
-
-from qp_algo import qp_eq, qp_eq_qr, qp_active_set
-
 
 # equality constrained QP
 G_mat = np.array([[2, 5, 0], [5, 2, 0], [0, 0, 4]])

@@ -281,12 +281,8 @@ def qp_active_set(
     # Compute the initial constraint violation.
     c = A.T @ x0 - b
     # Check the initial guess is feasible.
-    assert (
-        c[:num_eq_constraints] == 0
-    ).all(), "x0 must satisfy the equality constraints."
-    assert (
-        c[num_eq_constraints:] <= 0
-    ).all(), "x0 must satisfy the inequality constraints."
+    assert (c[:num_eq_constraints] == 0).all(), "x0 must satisfy the equality constraints."
+    assert (c[num_eq_constraints:] <= 0).all(), "x0 must satisfy the inequality constraints."
     # Initialize the solution.
     x = x0.copy()
     # Initialize the active set.
@@ -305,9 +301,7 @@ def qp_active_set(
 
         # Solve the reduced equality-constrained quadratic program,
         # get the search direction, and the Lagrange multipliers.
-        direction = qp_eq_qr(
-            G, g, A[:, active_set], Q, R, np.zeros(len(active_set)), return_lambda=False
-        )
+        direction = qp_eq_qr(G, g, A[:, active_set], Q, R, np.zeros(len(active_set)), return_lambda=False)
         trace_dict["direction"].append(direction.copy())
 
         # if direction is zero

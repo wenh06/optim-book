@@ -9,7 +9,7 @@
 \label{eq:qp-active-set}
 \mathcal{A} = \mathcal{A}({x}) = \left\{ i : ~ {a}_i^T {x} = b_i, ~ i \in \mathcal{E} \cup \mathcal{I} \right\},
 \end{equation}
-即在点~${x}$ 处, 等式成立的约束条件的指标~(index) 组成的集合. 
+即在点~${x}$ 处, 等式成立的约束条件的指标~(index) 组成的集合.
 将一般的二次规划的~KKT 条件~\eqref{eq:quadratic-programming-kkt} 根据积极集~$\mathcal{A}({x}^*)$ 改写一下, 即有
 \begin{equation}
 \label{eq:qp-active-set-kkt}
@@ -31,8 +31,8 @@
 这说明, 求解含不等式约束的二次规划问题几乎~(注意~KKT 条件~\eqref{eq:qp-active-set-kkt} 中的最后两个条件) 等价于求解一个等式约束的二次规划问题, 如果事先知道~$\mathcal{A}({x}^*).$ 但通常这是不可能的, 因此不能通过求解等式问题~\eqref{eq:qp-active-set-1} 来求解原二次规
 划问题~\eqref{eq:quadratic-programming-1}.
 
-在积极集法中, 依据以上的观察, 将积极集~$\mathcal{A}$ 确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题~\eqref{eq:quadratic-programming-1} 的解处的正确的积极约束. 更具体来说, 在第~$k$ 次迭代, 从可行点~${x}^{(k)}$ 出发, 
-积极集为~$\mathcal{A} = \mathcal{A}({x}^{(k)}).$ 在这一步迭代中, 
+在积极集法中, 依据以上的观察, 将积极集~$\mathcal{A}$ 确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题~\eqref{eq:quadratic-programming-1} 的解处的正确的积极约束. 更具体来说, 在第~$k$ 次迭代, 从可行点~${x}^{(k)}$ 出发,
+积极集为~$\mathcal{A} = \mathcal{A}({x}^{(k)}).$ 在这一步迭代中,
 求解等式问题~\eqref{eq:qp-active-set-1}. 更方便的做法是将原点平移到~${x}^{(k)},$ 令~${s} = {x} - {x}^{(k)},$ 求解问题
 \begin{equation}
 \label{eq:qp-active-set-2}
@@ -49,7 +49,7 @@
 \label{eq:qp-active-set-lambda}
 {g}^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} \alpha_i = 0.
 \end{equation}
-此时, 除对偶可行性条件~$\lambda_i \geqslant 0, ~ i \in \mathcal{I}$ 以外, 其余~KKT 
+此时, 除对偶可行性条件~$\lambda_i \geqslant 0, ~ i \in \mathcal{I}$ 以外, 其余~KKT
 条件~\eqref{eq:qp-active-set-kkt} 均满足. 当与原问题不等式约束对应的拉格朗日乘子均非负, 即
 \begin{equation*}
 \lambda_i^{(k)} \geqslant 0, ~ \forall i \in \mathcal{I} \cap \mathcal{A},
@@ -59,7 +59,7 @@
 \label{eq:qp-active-set-inactive-index}
 q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \end{equation}
-有~$\lambda_q^{(k)} < 0.$ 令~$\mathcal{A} = \mathcal{A} \setminus \{ q \},$ 
+有~$\lambda_q^{(k)} < 0.$ 令~$\mathcal{A} = \mathcal{A} \setminus \{ q \},$
 代入问题~\eqref{eq:qp-active-set-2}, 并求解此新的子问题.
 
 如果~${s}^{(k)} \neq {0},$ 即~${x}^{(k)}$ 不是当前等式约束问题~\eqref{eq:qp-active-set-1} 的解, 那么进一步检验试探点
@@ -76,7 +76,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \begin{equation*}
 {a}_i^T {x}^{(k)} - {b} + {s}^{(k)} > 0,
 \end{equation*}
-此时试探点~$\bar{{x}}^{(k)}$ 不是原问题的可行点, 需要将其投影到原问题的可行域. 
+此时试探点~$\bar{{x}}^{(k)}$ 不是原问题的可行点, 需要将其投影到原问题的可行域.
 沿着方向~${p}^{(k)} = {s}^{(k)}$ 进行线搜索, 选一个小于~$1$ 但尽可能大的步长
 \begin{equation}
 \label{eq:qp-active-set-step-len-1}
@@ -96,7 +96,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 {x}^{(k+1)} = {x}^{(k)} + \bar{\alpha}_k {s}^{(k)}, ~~ \mathcal{A} \gets \mathcal{A} \cup \{ j \}.
 \end{equation}
 这里把指标~$j$ 添加到了积极集, 是因为对于~${x}^{(k+1)},$ 指标~$j$ 对应的约束条件等式成立, 非积极约束~$j$ 变成积极的. 迭代格式~\eqref{eq:qp-active-set-next-step-1}
-与~\eqref{eq:qp-active-set-next-step-2} 可以统一表述为: 以等式问题~\eqref{eq:qp-active-set-2} 
+与~\eqref{eq:qp-active-set-next-step-2} 可以统一表述为: 以等式问题~\eqref{eq:qp-active-set-2}
 的解~${s}^{(k)}$ 为搜索方向~${p}^{(k)},$ 以
 \begin{equation}
 \label{eq:qp-active-set-step-len-uniform}
@@ -125,11 +125,11 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 
 \STATE 若~$\lambda^{(k)}_q \geqslant 0$, ${x}^* \gets {x}^{(k)}$, 算法终止, 返回~${x}^*$. 否则, ${x}^{(k+1)} \gets {x}^{(k)}$, 将指标~$q$ 从积极集~$\mathcal{A}$ 中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$.
 
-\STATE 取线搜索方向~${p}^{(k)} \gets {s}^{(k)}$, 由式~\eqref{eq:qp-active-set-step-len-2} 
+\STATE 取线搜索方向~${p}^{(k)} \gets {s}^{(k)}$, 由式~\eqref{eq:qp-active-set-step-len-2}
 计算~$\bar{\alpha}_k$ 以及相应的约束条件的指标$j$, 取步长~$\alpha_k \gets \min (1, \bar{\alpha}_k)$, 令~${x}^{(k+1)} \gets {x}^{(k)} + \alpha_k {p}^{(k)}$.
 
 
-\STATE 若~$\alpha_k < 1$, 将阻滞约束条件的指标~$j$ 添加到积极集~$\mathcal{A}$ 中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$. 
+\STATE 若~$\alpha_k < 1$, 将阻滞约束条件的指标~$j$ 添加到积极集~$\mathcal{A}$ 中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$.
 
 \STATE 令~$k=k+1$, 转步~2.
 \end{algorithmic}
@@ -173,7 +173,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 & s_2 = 0.
 \end{array}
 \end{equation*}
-很容易看到~${x}^{(0)}$ $($即~${s}^{(0)} = {0}$$)$ 是该问题的解. 
+很容易看到~${x}^{(0)}$ $($即~${s}^{(0)} = {0}$$)$ 是该问题的解.
 由式~\eqref{eq:qp-active-set-lambda} 求解积极约束的拉格朗日乘子, 即求解方程组
 \begin{equation*}
 \begin{bmatrix} 1 \\ -2 \end{bmatrix} \lambda_3^{(0)} + \begin{bmatrix} 0 \\ -1 \end{bmatrix} \lambda_5^{(0)} = \begin{bmatrix} -2 \\ 5 \end{bmatrix},
@@ -189,8 +189,8 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \begin{equation*}
 \min ~~ q({s}) = s_1^2 + (s_2 - 2.5)^2,
 \end{equation*}
-得解~${s}^{(3)} = (0, 2.5)^T.$ 试探点~${x}^{(3)} + {s}^{(3)} = (1, 2.5)^T$ 不是可行点, 
-因此需要以~${p}^{(3)} = {s}^{(3)}$ 为方向进行线搜索~${x}^{(3)} + \alpha_3 {p}^{(3)},$ 
+得解~${s}^{(3)} = (0, 2.5)^T.$ 试探点~${x}^{(3)} + {s}^{(3)} = (1, 2.5)^T$ 不是可行点,
+因此需要以~${p}^{(3)} = {s}^{(3)}$ 为方向进行线搜索~${x}^{(3)} + \alpha_3 {p}^{(3)},$
 并由式~\eqref{eq:qp-active-set-step-len-2} 以及式~\eqref{eq:qp-active-set-step-len-uniform} 算得最优步长~$\alpha_3 = 0.6,$ 以及相应阻滞约束的指标~$j = 1.$ 置~${x}^{(4)} = {x}^{(3)} + \alpha_3 {p}^{(3)} = (1, 1.5)^T,$ 并将阻滞约束的指标~$j = 1$ 添加到积极集得~$\mathcal{A} = \{ 1 \},$ 进入下一步迭代. 再次求解当前的等式问题, 得~${s}^{(4)} = (0.4, 0.2)^T.$ 相应的试探点~${x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T$ 可行, 于是得新的迭代点~${x}^{(5)} = (1.4, 1.7)^T.$ 由于~${x}^{(5)}$ 是当前等式问题的可行点, 且解得积极约束的拉格朗日乘子~$\lambda_1^{(5)} = 0.8 > 0,$ 算法终止条件达成,  得原问题的最优解
 \begin{equation*}
 {x}^* = {x}^{(5)} = (1.4, 1.7)^T.

@@ -34,3 +34,10 @@ pip install -r requirements.txt
 ```bash
 pandoc chap7.tex -o chap7.md
 ```
+
+编译文件[`standalone-figures.tex`](standalone-figures.tex)可以得到[`figures`](figures)文件夹中的图片。
+PNG图片需要使用另外的工具进行转换，例如
+
+```bash
+pdftoppm fig-qp-active-set.pdf fig-qp-active-set -png -r 600
+````

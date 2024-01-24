@@ -27,7 +27,7 @@
 & {\lambda}^*_{\mathcal{I}} \succcurlyeq {0}, ~ A_{\mathcal{I}}^T {x}^* - {b}_{\mathcal{I}} \preccurlyeq {0}, ~ ({\lambda}^*_{\mathcal{I}})^T (A_{\mathcal{I}}^T {x}^* - {b}_{\mathcal{I}}) = {0},
 \end{aligned}
 \end{equation}
-其中~$A = ({a}_1, \ldots, {a}_m);$ ${\lambda}^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$ 为拉格朗日乘子, ${\lambda}^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ ${x}^*$ 为~KKT 点. 值得注意的是, 由于二次规划问题线性约束规范总成立, 二次规划问题的任一解都满足~KKT 
+其中~$A = ({a}_1, \ldots, {a}_m);$ ${\lambda}^* = (\lambda_1^*, \ldots, \lambda_m^*)^T$ 为拉格朗日乘子, ${\lambda}^*_{\mathcal{I}} = (\lambda_{m_1+1}^*, \ldots, \lambda_m^*)^T;$ ${x}^*$ 为~KKT 点. 值得注意的是, 由于二次规划问题线性约束规范总成立, 二次规划问题的任一解都满足~KKT
 条件~\eqref{eq:quadratic-programming-kkt}.
 
 与线性规划问题类似, 一个二次规划问题总是能在有限步内求解, 或者证明其是不可行的或者无~(下) 界的. 当二次规划问题有解时, 若目标函数~$q({x}) = \frac{1}{2} {x}^T G {x} + {d}^T {x}$ 的~Hessian 阵~$G$ 是半正定的, 那么~$q({x})$ 是凸函数, 则该二次规划问题是凸规划问题, 其~KKT 点即为全局极小值点; 如果~$G$ 是正定的, 则解是唯一的~(唯一的全局极小值点). 当~$G$ 不定时, 目标函数~$q({x})$ 非凸, 可能有多个鞍点以及局部极小值点, 这些局部极小值点可能不是全局最优解. 此时, 求解全局最优解是一个~NP-难的问题~\cite{Murty_1987}.
