@@ -14,13 +14,13 @@
 % feasible region
 \draw[fill=gray!20] (0, 1) node (p1) [left] {$(0, 1)$} -- (2, 2) node (p2) [above] {$(2, 2)$} -- (4, 1) node (p3) [right] {$(4, 1)$} -- (2, 0) node (p4) [below] {$(2, 0)$} -- (0, 0) -- (0, 1);
 % iterations of the active-set algorithm
-\node[below = -0.1 of p4] (x01) {$\V{x}^{(1)}, \V{x}^{(0)}$};
-\draw[dashed, line width=3] (2, 0) -- (1, 0) node (x23) [below] {$\V{x}^{(3)}, \V{x}^{(2)}$};
+\node[below = -0.1 of p4] (x01) {${x}^{(1)}, {x}^{(0)}$};
+\draw[dashed, line width=3] (2, 0) -- (1, 0) node (x23) [below] {${x}^{(3)}, {x}^{(2)}$};
 \path[name path = line1] (0, 1) -- (2, 2);
 \path[name path = vertical1] (1, 0) -- (1, 4);
 \draw[dashed, line width=3, name intersections = {of = line1 and vertical1, by = {x4}}]  (1, 0) -- (x4);
-\node[below right = -0.2 and -0.03 of x4] (xx4) {$\V{x}^{(4)}$};
-\draw[dashdotted, thin] (x4) -- (C) node[above] (barx3) {$\bar{\V{x}}^{(3)}$};
+\node[below right = -0.2 and -0.03 of x4] (xx4) {${x}^{(4)}$};
+\draw[dashdotted, thin] (x4) -- (C) node[above] (barx3) {$\bar{{x}}^{(3)}$};
 \draw plot[only marks,mark=x,mark size=2] (C);
 \node[right = -0.2 of barx3] {\smaller 不可行};
 \path (barx3) edge [draw, bend right, -{Stealth}] ([xshift=-2, yshift=2]x4);
@@ -28,7 +28,7 @@
 \coordinate (c2) at (2, 2);
 \coordinate (x5) at ($(c1)!(C)!(c2)$);
 \draw[dashed, line width=3] (x4) -- (x5);
-\node[below right = -0.1 and -0.2 of x5] {$\V{x}^{(5)}$};
+\node[below right = -0.1 and -0.2 of x5] {${x}^{(5)}$};
 \foreach \x in {(2,0), (1,0), (x4), (x5)} \draw[fill=black] \x circle (0.06);
 % contour: circles
 \begin{scope}
