@@ -46,7 +46,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+# build/
 develop-eggs/
 dist/
 downloads/
@@ -172,3 +172,7 @@ dmypy.json
 # Jupyter Notebook
 .ipynb
 !notebook/*.ipynb
+
+!build
+build/*
+!build/.keep
