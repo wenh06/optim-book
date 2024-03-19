@@ -113,6 +113,8 @@ def main():
     else:
         backup_pdf_file = build_dir / f"{tex_entry_file.stem}.pdf"
     shutil.copy(generated_pdf_file, backup_pdf_file)
+    # also copy the log file
+    shutil.copy(generated_pdf_file.with_suffix(".log"), backup_pdf_file.with_suffix(".log"))
 
     # clean up
     cmd = f"""latexmk -C -outdir="{str(project_dir)}" "{str(tex_entry_file)}" """
@@ -123,6 +125,9 @@ def main():
     bbl_file = project_dir / f"{tex_entry_file.stem}.bbl"
     if bbl_file.exists():
         bbl_file.unlink()
+    # clear files of the pattern xelatex*.fls
+    for fls_file in project_dir.glob("xelatex*.fls"):
+        fls_file.unlink()
 
 
 if __name__ == "__main__":
