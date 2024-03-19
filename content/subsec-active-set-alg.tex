@@ -41,8 +41,11 @@
 {\rm s.t.} & {a}_i^T {s} = 0, ~ i \in \mathcal{A},
 \end{array}
 \end{equation}
-其中~${g}^{(k)} = \nabla q({x}^{(k)}) = G {x}^{(k)} + {d}$ 是原二次
-规划问题~\eqref{eq:quadratic-programming-1} 的目标函数~$q({x})$ 在点~${x}^{(k)}$ 处的梯度向量.  这个问题是一个等式约束的二次规划问题, 可以用上一小节~\S\ref{subsec:7.2.1} 中介绍的等式约束二次规划问题的求解方法进行求解. 记问题~\eqref{eq:qp-active-set-2} 的解为~${s}^{(k)},$ 需要对各种可能的情况进行分类讨论.
+其中
+\begin{equation*}
+{g}^{(k)} = \nabla q({x}^{(k)}) = G {x}^{(k)} + {d}
+\end{equation*}
+是原二次规划问题~\eqref{eq:quadratic-programming-1} 的目标函数~$q({x})$ 在点~${x}^{(k)}$ 处的梯度向量.  这个问题是一个等式约束的二次规划问题, 可以用上一小节~\S\ref{subsec:7.2.1} 中介绍的等式约束二次规划问题的求解方法进行求解. 记问题~\eqref{eq:qp-active-set-2} 的解为~${s}^{(k)},$ 需要对各种可能的情况进行分类讨论.
 
 如果~${s}^{(k)} = {0},$ 即~${x}^{(k)}$ 是当前等式约束问题~\eqref{eq:qp-active-set-1} 的解, 那么可以根据式~\eqref{eq:general-elim-lagrange} 计算积极约束的拉格朗日乘子, 记为~${\lambda}^{(k)},$  即有
 \begin{equation}
@@ -157,7 +160,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 
 \input{tikz-figures/active-set-eg}
 
-选取初始点~${x}^{(0)} = (2, 0)^T,$ 用~$1$ 至~$5$ 依次作为约束条件的指标. 在初始点~${x}^{(0)}$ 处, 约束~$3$ 和~$5$ 满足等式关系, 是积极约束, 所以初始积极集~$\mathcal{A} = \{ 3, 5 \}.$ 当前需要求解的等式问题~\eqref{eq:qp-active-set-1} 为
+选取初始点~${x}^{(0)} = (2, 0)^T,$ 用~$1$ 至~$5$ 依次作为约束条件的指标. 在初始点~${x}^{(0)}$ 处, 约束~$3$ 和~$5$ 满足等式关系, 是积极约束, 所以初始积极集~$\mathcal{A} = \{ 3, 5 \}.$ 当前需要求解的等式问题~\eqref{eq:qp-active-set-1} 具体为
 \begin{equation*}
 \begin{array}{cl}
 \min & q({x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
@@ -165,7 +168,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 & x_2 = 0,
 \end{array}
 \end{equation*}
-或者经过平移的问题~\eqref{eq:qp-active-set-2}
+或者求解经过平移的问题~\eqref{eq:qp-active-set-2}
 \begin{equation*}
 \begin{array}{cl}
 \min & q({s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
@@ -178,20 +181,48 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \begin{equation*}
 \begin{bmatrix} 1 \\ -2 \end{bmatrix} \lambda_3^{(0)} + \begin{bmatrix} 0 \\ -1 \end{bmatrix} \lambda_5^{(0)} = \begin{bmatrix} -2 \\ 5 \end{bmatrix},
 \end{equation*}
-得~$\lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1.$ 指标~$q = \argmin\limits_{i \in \{ 3, 5 \}} \lambda_i^{(0)} = 3.$ 由于~$\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$ 因此置~${x}^{(1)} = {x}^{(0)},$ 同时将指标~$q = 3$ 从积极集中删去, 进入下一步迭代. 接下来需要求解等式问题
+得
+\begin{equation*}
+\lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1, ~~\text{指标}~ q = \argmin\limits_{i \in \{ 3, 5 \}} \lambda_i^{(0)} = 3.
+\end{equation*}
+由于~$\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$ 因此置~${x}^{(1)} = {x}^{(0)},$ 同时将指标~$q = 3$ 从积极集中删去, 进入下一步迭代.
+
+接下来需要求解等式问题
 \begin{equation*}
 \begin{array}{cl}
 \min & q({s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
 {\rm s.t.} & s_2 = 0.
 \end{array}
 \end{equation*}
-容易解得~${s}^{(1)} = (-1, 0)^T.$ 此时, 试探点~${x}^{(1)} + {s}^{(1)} = (1, 0)^T$ 是可行点,  置~${x}^{(2)} = {x}^{(1)} + {s}^{(1)} = (1, 0)^T,$ 同时积极集~$\mathcal{A} = \{ 5 \}$ 保持不变, 进入下一步迭代. 容易验证~${x}^{(2)}$ 是这一步要解的等式问题的可行解, 进而可计算得相应的积极约束的拉格朗日乘子~$\lambda_5^{(2)} = -5.$ 此时, 约束~$5$ 变成非积极的, 积极集~$\mathcal{A} = \emptyset$ 变为空集. 置~${x}^{(3)} = {x}^{(2)} = (1, 0)^T$ 进入下一步迭代. 再次求解当前的等式约束问题~$($实际上已成为无约束问题$)$
+容易解得~${s}^{(1)} = (-1, 0)^T.$ 此时, 试探点~${x}^{(1)} + {s}^{(1)} = (1, 0)^T$ 是可行点, 置
+\begin{equation*}
+{x}^{(2)} = {x}^{(1)} + {s}^{(1)} = (1, 0)^T,
+\end{equation*}
+同时积极集~$\mathcal{A} = \{ 5 \}$ 保持不变, 进入下一步迭代.
+
+容易验证~${x}^{(2)}$ 是这一步要解的等式问题的可行解, 进而可计算得相应的积极约束的拉格朗日乘子~$\lambda_5^{(2)} = -5.$ 此时, 约束~$5$ 变成非积极的, 积极集~$\mathcal{A}$ 变为空集~$\emptyset.$ 置
+\begin{equation*}
+{x}^{(3)} = {x}^{(2)} = (1, 0)^T
+\end{equation*}
+进入下一步迭代.
+
+再次求解当前的等式约束问题~$($实际上已成为无约束问题$)$
 \begin{equation*}
 \min ~~ q({s}) = s_1^2 + (s_2 - 2.5)^2,
 \end{equation*}
 得解~${s}^{(3)} = (0, 2.5)^T.$ 试探点~${x}^{(3)} + {s}^{(3)} = (1, 2.5)^T$ 不是可行点,
 因此需要以~${p}^{(3)} = {s}^{(3)}$ 为方向进行线搜索~${x}^{(3)} + \alpha_3 {p}^{(3)},$
-并由式~\eqref{eq:qp-active-set-step-len-2} 以及式~\eqref{eq:qp-active-set-step-len-uniform} 算得最优步长~$\alpha_3 = 0.6,$ 以及相应阻滞约束的指标~$j = 1.$ 置~${x}^{(4)} = {x}^{(3)} + \alpha_3 {p}^{(3)} = (1, 1.5)^T,$ 并将阻滞约束的指标~$j = 1$ 添加到积极集得~$\mathcal{A} = \{ 1 \},$ 进入下一步迭代. 再次求解当前的等式问题, 得~${s}^{(4)} = (0.4, 0.2)^T.$ 相应的试探点~${x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T$ 可行, 于是得新的迭代点~${x}^{(5)} = (1.4, 1.7)^T.$ 由于~${x}^{(5)}$ 是当前等式问题的可行点, 且解得积极约束的拉格朗日乘子~$\lambda_1^{(5)} = 0.8 > 0,$ 算法终止条件达成,  得原问题的最优解
+并由式~\eqref{eq:qp-active-set-step-len-2} 以及式~\eqref{eq:qp-active-set-step-len-uniform} 算得最优步长~$\alpha_3 = 0.6,$ 以及相应阻滞约束的指标~$j = 1.$ 置
+\begin{equation*}
+{x}^{(4)} = {x}^{(3)} + \alpha_3 {p}^{(3)} = (1, 1.5)^T,
+\end{equation*}
+并将阻滞约束的指标~$j = 1$ 添加到积极集得~$\mathcal{A} = \{ 1 \},$ 进入下一步迭代.
+
+继续求解当前的等式问题, 解得~${s}^{(4)} = (0.4, 0.2)^T.$ 相应的试探点~${x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T$ 可行, 于是得新的迭代点
+\begin{equation*}
+{x}^{(5)} = {x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T.
+\end{equation*}
+由于~${x}^{(5)}$ 是当前等式问题的可行点, 且解得积极约束的拉格朗日乘子~$\lambda_1^{(5)} = 0.8 > 0,$ 算法终止条件达成, 得原问题的最优解
 \begin{equation*}
 {x}^* = {x}^{(5)} = (1.4, 1.7)^T.
 \end{equation*}
