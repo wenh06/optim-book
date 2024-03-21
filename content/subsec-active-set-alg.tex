@@ -28,10 +28,10 @@
 {\rm s.t.} & {a}_i^T {x} = b_i, ~ i \in \mathcal{A}({x}^*).
 \end{array}
 \end{equation}
-这说明, 求解含不等式约束的二次规划问题几乎~(注意~KKT 条件~\eqref{eq:qp-active-set-kkt} 中的最后两个条件) 等价于求解一个等式约束的二次规划问题, 如果事先知道~$\mathcal{A}({x}^*).$ 但通常这是不可能的, 因此不能通过求解等式问题~\eqref{eq:qp-active-set-1} 来求解原二次规
+这说明, 如果事先知道最优点处的积极集~$\mathcal{A}({x}^*),$ 那么求解含不等式约束的二次规划问题几乎~(注意~KKT 条件~\eqref{eq:qp-active-set-kkt} 中的最后两个条件) 等价于求解一个等式约束的二次规划问题. 但通常这是不可能的, 因此不能通过求解等式问题~\eqref{eq:qp-active-set-1} 来求解原二次规
 划问题~\eqref{eq:quadratic-programming-1}.
 
-在积极集法中, 依据以上的观察, 将积极集~$\mathcal{A}$ 确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题~\eqref{eq:quadratic-programming-1} 的解处的正确的积极约束. 更具体来说, 在第~$k$ 次迭代, 从可行点~${x}^{(k)}$ 出发,
+在积极集法中, 依据以上的观察, 我们将积极集~$\mathcal{A}$ 确定的约束看作等式约束, 而暂时忽略其余约束条件, 并通过某种迭代的方式不断修正调整这个集合, 直到识别出原问题~\eqref{eq:quadratic-programming-1} 的解处的正确的积极约束. 更具体来说, 在第~$k$ 次迭代, 从可行点~${x}^{(k)}$ 出发,
 积极集为~$\mathcal{A} = \mathcal{A}({x}^{(k)}).$ 在这一步迭代中,
 求解等式问题~\eqref{eq:qp-active-set-1}. 更方便的做法是将原点平移到~${x}^{(k)},$ 令~${s} = {x} - {x}^{(k)},$ 求解问题
 \begin{equation}
@@ -100,7 +100,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \end{equation}
 这里把指标~$j$ 添加到了积极集, 是因为对于~${x}^{(k+1)},$ 指标~$j$ 对应的约束条件等式成立, 非积极约束~$j$ 变成积极的. 迭代格式~\eqref{eq:qp-active-set-next-step-1}
 与~\eqref{eq:qp-active-set-next-step-2} 可以统一表述为: 以等式问题~\eqref{eq:qp-active-set-2}
-的解~${s}^{(k)}$ 为搜索方向~${p}^{(k)},$ 以
+的解~${s}^{(k)}$ 为搜索方向~${p}^{(k)},$ 并以
 \begin{equation}
 \label{eq:qp-active-set-step-len-uniform}
 \alpha_k = \min (1, \bar{\alpha}_k)
@@ -138,8 +138,10 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \end{algorithmic}
 \end{algorithm}
 
+下面举一个简单的例子，来说明用积极集法求解含不等式约束的二次规划问题的具体步骤. 
+
 \begin{exam}\label{eg:qp-active-set-algo}
-下面举例说明用积极集法求解含不等式约束的二次规划问题的步骤. 考虑如下的二次规划问题
+考虑如下的二次规划问题
 \begin{equation*}
 \begin{array}{cl}
 \min & q({x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
@@ -168,24 +170,29 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 & x_2 = 0,
 \end{array}
 \end{equation*}
-或者求解经过平移的问题~\eqref{eq:qp-active-set-2}
-\begin{equation*}
+或者来求解经过平移的问题~\eqref{eq:qp-active-set-2}， 具体形式如下
+\begin{equation}
+\label{eq:qp-active-set-eg-problem}
 \begin{array}{cl}
 \min & q({s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
 {\rm s.t.} & s_1 - 2s_2 = 0, \\
 & s_2 = 0.
 \end{array}
-\end{equation*}
-很容易看到~${x}^{(0)}$ $($即~${s}^{(0)} = {0}$$)$ 是该问题的解.
+\end{equation}
+很容易看到~${x}^{(0)}$ $($即~${s}^{(0)} = {0}$~$)$ 是该问题的解.
 由式~\eqref{eq:qp-active-set-lambda} 求解积极约束的拉格朗日乘子, 即求解方程组
 \begin{equation*}
 \begin{bmatrix} 1 \\ -2 \end{bmatrix} \lambda_3^{(0)} + \begin{bmatrix} 0 \\ -1 \end{bmatrix} \lambda_5^{(0)} = \begin{bmatrix} -2 \\ 5 \end{bmatrix},
 \end{equation*}
-得
+解得
 \begin{equation*}
 \lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1, ~~\text{指标}~ q = \argmin\limits_{i \in \{ 3, 5 \}} \lambda_i^{(0)} = 3.
 \end{equation*}
-由于~$\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$ 因此置~${x}^{(1)} = {x}^{(0)},$ 同时将指标~$q = 3$ 从积极集中删去, 进入下一步迭代.
+由于~$\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$ 因此置
+\begin{equation*}
+{x}^{(1)} = {x}^{(0)} = (2, 0)^T,
+\end{equation*}
+同时将指标~$q = 3$ 从积极集中删去, 进入下一步迭代.
 
 接下来需要求解等式问题
 \begin{equation*}
@@ -194,19 +201,19 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 {\rm s.t.} & s_2 = 0.
 \end{array}
 \end{equation*}
-容易解得~${s}^{(1)} = (-1, 0)^T.$ 此时, 试探点~${x}^{(1)} + {s}^{(1)} = (1, 0)^T$ 是可行点, 置
+容易解得~${s}^{(1)} = (-1, 0)^T.$ 此时, 试探点~${x}^{(1)} + {s}^{(1)} = (1, 0)^T$ 是可行点, 于是可以置
 \begin{equation*}
 {x}^{(2)} = {x}^{(1)} + {s}^{(1)} = (1, 0)^T,
 \end{equation*}
 同时积极集~$\mathcal{A} = \{ 5 \}$ 保持不变, 进入下一步迭代.
 
-容易验证~${x}^{(2)}$ 是这一步要解的等式问题的可行解, 进而可计算得相应的积极约束的拉格朗日乘子~$\lambda_5^{(2)} = -5.$ 此时, 约束~$5$ 变成非积极的, 积极集~$\mathcal{A}$ 变为空集~$\emptyset.$ 置
+容易验证~${x}^{(2)}$ 是接下来这一步要解的等式问题的可行解, 进而可计算得到相应的积极约束的拉格朗日乘子~$\lambda_5^{(2)} = -5.$ 此时, 约束~$5$ 变成非积极的, 积极集~$\mathcal{A}$ 变为空集~$\emptyset.$ 置
 \begin{equation*}
 {x}^{(3)} = {x}^{(2)} = (1, 0)^T
 \end{equation*}
 进入下一步迭代.
 
-再次求解当前的等式约束问题~$($实际上已成为无约束问题$)$
+再次求解当前~$($经过平移$)$ 的等式约束问题~$($实际上已成为无约束问题$)$
 \begin{equation*}
 \min ~~ q({s}) = s_1^2 + (s_2 - 2.5)^2,
 \end{equation*}
@@ -218,7 +225,14 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \end{equation*}
 并将阻滞约束的指标~$j = 1$ 添加到积极集得~$\mathcal{A} = \{ 1 \},$ 进入下一步迭代.
 
-继续求解当前的等式问题, 解得~${s}^{(4)} = (0.4, 0.2)^T.$ 相应的试探点~${x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T$ 可行, 于是得新的迭代点
+继续求解当前的等式问题
+\begin{equation*}
+\begin{array}{cl}
+\min & q({s}) = s_1 + (s_2 - 1)^2, \\
+{\rm s.t.} & s_1 - 2s_2 = 0.
+\end{array}
+\end{equation*}
+解得~${s}^{(4)} = (0.4, 0.2)^T.$ 相应的试探点~${x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T$ 可行, 于是得新的迭代点
 \begin{equation*}
 {x}^{(5)} = {x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T.
 \end{equation*}
@@ -226,7 +240,7 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \begin{equation*}
 {x}^* = {x}^{(5)} = (1.4, 1.7)^T.
 \end{equation*}
-将每一步的数值结果总结在表~\ref{tab:active-set-eg} 中. 表中的``$\backslash$''表示当前迭代步不需要计算相应的量.
+我们将以上每一步的数值结果总结在表~\ref{tab:active-set-eg} 中， 这样读者会对整个算法流程有更清晰的认知. 表中的``$\backslash$''表示当前迭代步不需要计算相应的量.
 \begin{table}[H]
     \caption{积极集法求解例~\ref{eg:qp-active-set-algo} 数值结果}
     \label{tab:active-set-eg}
