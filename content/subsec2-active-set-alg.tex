@@ -2,9 +2,9 @@
 \label{subsec:7.2.2}
 % finished
 
-对于一般的带不等式约束的二次规划问题~\eqref{eq:quadratic-programming-1}, 有一系列的实用算法来求解这些问题. 经典的积极集法~(active-set methods) 自从~20 世纪~70 年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模~(成百上千个变量) 的凸和非凸的二次规划问题. 梯度投影法~(gradient-projection methods) 是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束的二次规划问题~($a_i \leqslant x_i \leqslant b_i,$ 称这样的问题为~BoxQP). 还有一类方法是内点法~(interior-point methods), 广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于~20 世纪~90 年代. 内点法适用于求解大规模的凸二次规划问题. 本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题. 为描述简单, 假设原问题是凸二次规划问题.
+对于一般的带不等式约束的二次规划问题~\eqref{eq:quadratic-programming-1}, 有一系列的实用算法来求解这些问题. 经典的积极集法~(active-set methods) 自从~20 世纪~70 年代起被广泛应用于求解二次规划问题. 积极集法适用于求解中小规模~(成百上千个变量) 的凸和非凸的二次规划问题. 梯度投影法~(gradient-projection methods) 是属于积极集法的一种特殊的算法, 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题, 例如对每个变量的约束都是区间约束的二次规划问题~($a_i \leqslant x_i \leqslant b_i,$ 称这样的问题为~BoxQP). 还有一类方法是内点法~(interior-point methods), 这类方法被广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于~20 世纪~90 年代. 内点法适用于求解大规模的凸二次规划问题.
 
-回顾一下, 对于二次规划问题~\eqref{eq:quadratic-programming-1}, 积极集~$\mathcal{A}(x)$ 的定义为
+本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题. 为描述简单, 假设原问题是凸二次规划问题. 回顾一下, 对于二次规划问题~\eqref{eq:quadratic-programming-1}, 积极集~$\mathcal{A}(x)$ 的定义为
 \begin{equation}
 \label{eq:qp-active-set}
 \mathcal{A} = \mathcal{A}({x}) = \left\{ i : ~ {a}_i^T {x} = b_i, ~ i \in \mathcal{E} \cup \mathcal{I} \right\},
@@ -15,8 +15,8 @@
 \label{eq:qp-active-set-kkt}
 \begin{aligned}
 & G {x}^* + d + \sum\limits_{i \in \mathcal{A}({x}^*)} \lambda_i^* {a}_i = {0}, \\
-& {a}_i {x}^* = b_i, ~~ \forall i \in \mathcal{A}({x}^*), \\
-& {a}_i {x}^* \leqslant b_i, ~~ \forall i \in \mathcal{I} \setminus \mathcal{A}({x}^*), \\
+& {a}_i^T {x}^* = b_i, ~~ \forall i \in \mathcal{A}({x}^*), \\
+& {a}_i^T {x}^* \leqslant b_i, ~~ \forall i \in \mathcal{I} \setminus \mathcal{A}({x}^*), \\
 & \lambda_i^* \geqslant 0, ~~ \forall i \in \mathcal{I} \cap \mathcal{A}({x}^*).
 \end{aligned}
 \end{equation}
@@ -47,25 +47,27 @@
 \end{equation*}
 是原二次规划问题~\eqref{eq:quadratic-programming-1} 的目标函数~$q({x})$ 在点~${x}^{(k)}$ 处的梯度向量.  这个问题是一个等式约束的二次规划问题, 可以用上一小节~\S\ref{subsec:7.2.1} 中介绍的等式约束二次规划问题的求解方法进行求解. 记问题~\eqref{eq:qp-active-set-2} 的解为~${s}^{(k)},$ 需要对各种可能的情况进行分类讨论.
 
-如果~${s}^{(k)} = {0},$ 即~${x}^{(k)}$ 是当前等式约束问题~\eqref{eq:qp-active-set-1} 的解, 那么可以根据式~\eqref{eq:general-elim-lagrange} 计算积极约束的拉格朗日乘子, 记为~${\lambda}^{(k)},$  即有
+第一种情况是~${s}^{(k)} = {0},$ 即~${x}^{(k)}$ 是当前等式约束问题~\eqref{eq:qp-active-set-1} 的解, 那么可以根据式~\eqref{eq:general-elim-lagrange} 计算积极约束的拉格朗日乘子, 记为~${\lambda}^{(k)},$  即有
 \begin{equation}
 \label{eq:qp-active-set-lambda}
-{g}^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} \alpha_i = 0.
+{g}^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} a_i = 0.
 \end{equation}
 此时, 除对偶可行性条件~$\lambda_i \geqslant 0, ~ i \in \mathcal{I}$ 以外, 其余~KKT
 条件~\eqref{eq:qp-active-set-kkt} 均满足. 当与原问题不等式约束对应的拉格朗日乘子均非负, 即
 \begin{equation*}
 \lambda_i^{(k)} \geqslant 0, ~ \forall i \in \mathcal{I} \cap \mathcal{A},
 \end{equation*}
-则~$x^{(k)}$ 是原问题的~KKT 点, 迭代结束, 求解完毕. 若不然, 则设
+则~$x^{(k)}$ 是原问题的~KKT 点, 迭代结束, 求解完毕. 如若不然, 即有一个或多个拉格朗日乘子取负值, 
+这时候一个有效的策略是从积极集中去掉某一个负的拉格朗日乘子对应的约束条件, 并求解由此得到的新的等式约束问题, 相应的解可以使目标函数值下降. 一般我们取
 \begin{equation}
 \label{eq:qp-active-set-inactive-index}
 q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \end{equation}
 有~$\lambda_q^{(k)} < 0.$ 令~$\mathcal{A} = \mathcal{A} \setminus \{ q \},$
-代入问题~\eqref{eq:qp-active-set-2}, 并求解此新的子问题.
+代入问题~\eqref{eq:qp-active-set-2}, 并求解此新的等式约束问题. 可以证明, 这个新的等式约束问题的解, 
+暂记为~$s,$ 的确是我们去掉的第~$q$ 个约束条件的可行方向, 即有~$a_p^T s \geqslant 0$ (去掉其它任何一个负的拉格朗日乘子对应的约束条件得到的等式约束问题解得的解, 都是相应约束条件的可行方向). 更进一步地, 若~$s$ 还满足一些好的条件, 例如二阶最优性充分条件, 那么~$s$ 会是目标函数的~(严格) 下降方向.
 
-如果~${s}^{(k)} \neq {0},$ 即~${x}^{(k)}$ 不是当前等式约束问题~\eqref{eq:qp-active-set-1} 的解, 那么进一步检验试探点
+第二种情况是~${s}^{(k)} \neq {0},$ 即~${x}^{(k)}$ 不是当前等式约束问题~\eqref{eq:qp-active-set-1} 的解, 那么我们需要进一步检验试探点
 \begin{equation}
 \label{eq:qp-active-set-test-point}
 \bar{{x}}^{(k)} = {x}^{(k)} + {s}^{(k)}
@@ -75,12 +77,12 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \label{eq:qp-active-set-next-step-1}
 {x}^{(k+1)} = \bar{{x}}^{(k)} = {x}^{(k)} + {s}^{(k)},
 \end{equation}
-积极集保持不变, 进入下一步迭代搜索. 如果不然, 即存在指标~$i \not\in \mathcal{A},$ 使得
+积极集保持不变, 进入下一步迭代搜索. 如若不然, 即存在指标~$i \not\in \mathcal{A},$ 使得
 \begin{equation*}
 {a}_i^T {x}^{(k)} - {b} + {s}^{(k)} > 0,
 \end{equation*}
 此时试探点~$\bar{{x}}^{(k)}$ 不是原问题的可行点, 需要将其投影到原问题的可行域.
-沿着方向~${p}^{(k)} = {s}^{(k)}$ 进行线搜索, 选一个小于~$1$ 但尽可能大的步长
+一个自然的想法是, 沿着方向~${p}^{(k)} = {s}^{(k)}$ 进行线搜索, 选一个小于~$1$ 但尽可能大的步长
 \begin{equation}
 \label{eq:qp-active-set-step-len-1}
 \begin{aligned}
@@ -91,9 +93,9 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 注意~$\bar{\alpha}_k$ 是严格小于~$1$ 的, 因为此时的试探点~${x}^{(k)} + {s}^{(k)}$ 不可行. 取指标~$j$ 使得第~$j$ 个约束取得上式中~$\frac{b_i - {a}_i^T {x}^{(k)}}{{a}_i^T {p}^{(k)}}$ 的最大值, 即
 \begin{equation}
 \label{eq:qp-active-set-step-len-2}
-\bar{\alpha}_k = \frac{b_j - {a}_j^T {x}^{(k)}}{{a}_j^T {p}^{(k)}}, ~~ j = \argmin_{\substack{i: i \not\in \mathcal{A} \\ {a}_i^T {p}^{(k)} > 0}} \frac{b_i - {a}_i^T {x}^{(k)}}{{a}_i^T {p}^{(k)}},
+j = \argmin_{\substack{i: i \not\in \mathcal{A} \\ {a}_i^T {p}^{(k)} > 0}} \frac{b_i - {a}_i^T {x}^{(k)}}{{a}_i^T {p}^{(k)}}, ~~ \bar{\alpha}_k = \frac{b_j - {a}_j^T {x}^{(k)}}{{a}_j^T {p}^{(k)}},
 \end{equation}
-并称指标~$j$ 对应的约束为阻滞~(blocking) 约束. 取
+并称指标~$j$ 对应的约束为阻滞~(blocking) 约束. 取下一步迭代点为
 \begin{equation}
 \label{eq:qp-active-set-next-step-2}
 {x}^{(k+1)} = {x}^{(k)} + \bar{\alpha}_k {s}^{(k)}, ~~ \mathcal{A} \gets \mathcal{A} \cup \{ j \}.
@@ -114,31 +116,68 @@ q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 极集~$\mathcal{A}.$
 
 至此, 可以以伪代码的形式, 将经典的积极集法表示为算法~\ref{algo:active-set}.
-\begin{algorithm}[htbp]
-\caption{求解带不等式约束的二次规划
+
+\begingroup
+\begin{algorithm}[!htbp]
+\caption{求解带不等式约束的一般二次规划
 问题~\eqref{eq:quadratic-programming-1} 的积极集法}\label{algo:active-set}
 \begin{algorithmic}[1]
-\STATE 给定~$n$ 阶对称阵~$G,$ 列满秩的~$n \times m$ 的矩阵~$A,$ ${d} \in \mathbb{R}^n, {b} \in \mathbb{R}^m,$ 等式约束的数量~$m_1$. 随机选取一个可行点~${x}^{(0)},$ 确定相应
-的积极集~$\mathcal{A},$ $k \gets 0.$
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\REQUIRE $n$ 阶对称阵~$G,$ 列满秩的~$n \times m$ 矩阵~$A,$ ${d} \in \mathbb{R}^n, {b} \in \mathbb{R}^m,$ 等式约束的数量~$m_1$
+\ENSURE 带不等式约束的一般二次规划问题~\eqref{eq:quadratic-programming-1} 的解~$x^*$
 
-\STATE 求等式约束二次规划问题~\eqref{eq:qp-active-set-2} 解~${s}^{(k)}$.
+\STATE 初始化: 随机选取一个可行点~${x}^{(0)},$ 确定相应的积极集~$\mathcal{A},$ $k \gets 0$\;
 
-\STATE 若~${s}^{(k)} = 0$, 由~\eqref{eq:qp-active-set-lambda} 式计算拉格朗
-日乘子~${\lambda}^{(k)}$, 计算指标~$q \gets \argmin\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$.
+\WHILE{true}
 
-\STATE 若~$\lambda^{(k)}_q \geqslant 0$, ${x}^* \gets {x}^{(k)}$, 算法终止, 返回~${x}^*$. 否则, ${x}^{(k+1)} \gets {x}^{(k)}$, 将指标~$q$ 从积极集~$\mathcal{A}$ 中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$.
+\STATE 求等式约束二次规划问题~\eqref{eq:qp-active-set-2} 解~${s}^{(k)}$\;
 
-\STATE 取线搜索方向~${p}^{(k)} \gets {s}^{(k)}$, 由式~\eqref{eq:qp-active-set-step-len-2}
-计算~$\bar{\alpha}_k$ 以及相应的约束条件的指标$j$, 取步长~$\alpha_k \gets \min (1, \bar{\alpha}_k)$, 令~${x}^{(k+1)} \gets {x}^{(k)} + \alpha_k {p}^{(k)}$.
+\IF{${s}^{(k)} = 0$}
 
+\STATE 由\eqref{eq:qp-active-set-lambda}式计算拉格朗日乘子${\lambda}^{(k)}$\;
+\STATE 计算指标~$q \gets \argmin\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$\;
 
-\STATE 若~$\alpha_k < 1$, 将阻滞约束条件的指标~$j$ 添加到积极集~$\mathcal{A}$ 中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$.
+\IF{$\lambda^{(k)}_q \geqslant 0$}
 
-\STATE 令~$k=k+1$, 转步~2.
+\STATE ${x}^* \gets {x}^{(k)}$\;
+\STATE 算法终止, 返回~${x}^*$\;
+
+\ELSE
+
+\STATE ${x}^{(k+1)} \gets {x}^{(k)}$\;
+\STATE 将指标~$q$ 从积极集~$\mathcal{A}$ 中移除: $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$.
+
+\ENDIF
+
+\ELSE
+
+\STATE 取线搜索方向~${p}^{(k)} \gets {s}^{(k)}$\;
+\STATE 由~\eqref{eq:qp-active-set-step-len-2} 式计算~$\bar{\alpha}_k$ 以及相应的约束条件的指标$j$\;
+\STATE 取步长~$\alpha_k \gets \min (1, \bar{\alpha}_k)$\;
+\STATE 令~${x}^{(k+1)} \gets {x}^{(k)} + \alpha_k {p}^{(k)}$\;
+
+\IF{$\alpha_k < 1$}
+
+\STATE 将阻滞约束条件的指标~$j$ 添加到积极集~$\mathcal{A}$ 中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$\;
+
+\ENDIF
+
+\ENDIF
+
+\STATE $k \gets k + 1$\;
+
+\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
+\endgroup
 
-下面举一个简单的例子，来说明用积极集法求解含不等式约束的二次规划问题的具体步骤. 
+% \begin{thm}
+% \label{thm:qp-active-set-thm1}
+% 设二次规划问题~\eqref{eq:quadratic-programming-1} 中的约束条件梯度~$a_i$ 线性无关. 假设~${x}^{(k)}$ 满足对应于积极集~$\mathcal{A}$ 的等式约束问题的一阶最优性条件，同时存在积极集~$\mathcal{A}$ 中的某个指标~$j,$ 其对应的拉格朗日乘子~$\lambda_J^{(k)} < 0.$ 
+% \end{thm}
+
+下面举一个简单的例子，来说明用积极集法求解含不等式约束的二次规划问题的具体步骤.
 
 \begin{exam}\label{eg:qp-active-set-algo}
 考虑如下的二次规划问题

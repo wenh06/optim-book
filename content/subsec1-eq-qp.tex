@@ -133,7 +133,7 @@ A {\lambda}^* = -\left( G {x}^* + {d} \right) =: - {g}^*,
 {\lambda}^* = \left( A^T Y \right)^T {\lambda}^* = -Y^T {g}^*.
 \end{equation}
 
-到目前为止, 还没有介绍如何选取, 或者说构造矩阵~$Y$ 和~$Z.$ 矩阵~$Y,$ $Z$ 的构造方法有很多种, 通常首选的是正交分解法~(orthogonal factorization method). 对矩阵~$A$ 进行~QR 分解, 即
+到目前为止, 我们还没有介绍如何选取, 或者说构造矩阵~$Y$ 和~$Z.$ 这两个矩阵的构造方法有很多种, 通常首选的方法是正交分解法~(orthogonal factorization method): 对矩阵~$A$ 进行~QR 分解, 即
 \begin{equation}
 \label{eq:quadratic-programming-qr-decomp-1}
 A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} = Q_1 R,
@@ -147,7 +147,7 @@ Y = Q_1 R^{-T}, ~~ Z = Q_2
 \begin{equation*}
 R^T {v} = {b}
 \end{equation*}
-得到一个特解~${v},$ 进而得到~\eqref{eq:general-elim-3} 中的特解
+得到一个特解~${v},$ 进而可以得到~\eqref{eq:general-elim-3} 中的特解
 \begin{equation*}
 Y {b} = Y R^T {v} = Q_1 {v}.
 \end{equation*}
