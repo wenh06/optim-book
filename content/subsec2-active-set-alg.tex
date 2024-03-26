@@ -57,14 +57,14 @@
 \begin{equation*}
 \lambda_i^{(k)} \geqslant 0, ~ \forall i \in \mathcal{I} \cap \mathcal{A},
 \end{equation*}
-则~$x^{(k)}$ 是原问题的~KKT 点, 迭代结束, 求解完毕. 如若不然, 即有一个或多个拉格朗日乘子取负值, 
+则~$x^{(k)}$ 是原问题的~KKT 点, 迭代结束, 求解完毕. 如若不然, 即有一个或多个拉格朗日乘子取负值,
 这时候一个有效的策略是从积极集中去掉某一个负的拉格朗日乘子对应的约束条件, 并求解由此得到的新的等式约束问题, 相应的解可以使目标函数值下降. 一般我们取
 \begin{equation}
 \label{eq:qp-active-set-inactive-index}
 q = \argmin_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},
 \end{equation}
 有~$\lambda_q^{(k)} < 0.$ 令~$\mathcal{A} = \mathcal{A} \setminus \{ q \},$
-代入问题~\eqref{eq:qp-active-set-2}, 并求解此新的等式约束问题. 可以证明, 这个新的等式约束问题的解, 
+代入问题~\eqref{eq:qp-active-set-2}, 并求解此新的等式约束问题. 可以证明, 这个新的等式约束问题的解,
 暂记为~$s,$ 的确是我们去掉的第~$q$ 个约束条件的可行方向, 即有~$a_p^T s \geqslant 0$ (去掉其它任何一个负的拉格朗日乘子对应的约束条件得到的等式约束问题解得的解, 都是相应约束条件的可行方向). 更进一步地, 若~$s$ 还满足一些好的条件, 例如二阶最优性充分条件, 那么~$s$ 会是目标函数的~(严格) 下降方向.
 
 第二种情况是~${s}^{(k)} \neq {0},$ 即~${x}^{(k)}$ 不是当前等式约束问题~\eqref{eq:qp-active-set-1} 的解, 那么我们需要进一步检验试探点
@@ -174,7 +174,7 @@ j = \argmin_{\substack{i: i \not\in \mathcal{A} \\ {a}_i^T {p}^{(k)} > 0}} \frac
 
 % \begin{thm}
 % \label{thm:qp-active-set-thm1}
-% 设二次规划问题~\eqref{eq:quadratic-programming-1} 中的约束条件梯度~$a_i$ 线性无关. 假设~${x}^{(k)}$ 满足对应于积极集~$\mathcal{A}$ 的等式约束问题的一阶最优性条件，同时存在积极集~$\mathcal{A}$ 中的某个指标~$j,$ 其对应的拉格朗日乘子~$\lambda_J^{(k)} < 0.$ 
+% 设二次规划问题~\eqref{eq:quadratic-programming-1} 中的约束条件梯度~$a_i$ 线性无关. 假设~${x}^{(k)}$ 满足对应于积极集~$\mathcal{A}$ 的等式约束问题的一阶最优性条件，同时存在积极集~$\mathcal{A}$ 中的某个指标~$j,$ 其对应的拉格朗日乘子~$\lambda_J^{(k)} < 0.$
 % \end{thm}
 
 下面举一个简单的例子，来说明用积极集法求解含不等式约束的二次规划问题的具体步骤.
