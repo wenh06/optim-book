@@ -182,9 +182,9 @@ A {\lambda}^* = -\left( G {x}^* + {d} \right) =: - {g}^*,$$
 两边同时左乘 $Y^T,$ 有 $$\label{eq:general-elim-lambda}
 {\lambda}^* = \left( A^T Y \right)^T {\lambda}^* = -Y^T {g}^*.$$
 
-到目前为止, 还没有介绍如何选取, 或者说构造矩阵 $Y$ 和 $Z.$ 矩阵 $Y,$ $Z$
-的构造方法有很多种, 通常首选的是正交分解法 (orthogonal factorization
-method). 对矩阵 $A$ 进行 QR 分解, 即
+到目前为止, 我们还没有介绍如何选取, 或者说构造矩阵 $Y$ 和 $Z.$
+这两个矩阵的构造方法有很多种, 通常首选的方法是正交分解法 (orthogonal
+factorization method): 对矩阵 $A$ 进行 QR 分解, 即
 $$\label{eq:quadratic-programming-qr-decomp-1}
 A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} = Q_1 R,$$
 其中 $Q$ 是 $n \times n$ 的正交阵, $R$ 是 $m \times m$ 的可逆上三角阵.
@@ -194,7 +194,7 @@ Y = Q_1 R^{-T}, ~~ Z = Q_2$$
 即可满足 [\[eq:eq:general-elim-req\]](#eq:eq:general-elim-req){reference-type="eqref"
 reference="eq:eq:general-elim-req"} 中关于矩阵 $Y,$ $Z$ 的要求.
 通过解线性方程组 $$R^T {v} = {b}$$ 得到一个特解 ${v},$
-进而得到 [\[eq:general-elim-3\]](#eq:general-elim-3){reference-type="eqref"
+进而可以得到 [\[eq:general-elim-3\]](#eq:general-elim-3){reference-type="eqref"
 reference="eq:general-elim-3"} 中的特解 $$Y {b} = Y R^T {v} = Q_1 {v}.$$
 接下来只要按照广义消元法的程序, 解关于既约变量 ${y}$
 的方程组 [\[eq:general-elim-y\]](#eq:general-elim-y){reference-type="eqref"
@@ -323,12 +323,11 @@ reference="eq:quadratic-programming-1"},
 是经典积极集法的推广, 能够非常高效地求解简单约束的二次规划问题,
 例如对每个变量的约束都是区间约束的二次规划问题 ($a_i \leqslant x_i \leqslant b_i,$
 称这样的问题为 BoxQP). 还有一类方法是内点法 (interior-point methods),
-广泛应用于求解二次规划问题的时间比经典积极集法稍晚, 大概始于 20 世纪 90
-年代. 内点法适用于求解大规模的凸二次规划问题.
-本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题.
-为描述简单, 假设原问题是凸二次规划问题.
+这类方法被广泛应用于求解二次规划问题的时间比经典积极集法稍晚,
+大概始于 20 世纪 90 年代. 内点法适用于求解大规模的凸二次规划问题.
 
-回顾一下,
+本节主要介绍如何利用积极集法将等式约束问题的求解方法推广以求解带不等式约束的二次规划问题.
+为描述简单, 假设原问题是凸二次规划问题. 回顾一下,
 对于二次规划问题 [\[eq:quadratic-programming-1\]](#eq:quadratic-programming-1){reference-type="eqref"
 reference="eq:quadratic-programming-1"}, 积极集 $\mathcal{A}(x)$
 的定义为 $$\label{eq:qp-active-set}
@@ -341,25 +340,25 @@ reference="eq:quadratic-programming-kkt"}
 $$\label{eq:qp-active-set-kkt}
 \begin{aligned}
 & G {x}^* + d + \sum\limits_{i \in \mathcal{A}({x}^*)} \lambda_i^* {a}_i = {0}, \\
-& {a}_i {x}^* = b_i, ~~ \forall i \in \mathcal{A}({x}^*), \\
-& {a}_i {x}^* \leqslant b_i, ~~ \forall i \in \mathcal{I} \setminus \mathcal{A}({x}^*), \\
+& {a}_i^T {x}^* = b_i, ~~ \forall i \in \mathcal{A}({x}^*), \\
+& {a}_i^T {x}^* \leqslant b_i, ~~ \forall i \in \mathcal{I} \setminus \mathcal{A}({x}^*), \\
 & \lambda_i^* \geqslant 0, ~~ \forall i \in \mathcal{I} \cap \mathcal{A}({x}^*).
 \end{aligned}$$ 不难发现, ${x}^*$ 也是下面等式问题的 KKT 点
 $$\label{eq:qp-active-set-1}
 \begin{array}{cl}
 \min & \frac{1}{2} {x}^T G {x} + {d}^T {x}, \\
 {\rm s.t.} & {a}_i^T {x} = b_i, ~ i \in \mathcal{A}({x}^*).
-\end{array}$$ 这说明, 求解含不等式约束的二次规划问题几乎 (注意 KKT
+\end{array}$$ 这说明, 如果事先知道最优点处的积极集 $\mathcal{A}({x}^*),$
+那么求解含不等式约束的二次规划问题几乎 (注意 KKT
 条件 [\[eq:qp-active-set-kkt\]](#eq:qp-active-set-kkt){reference-type="eqref"
 reference="eq:qp-active-set-kkt"} 中的最后两个条件)
-等价于求解一个等式约束的二次规划问题, 如果事先知道 $\mathcal{A}({x}^*).$
-但通常这是不可能的,
+等价于求解一个等式约束的二次规划问题. 但通常这是不可能的,
 因此不能通过求解等式问题 [\[eq:qp-active-set-1\]](#eq:qp-active-set-1){reference-type="eqref"
 reference="eq:qp-active-set-1"} 来求解原二次规
 划问题 [\[eq:quadratic-programming-1\]](#eq:quadratic-programming-1){reference-type="eqref"
 reference="eq:quadratic-programming-1"}.
 
-在积极集法中, 依据以上的观察, 将积极集 $\mathcal{A}$
+在积极集法中, 依据以上的观察, 我们将积极集 $\mathcal{A}$
 确定的约束看作等式约束, 而暂时忽略其余约束条件,
 并通过某种迭代的方式不断修正调整这个集合,
 直到识别出原问题 [\[eq:quadratic-programming-1\]](#eq:quadratic-programming-1){reference-type="eqref"
@@ -372,9 +371,9 @@ reference="eq:qp-active-set-1"}. 更方便的做法是将原点平移到 ${x}^{
 \begin{array}{cl}
 \min & \frac{1}{2} {s}^T G {s} + \left( {g}^{(k)} \right)^T {s}, \\
 {\rm s.t.} & {a}_i^T {s} = 0, ~ i \in \mathcal{A},
-\end{array}$$ 其中 ${g}^{(k)} = \nabla q({x}^{(k)}) = G {x}^{(k)} + {d}$
-是原二次
-规划问题 [\[eq:quadratic-programming-1\]](#eq:quadratic-programming-1){reference-type="eqref"
+\end{array}$$ 其中
+$${g}^{(k)} = \nabla q({x}^{(k)}) = G {x}^{(k)} + {d}$$
+是原二次规划问题 [\[eq:quadratic-programming-1\]](#eq:quadratic-programming-1){reference-type="eqref"
 reference="eq:quadratic-programming-1"} 的目标函数 $q({x})$
 在点 ${x}^{(k)}$ 处的梯度向量. 这个问题是一个等式约束的二次规划问题,
 可以用上一小节 §[1.1](#subsec:7.2.1){reference-type="ref"
@@ -384,41 +383,49 @@ reference="subsec:7.2.1"}
 reference="eq:qp-active-set-2"} 的解为 ${s}^{(k)},$
 需要对各种可能的情况进行分类讨论.
 
-如果 ${s}^{(k)} = {0},$ 即 ${x}^{(k)}$
+第一种情况是 ${s}^{(k)} = {0},$ 即 ${x}^{(k)}$
 是当前等式约束问题 [\[eq:qp-active-set-1\]](#eq:qp-active-set-1){reference-type="eqref"
 reference="eq:qp-active-set-1"} 的解,
 那么可以根据式 [\[eq:general-elim-lagrange\]](#eq:general-elim-lagrange){reference-type="eqref"
 reference="eq:general-elim-lagrange"} 计算积极约束的拉格朗日乘子,
 记为 ${\lambda}^{(k)},$ 即有 $$\label{eq:qp-active-set-lambda}
-{g}^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} \alpha_i = 0.$$
+{g}^{(k)} + \sum\limits_{i \in \mathcal{A}} \lambda_i^{(k)} a_i = 0.$$
 此时, 除对偶可行性条件 $\lambda_i \geqslant 0, ~ i \in \mathcal{I}$
 以外, 其余 KKT
 条件 [\[eq:qp-active-set-kkt\]](#eq:qp-active-set-kkt){reference-type="eqref"
 reference="eq:qp-active-set-kkt"} 均满足.
 当与原问题不等式约束对应的拉格朗日乘子均非负, 即
 $$\lambda_i^{(k)} \geqslant 0, ~ \forall i \in \mathcal{I} \cap \mathcal{A},$$
-则 $x^{(k)}$ 是原问题的 KKT 点, 迭代结束, 求解完毕. 若不然, 则设
-$$\label{eq:qp-active-set-inactive-index}
+则 $x^{(k)}$ 是原问题的 KKT 点, 迭代结束, 求解完毕. 如若不然,
+即有一个或多个拉格朗日乘子取负值,
+这时候一个有效的策略是从积极集中去掉某一个负的拉格朗日乘子对应的约束条件,
+并求解由此得到的新的等式约束问题, 相应的解可以使目标函数值下降.
+一般我们取 $$\label{eq:qp-active-set-inactive-index}
 q = \mathop{\mathrm{arg\,min}}_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)},$$
 有 $\lambda_q^{(k)} < 0.$
 令 $\mathcal{A} = \mathcal{A} \setminus \{ q \},$
 代入问题 [\[eq:qp-active-set-2\]](#eq:qp-active-set-2){reference-type="eqref"
-reference="eq:qp-active-set-2"}, 并求解此新的子问题.
+reference="eq:qp-active-set-2"}, 并求解此新的等式约束问题. 可以证明,
+这个新的等式约束问题的解, 暂记为 $s,$ 的确是我们去掉的第 $q$
+个约束条件的可行方向, 即有 $a_p^T s \geqslant 0$
+(去掉其它任何一个负的拉格朗日乘子对应的约束条件得到的等式约束问题解得的解,
+都是相应约束条件的可行方向). 更进一步地, 若 $s$ 还满足一些好的条件,
+例如二阶最优性充分条件, 那么 $s$ 会是目标函数的 (严格) 下降方向.
 
-如果 ${s}^{(k)} \neq {0},$ 即 ${x}^{(k)}$
+第二种情况是 ${s}^{(k)} \neq {0},$ 即 ${x}^{(k)}$
 不是当前等式约束问题 [\[eq:qp-active-set-1\]](#eq:qp-active-set-1){reference-type="eqref"
-reference="eq:qp-active-set-1"} 的解, 那么进一步检验试探点
+reference="eq:qp-active-set-1"} 的解, 那么我们需要进一步检验试探点
 $$\label{eq:qp-active-set-test-point}
 \bar{{x}}^{(k)} = {x}^{(k)} + {s}^{(k)}$$
 是否满足其他不在积极集 $\mathcal{A}$ 中的不等式约束条件. 如果都满足的话,
 令 $$\label{eq:qp-active-set-next-step-1}
 {x}^{(k+1)} = \bar{{x}}^{(k)} = {x}^{(k)} + {s}^{(k)},$$ 积极集保持不变,
-进入下一步迭代搜索. 如果不然, 即存在指标 $i \not\in \mathcal{A},$ 使得
+进入下一步迭代搜索. 如若不然, 即存在指标 $i \not\in \mathcal{A},$ 使得
 $${a}_i^T {x}^{(k)} - {b} + {s}^{(k)} > 0,$$
 此时试探点 $\bar{{x}}^{(k)}$ 不是原问题的可行点,
-需要将其投影到原问题的可行域. 沿着方向 ${p}^{(k)} = {s}^{(k)}$
-进行线搜索, 选一个小于 $1$ 但尽可能大的步长
-$$\label{eq:qp-active-set-step-len-1}
+需要将其投影到原问题的可行域. 一个自然的想法是,
+沿着方向 ${p}^{(k)} = {s}^{(k)}$ 进行线搜索, 选一个小于 $1$
+但尽可能大的步长 $$\label{eq:qp-active-set-step-len-1}
 \begin{aligned}
 \bar{\alpha}_k & = \max \left\{ \alpha : ~ \alpha > 0, ~ {a}_i^T {x}^{(k)} - b_i + \alpha {a}_i^T {p}^{(k)} \leqslant 0, ~ {a}_i^T {p}^{(k)} > 0, ~ \forall i \not\in \mathcal{A} \right\}, \\
 & = \min_{\substack{i: i \not\in \mathcal{A} \\ {a}_i^T {p}^{(k)} > 0}} \frac{b_i - {a}_i^T {x}^{(k)}}{{a}_i^T {p}^{(k)}}.
@@ -426,8 +433,8 @@ $$\label{eq:qp-active-set-step-len-1}
 因为此时的试探点 ${x}^{(k)} + {s}^{(k)}$ 不可行. 取指标 $j$ 使得第 $j$
 个约束取得上式中 $\frac{b_i - {a}_i^T {x}^{(k)}}{{a}_i^T {p}^{(k)}}$
 的最大值, 即 $$\label{eq:qp-active-set-step-len-2}
-\bar{\alpha}_k = \frac{b_j - {a}_j^T {x}^{(k)}}{{a}_j^T {p}^{(k)}}, ~~ j = \mathop{\mathrm{arg\,min}}_{\substack{i: i \not\in \mathcal{A} \\ {a}_i^T {p}^{(k)} > 0}} \frac{b_i - {a}_i^T {x}^{(k)}}{{a}_i^T {p}^{(k)}},$$
-并称指标 $j$ 对应的约束为阻滞 (blocking) 约束. 取
+j = \mathop{\mathrm{arg\,min}}_{\substack{i: i \not\in \mathcal{A} \\ {a}_i^T {p}^{(k)} > 0}} \frac{b_i - {a}_i^T {x}^{(k)}}{{a}_i^T {p}^{(k)}}, ~~ \bar{\alpha}_k = \frac{b_j - {a}_j^T {x}^{(k)}}{{a}_j^T {p}^{(k)}},$$
+并称指标 $j$ 对应的约束为阻滞 (blocking) 约束. 取下一步迭代点为
 $$\label{eq:qp-active-set-next-step-2}
 {x}^{(k+1)} = {x}^{(k)} + \bar{\alpha}_k {s}^{(k)}, ~~ \mathcal{A} \gets \mathcal{A} \cup \{ j \}.$$
 这里把指标 $j$ 添加到了积极集, 是因为对于 ${x}^{(k+1)},$ 指标 $j$
@@ -438,7 +445,7 @@ reference="eq:qp-active-set-next-step-1"}
 reference="eq:qp-active-set-next-step-2"} 可以统一表述为:
 以等式问题 [\[eq:qp-active-set-2\]](#eq:qp-active-set-2){reference-type="eqref"
 reference="eq:qp-active-set-2"} 的解 ${s}^{(k)}$ 为搜索方向 ${p}^{(k)},$
-以 $$\label{eq:qp-active-set-step-len-uniform}
+并以 $$\label{eq:qp-active-set-step-len-uniform}
 \alpha_k = \min (1, \bar{\alpha}_k)$$ 为迭代步长, 得下一步的迭代点
 $$\label{eq:qp-active-set-next-step-uniform}
 {x}^{(k+1)} = {x}^{(k)} + \alpha_k {p}^{(k)},$$
@@ -451,42 +458,44 @@ reference="algo:active-set"}.
 
 ::: algorithm
 ::: algorithmic
-给定 $n$ 阶对称阵 $G,$ 列满秩的 $n \times m$ 的矩阵 $A,$
-${d} \in \mathbb{R}^n, {b} \in \mathbb{R}^m,$ 等式约束的数量 $m_1$.
-随机选取一个可行点 ${x}^{(0)},$ 确定相应 的积极集 $\mathcal{A},$
-$k \gets 0.$
+$n$ 阶对称阵 $G,$ 列满秩的 $n \times m$ 矩阵 $A,$
+${d} \in \mathbb{R}^n, {b} \in \mathbb{R}^m,$ 等式约束的数量 $m_1$
+带不等式约束的一般二次规划问题 [\[eq:quadratic-programming-1\]](#eq:quadratic-programming-1){reference-type="eqref"
+reference="eq:quadratic-programming-1"} 的解 $x^*$
+
+初始化: 随机选取一个可行点 ${x}^{(0)},$ 确定相应的积极集 $\mathcal{A},$
+$k \gets 0$
 
 求等式约束二次规划问题 [\[eq:qp-active-set-2\]](#eq:qp-active-set-2){reference-type="eqref"
-reference="eq:qp-active-set-2"} 解 ${s}^{(k)}$.
+reference="eq:qp-active-set-2"} 解 ${s}^{(k)}$
 
-若 ${s}^{(k)} = 0$,
-由 [\[eq:qp-active-set-lambda\]](#eq:qp-active-set-lambda){reference-type="eqref"
-reference="eq:qp-active-set-lambda"} 式计算拉格朗
-日乘子 ${\lambda}^{(k)}$,
-计算指标 $q \gets \mathop{\mathrm{arg\,min}}\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$.
+由[\[eq:qp-active-set-lambda\]](#eq:qp-active-set-lambda){reference-type="eqref"
+reference="eq:qp-active-set-lambda"}式计算拉格朗日乘子${\lambda}^{(k)}$
+计算指标 $q \gets \mathop{\mathrm{arg\,min}}\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$
 
-若 $\lambda^{(k)}_q \geqslant 0$, ${x}^* \gets {x}^{(k)}$, 算法终止,
-返回 ${x}^*$. 否则, ${x}^{(k+1)} \gets {x}^{(k)}$, 将指标 $q$
-从积极集 $\mathcal{A}$ 中移除:
+${x}^* \gets {x}^{(k)}$ 算法终止, 返回 ${x}^*$
+
+${x}^{(k+1)} \gets {x}^{(k)}$ 将指标 $q$ 从积极集 $\mathcal{A}$ 中移除:
 $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$.
 
-取线搜索方向 ${p}^{(k)} \gets {s}^{(k)}$,
-由式 [\[eq:qp-active-set-step-len-2\]](#eq:qp-active-set-step-len-2){reference-type="eqref"
-reference="eq:qp-active-set-step-len-2"} 计算 $\bar{\alpha}_k$
-以及相应的约束条件的指标$j$,
-取步长 $\alpha_k \gets \min (1, \bar{\alpha}_k)$,
-令 ${x}^{(k+1)} \gets {x}^{(k)} + \alpha_k {p}^{(k)}$.
+取线搜索方向 ${p}^{(k)} \gets {s}^{(k)}$
+由 [\[eq:qp-active-set-step-len-2\]](#eq:qp-active-set-step-len-2){reference-type="eqref"
+reference="eq:qp-active-set-step-len-2"} 式计算 $\bar{\alpha}_k$
+以及相应的约束条件的指标$j$
+取步长 $\alpha_k \gets \min (1, \bar{\alpha}_k)$
+令 ${x}^{(k+1)} \gets {x}^{(k)} + \alpha_k {p}^{(k)}$
 
-若 $\alpha_k < 1$, 将阻滞约束条件的指标 $j$ 添加到积极集 $\mathcal{A}$
-中: $\mathcal{A} \gets \mathcal{A} \cup \{ j \}$.
+将阻滞约束条件的指标 $j$ 添加到积极集 $\mathcal{A}$ 中:
+$\mathcal{A} \gets \mathcal{A} \cup \{ j \}$
 
-令 $k=k+1$, 转步 2.
+$k \gets k + 1$
 :::
 :::
+
+下面举一个简单的例子，来说明用积极集法求解含不等式约束的二次规划问题的具体步骤.
 
 ::: {#tab:active-set-eg .exam}
 **例 3**. *[]{#eg:qp-active-set-algo label="eg:qp-active-set-algo"}
-下面举例说明用积极集法求解含不等式约束的二次规划问题的步骤.
 考虑如下的二次规划问题 $$\begin{array}{cl}
 \min & q({x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
 {\rm s.t.} & -x_1 + 2x_2 - 2 \leqslant 0, \\
@@ -509,38 +518,44 @@ data-reference="eg:qp-active-set-algo">[eg:qp-active-set-algo]</a> 的迭代示
 依次作为约束条件的指标. 在初始点 ${x}^{(0)}$ 处, 约束 $3$ 和 $5$
 满足等式关系, 是积极约束, 所以初始积极集 $\mathcal{A} = \{ 3, 5 \}.$
 当前需要求解的等式问题 [\[eq:qp-active-set-1\]](#eq:qp-active-set-1){reference-type="eqref"
-reference="eq:qp-active-set-1"} 为 $$\begin{array}{cl}
+reference="eq:qp-active-set-1"} 具体为 $$\begin{array}{cl}
 \min & q({x}) = (x_1 - 1)^2 + (x_2 - 2.5)^2, \\
 {\rm s.t.} & x_1 - 2x_2 - 2 = 0, \\
 & x_2 = 0,
 \end{array}$$
-或者经过平移的问题 [\[eq:qp-active-set-2\]](#eq:qp-active-set-2){reference-type="eqref"
-reference="eq:qp-active-set-2"} $$\begin{array}{cl}
+或者来求解经过平移的问题 [\[eq:qp-active-set-2\]](#eq:qp-active-set-2){reference-type="eqref"
+reference="eq:qp-active-set-2"}， 具体形式如下
+$$\label{eq:qp-active-set-eg-problem}
+\begin{array}{cl}
 \min & q({s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
 {\rm s.t.} & s_1 - 2s_2 = 0, \\
 & s_2 = 0.
-\end{array}$$ 很容易看到 ${x}^{(0)}$ $($即 ${s}^{(0)} = {0}$$)$
+\end{array}$$ 很容易看到 ${x}^{(0)}$ $($即 ${s}^{(0)} = {0}$ $)$
 是该问题的解.
 由式 [\[eq:qp-active-set-lambda\]](#eq:qp-active-set-lambda){reference-type="eqref"
 reference="eq:qp-active-set-lambda"} 求解积极约束的拉格朗日乘子,
 即求解方程组
 $$\begin{bmatrix} 1 \\ -2 \end{bmatrix} \lambda_3^{(0)} + \begin{bmatrix} 0 \\ -1 \end{bmatrix} \lambda_5^{(0)} = \begin{bmatrix} -2 \\ 5 \end{bmatrix},$$
-得 $\lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1.$
-指标 $q = \mathop{\mathrm{arg\,min}}\limits_{i \in \{ 3, 5 \}} \lambda_i^{(0)} = 3.$
-由于 $\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$
-因此置 ${x}^{(1)} = {x}^{(0)},$ 同时将指标 $q = 3$ 从积极集中删去,
-进入下一步迭代. 接下来需要求解等式问题 $$\begin{array}{cl}
+解得
+$$\lambda_3^{(0)} = -2, \lambda_5^{(0)} = -1, ~~\text{指标}~ q = \mathop{\mathrm{arg\,min}}\limits_{i \in \{ 3, 5 \}} \lambda_i^{(0)} = 3.$$
+由于 $\lambda_q^{(0)} = \lambda_3^{(0)} = -2 < 0,$ 因此置
+$${x}^{(1)} = {x}^{(0)} = (2, 0)^T,$$ 同时将指标 $q = 3$ 从积极集中删去,
+进入下一步迭代.*
+
+*接下来需要求解等式问题 $$\begin{array}{cl}
 \min & q({s}) = (s_1 + 1)^2 + (s_2 - 2.5)^2, \\
 {\rm s.t.} & s_2 = 0.
 \end{array}$$ 容易解得 ${s}^{(1)} = (-1, 0)^T.$ 此时,
-试探点 ${x}^{(1)} + {s}^{(1)} = (1, 0)^T$ 是可行点,
-置 ${x}^{(2)} = {x}^{(1)} + {s}^{(1)} = (1, 0)^T,$
-同时积极集 $\mathcal{A} = \{ 5 \}$ 保持不变, 进入下一步迭代.
-容易验证 ${x}^{(2)}$ 是这一步要解的等式问题的可行解,
-进而可计算得相应的积极约束的拉格朗日乘子 $\lambda_5^{(2)} = -5.$ 此时,
-约束 $5$ 变成非积极的, 积极集 $\mathcal{A} = \emptyset$ 变为空集.
-置 ${x}^{(3)} = {x}^{(2)} = (1, 0)^T$ 进入下一步迭代.
-再次求解当前的等式约束问题 $($实际上已成为无约束问题$)$
+试探点 ${x}^{(1)} + {s}^{(1)} = (1, 0)^T$ 是可行点, 于是可以置
+$${x}^{(2)} = {x}^{(1)} + {s}^{(1)} = (1, 0)^T,$$
+同时积极集 $\mathcal{A} = \{ 5 \}$ 保持不变, 进入下一步迭代.*
+
+*容易验证 ${x}^{(2)}$ 是接下来这一步要解的等式问题的可行解,
+进而可计算得到相应的积极约束的拉格朗日乘子 $\lambda_5^{(2)} = -5.$ 此时,
+约束 $5$ 变成非积极的, 积极集 $\mathcal{A}$ 变为空集 $\emptyset.$ 置
+$${x}^{(3)} = {x}^{(2)} = (1, 0)^T$$ 进入下一步迭代.*
+
+*再次求解当前 $($经过平移$)$ 的等式约束问题 $($实际上已成为无约束问题$)$
 $$\min ~~ q({s}) = s_1^2 + (s_2 - 2.5)^2,$$
 得解 ${s}^{(3)} = (0, 2.5)^T.$
 试探点 ${x}^{(3)} + {s}^{(3)} = (1, 2.5)^T$ 不是可行点,
@@ -550,17 +565,23 @@ $$\min ~~ q({s}) = s_1^2 + (s_2 - 2.5)^2,$$
 reference="eq:qp-active-set-step-len-2"}
 以及式 [\[eq:qp-active-set-step-len-uniform\]](#eq:qp-active-set-step-len-uniform){reference-type="eqref"
 reference="eq:qp-active-set-step-len-uniform"}
-算得最优步长 $\alpha_3 = 0.6,$ 以及相应阻滞约束的指标 $j = 1.$
-置 ${x}^{(4)} = {x}^{(3)} + \alpha_3 {p}^{(3)} = (1, 1.5)^T,$
+算得最优步长 $\alpha_3 = 0.6,$ 以及相应阻滞约束的指标 $j = 1.$ 置
+$${x}^{(4)} = {x}^{(3)} + \alpha_3 {p}^{(3)} = (1, 1.5)^T,$$
 并将阻滞约束的指标 $j = 1$ 添加到积极集得 $\mathcal{A} = \{ 1 \},$
-进入下一步迭代. 再次求解当前的等式问题, 得 ${s}^{(4)} = (0.4, 0.2)^T.$
+进入下一步迭代.*
+
+*继续求解当前的等式问题 $$\begin{array}{cl}
+\min & q({s}) = s_1 + (s_2 - 1)^2, \\
+{\rm s.t.} & s_1 - 2s_2 = 0.
+\end{array}$$ 解得 ${s}^{(4)} = (0.4, 0.2)^T.$
 相应的试探点 ${x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T$ 可行,
-于是得新的迭代点 ${x}^{(5)} = (1.4, 1.7)^T.$ 由于 ${x}^{(5)}$
-是当前等式问题的可行点,
+于是得新的迭代点 $${x}^{(5)} = {x}^{(4)} + {s}^{(4)} = (1.4, 1.7)^T.$$
+由于 ${x}^{(5)}$ 是当前等式问题的可行点,
 且解得积极约束的拉格朗日乘子 $\lambda_1^{(5)} = 0.8 > 0,$
 算法终止条件达成, 得原问题的最优解 $${x}^* = {x}^{(5)} = (1.4, 1.7)^T.$$
-将每一步的数值结果总结在表 [3](#tab:active-set-eg){reference-type="ref"
-reference="tab:active-set-eg"} 中.
+我们将以上每一步的数值结果总结在表 [3](#tab:active-set-eg){reference-type="ref"
+reference="tab:active-set-eg"} 中，
+这样读者会对整个算法流程有更清晰的认知.
 表中的"$\backslash$"表示当前迭代步不需要计算相应的量.*
 
 ::: {#tab:active-set-eg}
