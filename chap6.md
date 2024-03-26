@@ -473,7 +473,7 @@ reference="eq:qp-active-set-2"} 解 ${s}^{(k)}$
 reference="eq:qp-active-set-lambda"}式计算拉格朗日乘子${\lambda}^{(k)}$
 计算指标 $q \gets \mathop{\mathrm{arg\,min}}\limits_{i \in \mathcal{I} \cap \mathcal{A}} \lambda_i^{(k)}$
 
-${x}^* \gets {x}^{(k)}$ 算法终止, 返回 ${x}^*$
+${x}^* \gets {x}^{(k)}$ **算法终止, 返回 ${x}^*$**
 
 ${x}^{(k+1)} \gets {x}^{(k)}$ 将指标 $q$ 从积极集 $\mathcal{A}$ 中移除:
 $\mathcal{A} \gets \mathcal{A} \setminus \{ j \}$.
