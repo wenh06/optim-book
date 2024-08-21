@@ -48,7 +48,6 @@ A = \begin{bmatrix} A_1 \\ A_2 \end{bmatrix}, ~ G = \begin{bmatrix} G_{11} & G_{
 \begin{equation*}
 {\lambda}^* = -A_1^{-1} \left( G_{11} {x}_1^* + G_{12} {x}_2^* + {d}_1 \right).
 \end{equation*}
-
 \begin{exam}\label{eg:7.2.1}
 用直接消元法求解下列等式约束的二次规划问题
 \begin{equation*}
@@ -81,7 +80,7 @@ $\psi$ 的~{\rm Hessian} 阵~$\nabla^2 \psi = \psi'' = \frac{10}{3} > 0,$ 于是
 \end{exam}
 
 直接消元法是一种朴素初等的方法, 非常直观, 但不是求解等式约束二次规划
-问题~\eqref{eq:quadratic-programming-eq-constrained} 的最优方法. 还可以采用广义消元法~(generalized elimination) 来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表
+问题~\eqref{eq:quadratic-programming-eq-constrained} 的最优方法. 还可以采用广义消元法~(Generalized Elimination) 来求解. 这个方法的名字来源于矩阵的广义逆, 利用矩阵的广义逆来表
 达问题~\eqref{eq:quadratic-programming-eq-constrained} 的等式约束~(线性方程组) $A^T {x} = {b}$ 的通解, 回代入目标函数~$q({x}),$ 得到一个无约束的极小化问题. 广义消元法的本质是对变量做了线性变换, 是直接消元法~\eqref{eq:quadratic-programming-eq-constrained-subs} 的推广.
 
 对于非齐次线性方程组~$A^T {x} = {b},$ 它如果有解, 那么它的通解可以表示为
@@ -89,13 +88,13 @@ $\psi$ 的~{\rm Hessian} 阵~$\nabla^2 \psi = \psi'' = \frac{10}{3} > 0,$ 于是
 \label{eq:general-elim-1}
 {x} = Y {b} + {s}
 \end{equation}
-其中~$Y \in \mathbb{R}^{n\times m}$ 是系数矩阵~$A^T$ 的某个广义逆, ${s}$ 是齐次线性方程组~$A^T {x} = 0$ 的解, 或者说属于~$A$ 的列零空间(null column space). ${s}$ 也被称作可行点~${x}$ 处的可行增量. $m\times n$ 的矩阵~$A^T$ 的广义逆, 指的是一个~$n\times m$ 的矩阵~$Y,$ 满足~$A^T Y A^T = A^T.$ 同时, 非齐次线性方程组~$A^T {x} = {b}$ 有解当且仅当~$A^T Y {b} = {b}.$ 假设取定了~$n \times m$ 的矩阵~$Y$ 以及~$n \times (n-m)$ 的矩阵~$Z,$ 满足
+其中~$Y \in \mathbb{R}^{n\times m}$ 是系数矩阵~$A^T$ 的某个广义逆, ${s}$ 是齐次线性方程组~$A^T {x} = 0$ 的解, 或者说属于~$A$ 的列零空间~(Null Column Space). 这里, $n\times m$ 矩阵~$A$ 的列零空间指的是与矩阵~$A$ 所有列都正交的~$n$ 维向量的全体, 它们构成了~$\mathbb{R}^{n}$ 的一个线性子空间. 一个${s}$ 也被称作可行点~${x}$ 处的可行增量. $m\times n$ 的矩阵~$A^T$ 的广义逆, 指的是一个~$n\times m$ 的矩阵~$Y,$ 满足~$A^T Y A^T = A^T.$ 同时, 非齐次线性方程组~$A^T {x} = {b}$ 有解当且仅当~$A^T Y {b} = {b}.$ 假设取定了~$n \times m$ 的矩阵~$Y$ 以及~$n \times (n-m)$ 的矩阵~$Z,$ 满足
 \begin{equation}
 \label{eq:eq:general-elim-req}
 \begin{bmatrix} Y & Z\end{bmatrix} \text{ 非奇异, 且~} A^T Y = I_m, ~ A^T Z = 0.
 \end{equation}
-也就是说~$Y$ 是~$A^T$ 的一个右广义逆~(比广义逆的定义~$A^T Y A^T = A^T$ 更进一步要求~$A^T Y = I_m$). 而矩阵~$Z$ 的列~${z}_1, \ldots, {z}_{n-m}$ 构成了~$A$ 的列零空间的一组基,
-也被称作既约~(reduced) 坐标方向, 矩阵~$Z$ 也被称作零空间矩阵~(null-space matrix). 矩阵~$Z^T G Z$ 被称作二次规划问题~\eqref{eq:quadratic-programming-eq-constrained} 的既约~Hessian 阵. 那么,
+也就是说~$Y$ 是~$A^T$ 的一个右广义逆, 即满足~$A^T Y = I_m$~(回忆一下, 一般的广义逆只要求满足~$A^T Y A^T = A^T$). 而矩阵~$Z$ 的列~${z}_1, \ldots, {z}_{n-m}$ 构成了~$A$ 的列零空间的一组基,
+也被称作既约~(Reduced) 坐标方向, 矩阵~$Z$ 也被称作零空间矩阵~(Null-Space Matrix). 矩阵~$Z^T G Z$ 被称作二次规划问题~\eqref{eq:quadratic-programming-eq-constrained} 的既约~Hessian 阵. 那么,
 可行增量~${s}$ 可以表示为~${z}_1, \ldots, {z}_{n-m}$ 的线性组合
 \begin{equation}
 \label{eq:general-elim-2}
@@ -133,7 +132,7 @@ A {\lambda}^* = -\left( G {x}^* + {d} \right) =: - {g}^*,
 {\lambda}^* = \left( A^T Y \right)^T {\lambda}^* = -Y^T {g}^*.
 \end{equation}
 
-到目前为止, 我们还没有介绍如何选取, 或者说构造矩阵~$Y$ 和~$Z.$ 这两个矩阵的构造方法有很多种, 通常首选的方法是正交分解法~(orthogonal factorization method): 对矩阵~$A$ 进行~QR 分解, 即
+到目前为止, 还没有介绍如何选取, 或者说构造矩阵~$Y$ 和~$Z.$ 矩阵~$Y,$ $Z$ 的构造方法有很多种, 通常首选的是正交分解法~(Orthogonal Factorization Method). 对矩阵~$A$ 进行~QR 分解, 即
 \begin{equation}
 \label{eq:quadratic-programming-qr-decomp-1}
 A = Q \begin{bmatrix} R \\ 0 \end{bmatrix} = \begin{bmatrix} Q_1 & Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} = Q_1 R,
@@ -147,7 +146,7 @@ Y = Q_1 R^{-T}, ~~ Z = Q_2
 \begin{equation*}
 R^T {v} = {b}
 \end{equation*}
-得到一个特解~${v},$ 进而可以得到~\eqref{eq:general-elim-3} 中的特解
+得到一个特解~${v},$ 进而得到~\eqref{eq:general-elim-3} 中的特解
 \begin{equation*}
 Y {b} = Y R^T {v} = Q_1 {v}.
 \end{equation*}
@@ -243,7 +242,7 @@ E & = G^{-1} A \left( A^TG^{-1}A \right)^{-1},\\
 F & = - \left( A^TG^{-1}A \right)^{-1}.
 \end{aligned}
 \end{equation}
-相关的方法被称作~Schur 补法~(Schur-complement method). 这个名字来源于, 执行分块消元操作的时候, 会得到矩阵~$G$ 的~Schur 补~$-A^TG^{-1}A.$ 要注意的是, Schur 补法要求~$G$ 可逆, 而这并不是~KKT 矩阵非奇异的必要条件; 同时基于数值稳定性等方面的考虑, 只有当~$G$ 正定以及~$A^TG^{-1}A$ 的计算开销足够小等一系列条件得到满足, Schur 补法才有应用的价值.
+相关的方法被称作~Schur 补法~(Schur-Complement Method). 这个名字来源于, 执行分块消元操作的时候, 会得到矩阵~$G$ 的~Schur 补~$-A^TG^{-1}A.$ 要注意的是, Schur 补法要求~$G$ 可逆, 而这并不是~KKT 矩阵非奇异的必要条件; 同时基于数值稳定性等方面的考虑, 只有当~$G$ 正定以及~$A^TG^{-1}A$ 的计算开销足够小等一系列条件得到满足, Schur 补法才有应用的价值.
 
 可以利用式~\eqref{eq:quadratic-programming-qr-decomp-general} 定义的矩阵~$Y,$ $Z$, 来求~KKT 矩阵的逆矩阵, 有
 \begin{equation}
@@ -254,4 +253,4 @@ E & = Y - Z \left( Z^T G Z \right)^{-1} Z^T G Y,\\
 F & = Y^T G Z \left( Z^T G Z \right)^{-1} Z^T G Y - Y^T G Y.\\
 \end{aligned}
 \end{equation}
-这样, 可以利用矩阵~$Y,$ $Z$ 和~$Z^T G Z$ 的~Cholesky 分解~$L L^T$ 等计算方法来分解~KKT 矩阵, 相关的方法被称作零空间法~(null-space method). 这一名称来源于矩阵~$Z$ 的选取, 即~$Z$ 的列构成约束条件系数矩阵的转置矩阵~$A$ 的列零空间. 对应于不同的~$Y$ 和~$Z$ 的选取, 有不同的零空间法, 如上面介绍的广义消元法.
+这样, 可以利用矩阵~$Y,$ $Z$ 和~$Z^T G Z$ 的~Cholesky 分解~$L L^T$~($L$ 是某个下三角矩阵) 等计算方法来分解~KKT 矩阵, 相关的方法被称作零空间法~(Null-Space Method). 这一名称来源于矩阵~$Z$ 的选取, 即~$Z$ 的列构成约束条件系数矩阵的转置矩阵~$A$ 的列零空间. 对应于不同的~$Y$ 和~$Z$ 的选取, 有不同的零空间法, 如上面介绍的广义消元法.
