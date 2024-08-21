@@ -61,7 +61,11 @@
 % 两者相同时可以合并为一个选项 style
 % https://ctan.org/pkg/biblatex-gb7714-2015?lang=en
 % https://www.overleaf.com/learn/latex/Articles/Getting_started_with_BibLaTeX
-\usepackage[backend=biber,style=gb7714-2015]{biblatex}
+\usepackage[
+backend=biber,
+style=gb7714-2015,
+gbnamefmt=givenahead
+]{biblatex}
 \addbibresource[location=local]{references.bib}
 
 
