@@ -39,5 +39,6 @@ jobs:
       uses: pre-commit/action@v3.0.0
     - name: Test using bib-lookup to gather .tex files
       run: |
-        rm -rf chap7_in_one.tex
-        bib-lookup --gather chap7.tex
+        rm -rf chap6_in_one.tex
+        bib-lookup --gather chap6.tex
+        [ -f chap6_in_one.tex ] || { echo "chap6_in_one.tex not generated"; exit 1; }
